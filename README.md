@@ -5,4 +5,5 @@ Join us this Fall for a new Full-Stack OSP!
 Contributors:
 Helium Yang
 Yushus Komarlu
+Turjoy Paul
 Matt Basil
