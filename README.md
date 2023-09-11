@@ -6,6 +6,7 @@ Join us this Fall for a new Full-Stack OSP!
 Contributors:
 Helium Yang
 Yushus Komarlu
+Cason Pittman
 Matt Basil
 Arjun Kavungal
 Adithya Devi
