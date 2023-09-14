@@ -30,3 +30,5 @@ Swapnil Roy
 Nivedha Natarajan
 
 Codey Borrelli
+
+Rohan Singh
