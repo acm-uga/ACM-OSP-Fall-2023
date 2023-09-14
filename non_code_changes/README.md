@@ -10,4 +10,7 @@ Date of change: 12/13/2002
 
 Description of change:
 Created a draft of the navbar, button, footer for the project
+
+Evidence of change:
+// you can add an image, or link of your evidence!
 ```
