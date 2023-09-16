@@ -36,3 +36,8 @@ Hiep Pham
 Rohan Singh
 
 Jeffrey Li
+
+Jacob Douglas
+
+Ishaan Chitre
+
