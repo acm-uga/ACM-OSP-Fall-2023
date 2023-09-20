@@ -41,3 +41,5 @@ Jacob Douglas
 
 Ishaan Chitre
 
+Kelsey Sterner
+
