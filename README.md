@@ -41,3 +41,8 @@ Jacob Douglas
 
 Ishaan Chitre
 
+Kelsey Sterner
+
+Saachi Varshney
+
+Max Stewart
