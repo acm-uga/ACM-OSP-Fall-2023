@@ -6,23 +6,55 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Set of Material typography styles to start with
+// TODO: ADD ROBOTO FONT FAMILY
+// Typography styles as defined in the Figma Mockup
 val Typography = Typography(
-    body1 = TextStyle(
+    // Container headers
+    header1 = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    )
-    /* Other default text styles to override
-    button = TextStyle(
+        fontWeight = FontWeight.Bold,
+        fontSize = 22.sp
+    ),
+
+    // Element headers
+    header2 = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp
+    ),
+
+    // Page headers
+    header3 = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 20.sp
+    ),
+
+    // Container subheaders
+    subheader1 = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 14.sp
     ),
-    caption = TextStyle(
+
+    // Element subheaders
+    subheader1 = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 12.sp
-    )
-    */
+    ),
+
+    // Context
+    context = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 10.sp
+    ),
+
+    // Container subheaders
+    body = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Regular,
+        fontSize = 11.sp
+    ),
 )
