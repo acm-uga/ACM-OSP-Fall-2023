@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Navigation()
+            Navigation() //Calling Navigation launches the main screen and allows for accessing different pages
         }
     }
 }

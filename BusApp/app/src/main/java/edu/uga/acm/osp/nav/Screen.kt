@@ -1,7 +1,7 @@
 package edu.uga.acm.osp.nav
 
 sealed class Screen(val route: String) {
-    object HomeScreen : Screen("main_screen");
+    object HomeScreen : Screen("home_screen");
     object SearchScreen : Screen("search_screen");
     object AlertScreen : Screen("alert_screen");
     object PlannerScreen: Screen("planner_screen");
