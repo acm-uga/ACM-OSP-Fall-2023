@@ -65,8 +65,11 @@ private val lightColorPalette = ColorPalette(
 
 private val LocalReplacementDarkColors = staticCompositionLocalOf { darkColorPalette }
 private val LocalReplacementLightColors = staticCompositionLocalOf { lightColorPalette }
-private var CurrentLocalReplacementColors = LocalReplacementLightColors
 
+// TODO presumably the BusAppTheme colors aren't changing because CurrentLocalReplacementColors
+// isn't accessible below (HERE!!!). Look into how buttons can change variables outside of a composable
+// and consider implementing that approach here so that CurrentLocalReplacementColors is set
+// by the function below and is therefore correct in the BusAppTheme object
 @Composable
 fun BusAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -76,7 +79,6 @@ fun BusAppTheme(
 ) {
     val localReplacementColors = if (darkTheme) localReplacementDarkColors else localReplacementLightcolors
     val replacementColors = if (darkTheme) darkColorPalette else lightColorPalette
-    CurrentLocalReplacementColors = localReplacementColors
 
     // Allows us to override the Material You color palette class' limitations by implementing our
     // own ColorPalette class as the color system for BusTheme
@@ -91,9 +93,21 @@ fun BusAppTheme(
     }
 }
 
+@Composable
+fun CurrentColorPalette(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    localReplacementDarkColors: ProvidableCompositionLocal<ColorPalette> = LocalReplacementDarkColors,
+    localReplacementLightcolors: ProvidableCompositionLocal<ColorPalette> = LocalReplacementLightColors,
+): ProvidableCompositionLocal<ColorPalette> {
+    return if (darkTheme) localReplacementDarkColors else localReplacementLightcolors
+}
+
 // Use with eg. BusAppTheme.colors.primary
 object BusAppTheme {
     val colors: ColorPalette
         @Composable
-        get() = CurrentLocalReplacementColors.current
+        get() = CurrentColorPalette().current
+
+    val typography = Typography
+    val shapes = Shapes
 }
