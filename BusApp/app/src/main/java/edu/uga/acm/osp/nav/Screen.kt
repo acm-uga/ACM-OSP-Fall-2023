@@ -7,6 +7,7 @@ sealed class Screen(val route: String) {
     object PlannerScreen: Screen("planner_screen");
     object SettingScreen: Screen("setting_screen");
 
+    //more screens later
     fun withArgs(vararg args: String) : String {
         return buildString {
             append(route)

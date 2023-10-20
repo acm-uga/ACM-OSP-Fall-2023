@@ -6,13 +6,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import edu.uga.acm.osp.composables.TestComposable
+import edu.uga.acm.osp.composables.myButton
 
 @Composable
 fun HomeScreen(navController: NavController) {
     Column(modifier = Modifier.fillMaxSize()) {
         TestComposable()
-        Text(text = "Bottom Half of Page")
     }
 }
