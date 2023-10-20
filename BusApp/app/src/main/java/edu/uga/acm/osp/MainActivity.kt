@@ -29,6 +29,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// Purely a demo of changing colors based on System Theme,
+// delete later
 @Composable
 fun ThemeChangeDemo() {
     Column(){
