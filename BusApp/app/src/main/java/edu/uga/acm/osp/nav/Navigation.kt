@@ -24,5 +24,9 @@ fun Navigation() {
         composable(route = Screen.SettingScreen.route) {
             SettingScreen(navController = navController)
         }
+        //composable(route = Screen.ScreenName.route) {
+    //  ScreenName(navController = navController)
+    //
+    // }
     }
 }
