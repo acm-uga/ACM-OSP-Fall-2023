@@ -2,12 +2,16 @@ package edu.uga.acm.osp.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 
 // Theme-specific color palettes as defined in the Figma Mockup
-private val DarkColorPalette = darkColors(
+// Uses a custom color palette class to avoid adhering to the Material You Palette's limitations
+private val darkColorPalette = ColorPalette(
     background = AsphaltBlack, // Page backgrounds
     onBackgroundPrimary = ChapelBellWhite, // Primary info (e.g. headers)
     onBackgroundSecondary = BusGray,// Secondary info (e.g. context)
@@ -30,10 +34,10 @@ private val DarkColorPalette = darkColors(
 
     negativeStatus = TripleGray, // Setting is disabled
     positiveStatus = BulldogRed, // Enabled settings
-    onStatus = AsphaltGray
+    onStatus = AsphaltBlack
 )
 
-private val LightColorPalette = lightColors(
+private val lightColorPalette = ColorPalette(
     background = BoydGray, // Page backgrounds
     onBackgroundPrimary = ArchBlack, // Primary info (e.g. headers)
     onBackgroundSecondary = TripleGray,// Secondary info (e.g. context)
@@ -59,18 +63,37 @@ private val LightColorPalette = lightColors(
     onStatus = ChapelBellWhite
 )
 
-@Composable
-fun BusAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
+private val LocalReplacementDarkColors = staticCompositionLocalOf { darkColorPalette }
+private val LocalReplacementLightColors = staticCompositionLocalOf { lightColorPalette }
+private var CurrentLocalReplacementColors = LocalReplacementLightColors
 
-    MaterialTheme(
-        colors = colors,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
+@Composable
+fun BusAppTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    localReplacementDarkColors: ProvidableCompositionLocal<ColorPalette> = LocalReplacementDarkColors,
+    localReplacementLightcolors: ProvidableCompositionLocal<ColorPalette> = LocalReplacementLightColors,
+    content: @Composable () -> Unit
+) {
+    val localReplacementColors = if (darkTheme) localReplacementDarkColors else localReplacementLightcolors
+    val replacementColors = if (darkTheme) darkColorPalette else lightColorPalette
+    CurrentLocalReplacementColors = localReplacementColors
+
+    // Allows us to override the Material You color palette class' limitations by implementing our
+    // own ColorPalette class as the color system for BusTheme
+    CompositionLocalProvider(
+        localReplacementColors provides replacementColors
+    ) {
+        MaterialTheme(
+            typography = Typography,
+            shapes = Shapes,
+            content = content
+        )
+    }
+}
+
+// Use with eg. BusAppTheme.colors.primary
+object BusAppTheme {
+    val colors: ColorPalette
+        @Composable
+        get() = CurrentLocalReplacementColors.current
 }
