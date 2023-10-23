@@ -18,11 +18,15 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
+import edu.uga.acm.osp.nav.HomeScreen
+import edu.uga.acm.osp.nav.Navigation
 import edu.uga.acm.osp.ui.theme.BusAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent{
             ThemeChangeDemo()
         }
@@ -57,6 +61,5 @@ fun ThemeChangeDemo() {
                 text = "Hello UGA idk",
                 style = BusAppTheme.typography.body1
             )
-        }
     }
 }
