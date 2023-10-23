@@ -2,7 +2,11 @@ package edu.uga.acm.osp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val BulldogRed = Color(0xBA0C2F)
+val BusGray = Color(0xB9BCBC)
+val ArchBlack = Color(0x000000)
+val ChapelBellWhite = Color(0xFFFFFF)
+val GloryGloryRed = Color(0xE4002B)
+val TripleGray = Color(0x333333)
+val BoydGray = Color(0xF2F2F2)
+val AsphaltBlack = Color(0x221E1F)
