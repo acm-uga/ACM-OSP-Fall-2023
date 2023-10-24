@@ -8,11 +8,11 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -65,3 +65,17 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
         }
     }
 }
+
+/*
+@Preview(showBackground = true)
+@Composable
+fun NavBarPreview() { // Previews the navbar
+    // Create the paramaters
+    var previewList = List<NavBarItem>(3) {
+        NavBarItem("test1", "route", );
+        NavBarItem("test1", "route", )
+    } //list of 2 NavBarItems
+
+}
+
+ */
