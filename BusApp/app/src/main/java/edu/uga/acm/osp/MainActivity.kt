@@ -40,47 +40,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent{
-            val navController = rememberNavController()
-            Scaffold (
-                bottomBar = {
-                    NavBar(items = listOf(
-                        NavBarItem(
-                            name = "Home",
-                            route = "home_screen",
-                            icon = Icons.Default.Home
-                        ),
-                        NavBarItem(
-                            name = "Search",
-                            route = "search_screen",
-                            icon = Icons.Default.Search
-                        ),
-                        NavBarItem(
-                            name = "Alert",
-                            route = "alert_screen",
-                            icon = Icons.Default.Notifications
-                        ),
-                        NavBarItem(
-                            name = "Planner",
-                            route = "planner_screen",
-                            icon = Icons.Default.DateRange
-                        ),
-                        NavBarItem(
-                            name = "Settings",
-                            route = "setting_screen",
-                            icon = Icons.Default.Settings
-                        ),
-                    ),
-                        navController = navController,
-                        onItemClick = {
-                            navController.navigate(it.route)
-                        }
-                        )
-                }
-            ) {
-                Navigation()
-            }
-
-            ThemeChangeDemo()
+            Navigation()
         }
     }
 }
