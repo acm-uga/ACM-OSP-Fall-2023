@@ -42,13 +42,14 @@ fun myButton(text: String,int: Int,navController: NavController,color: Color,rou
         },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
+                .height(300.dp)
                 .padding(20.dp)
                 .border(width = 3.dp, color = Color.Black)
                 .background(color = Color.Gray)
         ) {
-            Text(text = "Hi, $text $int", color = Purple200, fontSize = 20.sp)
+            Text(text = "Hi, $text $int", color = Color.White, fontSize = 20.sp)
         }
     }
 
 }
+
