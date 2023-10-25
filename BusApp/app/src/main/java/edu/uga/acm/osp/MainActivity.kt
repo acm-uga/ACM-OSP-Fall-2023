@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent{
-            ThemeChangeDemo()
+            Navigation()
         }
     }
 }
@@ -61,5 +61,6 @@ fun ThemeChangeDemo() {
                 text = "Hello UGA idk",
                 style = BusAppTheme.typography.body1
             )
+        }
     }
 }
