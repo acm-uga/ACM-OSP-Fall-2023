@@ -2,9 +2,11 @@ package edu.uga.acm.osp.ui.theme
 
 import android.graphics.fonts.Font
 import androidx.compose.material.Typography
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import edu.uga.acm.osp.R
 
