@@ -23,14 +23,14 @@ import edu.uga.acm.osp.ui.theme.BusAppTheme
 fun IconBadge (badgeColor: Color, badgeIcon: ImageVector, badgeIconDesc: String) {
     Box(contentAlignment = Alignment.Center,
         modifier = Modifier
-            .size(55.dp)
+            .size(60.dp)
             .clip(CircleShape)
             .background(badgeColor)
-            .padding(horizontal = 10.dp)
+            .padding(horizontal = 12.dp)
     ){
         Icon(imageVector = badgeIcon, badgeIconDesc, tint = BusAppTheme.colors.onAccent,
             modifier = Modifier
-                .size(35.dp)
+                .size(37.dp)
         )
     }
 }
@@ -39,14 +39,14 @@ fun IconBadge (badgeColor: Color, badgeIcon: ImageVector, badgeIconDesc: String)
 fun TextBadge (badgeColor: Color, badgeText: String) {
     Box(contentAlignment = Alignment.Center,
         modifier = Modifier
-            .size(55.dp)
+            .size(60.dp)
             .clip(CircleShape)
             .background(badgeColor)
-            .padding(horizontal = 10.dp)
+            .padding(horizontal = 2.dp)
     ){
         Text(text = badgeText,
             color = BusAppTheme.colors.onAccent,
-            fontSize = 24.sp,
+            fontSize = 26.sp,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
             overflow = TextOverflow.Clip)
