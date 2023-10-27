@@ -22,5 +22,5 @@ import edu.uga.acm.osp.ui.theme.BulldogRed
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Header()
+    Header(text = "Home")
 }

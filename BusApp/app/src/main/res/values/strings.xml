@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Bus App</string>
+    <string name = "header_text">Home</string>
 </resources>
