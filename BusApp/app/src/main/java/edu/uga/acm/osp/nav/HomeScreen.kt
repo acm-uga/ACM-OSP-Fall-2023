@@ -6,5 +6,5 @@ import edu.uga.acm.osp.composables.Header
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Header()
+    Header(text = "Home")
 }

@@ -14,7 +14,8 @@ import edu.uga.acm.osp.R
     Font(R.font.Roboto_Medium, FontWeight.SemiBold),
     Font(R.font.Roboto_Bold, FontWeight.Default, FontStyle.Bold),
     Font(R.font.Roboto_BoldItalic, FontWeight.Default, FontStyle.BoldItalic) // TODO check fontstyles and correct typography references
-) */
+)
+ */
 
 // Typography styles as defined in the Figma Mockup
 val Typography = Typography(
