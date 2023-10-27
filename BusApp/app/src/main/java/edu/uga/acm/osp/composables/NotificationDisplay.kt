@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 var titles = listOf("Notifications", "Status", "Remind")
 val height = 225.sp
 
+// How to use theme: BusAppTheme.colors.onB[whatever you need]
 /**
  * Composes the entire Notification tab.
  */
@@ -130,7 +131,10 @@ fun CheckboxLabelled() {
             modifier = Modifier.offset(0.dp, -5.dp),
             colors = CheckboxDefaults.colors(Color.Red)
             // Can change color with: colors =
-        )
+        ) // Put them in own file in components folder
+        // put in components "CheckBox"
+        // Same w/ display settings, drop down should go in separate file
+        //
 
     }
 }
