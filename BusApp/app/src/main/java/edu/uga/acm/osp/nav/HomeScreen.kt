@@ -1,19 +1,10 @@
 package edu.uga.acm.osp.nav
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
-import edu.uga.acm.osp.composables.TestComposable
-import edu.uga.acm.osp.composables.myButton
+import edu.uga.acm.osp.composables.Header
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        TestComposable()
-    }
+    Header(text = "Home")
 }
