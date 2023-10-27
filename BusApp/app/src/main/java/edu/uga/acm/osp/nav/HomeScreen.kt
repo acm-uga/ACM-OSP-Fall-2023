@@ -22,14 +22,5 @@ import edu.uga.acm.osp.ui.theme.BulldogRed
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Top of Page")
-        Column(modifier = Modifier
-            .height(100.dp)
-            .background(color = BulldogRed)
-        ) {
-
-        }
-        displayNavBar()
-    }
+    Header()
 }
