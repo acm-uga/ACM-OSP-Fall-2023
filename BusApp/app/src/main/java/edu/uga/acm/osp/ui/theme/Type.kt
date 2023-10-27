@@ -1,12 +1,10 @@
 package edu.uga.acm.osp.ui.theme
 
-import android.graphics.fonts.Font
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import edu.uga.acm.osp.R
 
 /*val robotoFamily = FontFamily(
     Font(R.font.Roboto_Regular, FontWeight.Default),
@@ -22,28 +20,28 @@ val Typography = Typography(
     h1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
-        fontSize = 22.sp
+        fontSize = 24.sp
     ),
 
     // Element headers
     h2 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp
+        fontSize = 22.sp
     ),
 
     // Page headers
     h3 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 20.sp
+        fontSize = 22.sp
     ),
 
     // Buttons and calls to action (important text)
     button = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 14.sp
+        fontSize = 16.sp
     ),
 
     // Element subheaders
@@ -63,6 +61,6 @@ val Typography = Typography(
     caption = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 10.sp
+        fontSize = 11.sp
     )
 )
