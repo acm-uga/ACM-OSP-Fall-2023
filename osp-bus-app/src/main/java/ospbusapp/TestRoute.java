@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 //Test class for working with similar data to what would be retrieved via DB methods
+//Hardcoded with some sample values from BH route
 public class TestRoute {
     //Fields:
     private final long routeId;
     private String name;
-    //K: either weekend or weekday, V: start time : end time
+    //K: either weekend/weekday, V: start time - end time
     private Map<String, String> schedule;
     private List<Long> stopIds;
     private List<Bus> activeBuses;
@@ -35,7 +36,7 @@ public class TestRoute {
     }
 
     public void setName() {
-        this.name = "Night Campus";
+        name = "Bulldog Housing";
     }
 
     public Map<String, String> getSchedule() {
@@ -43,10 +44,10 @@ public class TestRoute {
     }
 
     public void setSchedule() {
-        this.schedule = new HashMap<>();
+        schedule = new HashMap<>();
 
-        this.schedule.put("weekend", "9:00AM - 9:00PM");
-        this.schedule.put("weekday", "7:00AM - 7:00PM");
+        schedule.put("weekend", "9:00AM - 9:00PM");
+        schedule.put("weekday", "7:00AM - 7:00PM");
     }
 
     public List<Long> getStopIds() {
@@ -54,10 +55,10 @@ public class TestRoute {
     }
 
     public void setStopIds() {
-        this.stopIds = new ArrayList<>();
+        stopIds = new ArrayList<>();
 
-        this.stopIds.add(2732990L);
-        this.stopIds.add(2737326L);
+        //Add sample stopIds for BH
+        stopIds.add(2737326L);
     }
 
     public List<Bus> getActiveBuses() {
@@ -79,5 +80,12 @@ public class TestRoute {
                 ", activeBuses=" + activeBuses +
                 '}'
         );
+    }
+}
+
+class Driver {
+    public static void main(String[] args) {
+        //Test getRoute() method
+        ApiService.getRoute(19369L);
     }
 }
