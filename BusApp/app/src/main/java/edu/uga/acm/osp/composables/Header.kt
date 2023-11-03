@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import edu.uga.acm.osp.R
 import edu.uga.acm.osp.ui.theme.BoydGray
 import edu.uga.acm.osp.ui.theme.BulldogRed
+import edu.uga.acm.osp.ui.theme.BusAppTheme
 import edu.uga.acm.osp.ui.theme.ChapelBellWhite
 
 
@@ -46,7 +47,7 @@ fun Header(text: String) {
            .requiredHeight(55.dp)
            .height(55.dp)
            .fillMaxWidth()
-           .background(color = BulldogRed, shape = RectangleShape)
+           .background(color = BusAppTheme.colors.onBackgroundPrimary, shape = RectangleShape)
    ) {
        Row(
            modifier = Modifier
@@ -67,8 +68,6 @@ fun Header(text: String) {
                    .offset(y = 8.dp),
                style = TextStyle(fontFamily = FontFamily.SansSerif, textAlign = TextAlign.Center, fontWeight = FontWeight.ExtraBold)
            )
-
        }
    }
-
 }
