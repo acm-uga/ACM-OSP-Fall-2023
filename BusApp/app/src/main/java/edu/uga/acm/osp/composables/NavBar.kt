@@ -29,7 +29,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import edu.uga.acm.osp.nav.HomeScreen
 import edu.uga.acm.osp.nav.Navigation
+import edu.uga.acm.osp.ui.theme.BusAppTheme
 
 /*
     Based off of Phillip Lackner's tutorial video.
@@ -43,7 +45,7 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
     val backStackEntry = navController.currentBackStackEntryAsState()
     BottomNavigation(
         modifier = modifier,
-        backgroundColor = Color.DarkGray, // Based off of the tutorial video. Will probably change the color to match the UGA theme later
+        backgroundColor = BusAppTheme.colors.onBackgroundPrimary, // Based off of the tutorial video. Will probably change the color to match the UGA theme later
         elevation = 5.dp
     ) {
         items.forEach { item ->
@@ -55,8 +57,8 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
                 onClick = { onItemClick(item) },
                 icon = {
                     Column(horizontalAlignment = CenterHorizontally) {
-                        if(item.badgeCount > 0) {
-                            BadgedBox( badge = { Badge { Text(item.badgeCount.toString()) } } ) {
+                        if (item.badgeCount > 0) {
+                            BadgedBox(badge = { Badge { Text(item.badgeCount.toString()) } }) {
                                 Icon(
                                     imageVector = item.icon,
                                     contentDescription = item.name
@@ -65,7 +67,7 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
                         } else {
                             Icon(imageVector = item.icon, contentDescription = item.name)
                         }
-                        if(selected) {
+                        if (selected) {
                             Text(
                                 text = item.name,
                                 textAlign = TextAlign.Center,
@@ -78,51 +80,6 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
         }
     }
 }
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@Composable
-fun displayNavBar() {
-    val navController = rememberNavController()
-    Scaffold (
-        bottomBar = {
-            NavBar(items = listOf(
-                NavBarItem(
-                    name = "Home",
-                    route = "home_screen",
-                    icon = Icons.Default.Home
-                ),
-                NavBarItem(
-                    name = "Search",
-                    route = "search_screen",
-                    icon = Icons.Default.Search
-                ),
-                NavBarItem(
-                    name = "Alert",
-                    route = "alert_screen",
-                    icon = Icons.Default.Notifications
-                ),
-                NavBarItem(
-                    name = "Planner",
-                    route = "planner_screen",
-                    icon = Icons.Default.DateRange
-                ),
-                NavBarItem(
-                    name = "Settings",
-                    route = "setting_screen",
-                    icon = Icons.Default.Settings
-                ),
-            ),
-                navController = navController,
-                onItemClick = {
-                    navController.navigate(it.route)
-                }
-            )
-        }
-    ) {
-    Text(text = "Testing")
-    }
-}
-
 
 /*
 @Preview(showBackground = true)
@@ -137,3 +94,39 @@ fun NavBarPreview() { // Previews the navbar
 }
 
  */
+@Composable
+fun displayNavBar(navController: NavController) {
+
+    NavBar(items = listOf(
+        NavBarItem(
+            name = "Home",
+            route = "home_screen",
+            icon = Icons.Default.Home
+        ),
+        NavBarItem(
+            name = "Search",
+            route = "search_screen",
+            icon = Icons.Default.Search
+        ),
+        NavBarItem(
+            name = "Alert",
+            route = "alert_screen",
+            icon = Icons.Default.Notifications
+        ),
+        NavBarItem(
+            name = "Planner",
+            route = "planner_screen",
+            icon = Icons.Default.DateRange
+        ),
+        NavBarItem(
+            name = "Settings",
+            route = "setting_screen",
+            icon = Icons.Default.Settings
+        ),
+    ),
+        navController = navController,
+        onItemClick = {
+            navController.navigate(it.route)
+        }
+    )
+}
