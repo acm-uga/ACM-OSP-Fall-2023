@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Badge
 import androidx.compose.material.BadgedBox
@@ -13,6 +14,7 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
@@ -20,6 +22,10 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -77,6 +83,17 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
     }
 }
 
+@Composable
+fun searchBar() {
+    var text by remember { mutableStateOf(" ") }
+    TextField(
+        value = text,
+        onValueChange = { text = it },
+        label = { Text("Search")},
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
 //Displaying the navbar. Creates the navbar to be used in the app
 @Composable
 fun displayNavBar(navController: NavController) {
@@ -85,6 +102,7 @@ fun displayNavBar(navController: NavController) {
         verticalArrangement = Arrangement.Bottom,
         modifier = Modifier.fillMaxSize()
     ) {
+        searchBar()
         NavBar(items = listOf(
             NavBarItem(
                 name = "Home",
