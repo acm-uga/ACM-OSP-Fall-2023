@@ -35,19 +35,13 @@ import edu.uga.acm.osp.nav.HomeScreen
 import edu.uga.acm.osp.nav.Navigation
 import edu.uga.acm.osp.ui.theme.BusAppTheme
 
-/*
-    Based off of Phillip Lackner's tutorial video.
-    I will have to through this multiple more times to do the following:
-     * Make sure I actually understand what each line does
-     * Make sure everything is up to date and adjust for any changes
-     * Make the style consistent
- */
+// The logic behind the navbar
 @Composable
 fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modifier = Modifier, onItemClick: (NavBarItem) -> Unit) {
     val backStackEntry = navController.currentBackStackEntryAsState()
     BottomNavigation(
         modifier = modifier,
-        backgroundColor = BusAppTheme.colors.background, // Based off of the tutorial video. Will probably change the color to match the UGA theme later
+        backgroundColor = BusAppTheme.colors.container,
         elevation = 5.dp
     ) {
         items.forEach { item ->
@@ -83,6 +77,7 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
     }
 }
 
+//Displaying the navbar. Creates the navbar to be used in the app
 @Composable
 fun displayNavBar(navController: NavController) {
 // For navigation
