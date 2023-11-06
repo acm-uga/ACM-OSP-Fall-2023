@@ -92,14 +92,14 @@ fun displayNavBar(navController: NavController) {
                 icon = Icons.Default.Home
             ),
             NavBarItem(
-                name = "Search",
-                route = "search_screen",
-                icon = Icons.Default.Search
-            ),
-            NavBarItem(
                 name = "Alert",
                 route = "alert_screen",
                 icon = Icons.Default.Notifications
+            ),
+            NavBarItem(
+                name = "Search",
+                route = "search_screen",
+                icon = Icons.Default.Search
             ),
             NavBarItem(
                 name = "Planner",
