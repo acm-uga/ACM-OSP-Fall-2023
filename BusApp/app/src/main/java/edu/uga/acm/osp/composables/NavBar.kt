@@ -1,8 +1,10 @@
 package edu.uga.acm.osp.composables
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Badge
 import androidx.compose.material.BadgedBox
@@ -45,15 +47,15 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
     val backStackEntry = navController.currentBackStackEntryAsState()
     BottomNavigation(
         modifier = modifier,
-        backgroundColor = BusAppTheme.colors.onBackgroundPrimary, // Based off of the tutorial video. Will probably change the color to match the UGA theme later
+        backgroundColor = BusAppTheme.colors.background, // Based off of the tutorial video. Will probably change the color to match the UGA theme later
         elevation = 5.dp
     ) {
         items.forEach { item ->
             val selected = item.route == backStackEntry.value?.destination?.route
             BottomNavigationItem(
                 selected = selected,
-                selectedContentColor = Color.Green,
-                unselectedContentColor = Color.Gray,
+                selectedContentColor = BusAppTheme.colors.positiveStatus,
+                unselectedContentColor = BusAppTheme.colors.negativeStatus,
                 onClick = { onItemClick(item) },
                 icon = {
                     Column(horizontalAlignment = CenterHorizontally) {
@@ -81,52 +83,44 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
     }
 }
 
-/*
-@Preview(showBackground = true)
-@Composable
-fun NavBarPreview() { // Previews the navbar
-    // Create the paramaters
-    var previewList = List<NavBarItem>(3) {
-        NavBarItem("test1", "route", );
-        NavBarItem("test1", "route", )
-    } //list of 2 NavBarItems
-
-}
-
- */
 @Composable
 fun displayNavBar(navController: NavController) {
-
-    NavBar(items = listOf(
-        NavBarItem(
-            name = "Home",
-            route = "home_screen",
-            icon = Icons.Default.Home
+// For navigation
+    Column(
+        verticalArrangement = Arrangement.Bottom,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        NavBar(items = listOf(
+            NavBarItem(
+                name = "Home",
+                route = "home_screen",
+                icon = Icons.Default.Home
+            ),
+            NavBarItem(
+                name = "Search",
+                route = "search_screen",
+                icon = Icons.Default.Search
+            ),
+            NavBarItem(
+                name = "Alert",
+                route = "alert_screen",
+                icon = Icons.Default.Notifications
+            ),
+            NavBarItem(
+                name = "Planner",
+                route = "planner_screen",
+                icon = Icons.Default.DateRange
+            ),
+            NavBarItem(
+                name = "Settings",
+                route = "setting_screen",
+                icon = Icons.Default.Settings
+            ),
         ),
-        NavBarItem(
-            name = "Search",
-            route = "search_screen",
-            icon = Icons.Default.Search
-        ),
-        NavBarItem(
-            name = "Alert",
-            route = "alert_screen",
-            icon = Icons.Default.Notifications
-        ),
-        NavBarItem(
-            name = "Planner",
-            route = "planner_screen",
-            icon = Icons.Default.DateRange
-        ),
-        NavBarItem(
-            name = "Settings",
-            route = "setting_screen",
-            icon = Icons.Default.Settings
-        ),
-    ),
-        navController = navController,
-        onItemClick = {
-            navController.navigate(it.route)
-        }
-    )
+            navController = navController,
+            onItemClick = {
+                navController.navigate(it.route)
+            }
+        )
+    }
 }

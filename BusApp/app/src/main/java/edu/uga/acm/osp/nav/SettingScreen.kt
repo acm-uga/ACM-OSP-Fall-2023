@@ -9,4 +9,5 @@ import edu.uga.acm.osp.composables.*
 fun SettingScreen(navController: NavController) {
     Header("Settings")
     DisplayBox()
+    displayNavBar(navController = navController)
 }
