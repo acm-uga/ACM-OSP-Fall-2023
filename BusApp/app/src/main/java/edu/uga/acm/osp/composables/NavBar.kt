@@ -19,8 +19,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Route
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -102,32 +109,32 @@ fun displayNavBar(navController: NavController) {
         verticalArrangement = Arrangement.Bottom,
         modifier = Modifier.fillMaxSize()
     ) {
-        searchBar()
+        //searchBar()
         NavBar(items = listOf(
             NavBarItem(
                 name = "Home",
                 route = "home_screen",
-                icon = Icons.Default.Home
+                icon = Icons.Outlined.Home
             ),
             NavBarItem(
-                name = "Alert",
+                name = "Alerts",
                 route = "alert_screen",
-                icon = Icons.Default.Notifications
+                icon = Icons.Outlined.Notifications
             ),
             NavBarItem(
                 name = "Search",
                 route = "search_screen",
-                icon = Icons.Default.Search
+                icon = Icons.Outlined.Search
             ),
             NavBarItem(
                 name = "Planner",
                 route = "planner_screen",
-                icon = Icons.Default.DateRange
+                icon = Icons.Outlined.Route
             ),
             NavBarItem(
                 name = "Settings",
                 route = "setting_screen",
-                icon = Icons.Default.Settings
+                icon = Icons.Outlined.Settings
             ),
         ),
             navController = navController,
