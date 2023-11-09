@@ -1,4 +1,4 @@
-package edu.uga.acm.osp.components
+package edu.uga.acm.osp.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

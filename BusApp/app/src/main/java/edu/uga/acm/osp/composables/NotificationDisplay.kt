@@ -3,6 +3,7 @@ package edu.uga.acm.osp.composables
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -32,7 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons.Default
+import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.BusAlert
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
@@ -50,7 +53,7 @@ val height = 225.sp
 @Preview(showBackground = false)
 @Composable
 fun NotificationComposable() {
-    Card(
+    Box(
         modifier = Modifier
             .size(width = 500.dp, height = 220.dp)
             .padding(15.dp)
@@ -84,7 +87,7 @@ fun NotificationComposable() {
             Row (modifier = Modifier
                 .height(30.dp)
             ){
-                DefaultIcon(imageVector = Default.ArrowForward, contentDescription = "Status Updates")
+                DefaultIcon(imageVector = Default.BusAlert, contentDescription = "Status Updates")
                 Text(text = "Status Updates", fontSize = 15.sp, modifier = Modifier.offset(8.dp))
                 Spacer(modifier = Modifier.padding(15.dp))
                 CheckboxLabelled()
@@ -96,7 +99,7 @@ fun NotificationComposable() {
             Row (modifier = Modifier
                 .height(30.dp)
             ) {
-                DefaultIcon(imageVector = Default.Notifications, contentDescription = "Your Reminders")
+                DefaultIcon(imageVector = Default.Alarm, contentDescription = "Your Reminders")
                 Text(text = "Your Reminders", fontSize = 15.sp, modifier = Modifier.offset(8.dp))
                 Spacer(modifier = Modifier.padding(12.5.dp))
                 CheckboxLabelled()

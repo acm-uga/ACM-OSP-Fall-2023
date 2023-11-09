@@ -1,4 +1,4 @@
-package edu.uga.acm.osp.components
+package edu.uga.acm.osp.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -96,7 +96,7 @@ fun IconListItem(
                         modifier = Modifier
                             .height(22.dp)
                     ) {
-                        Spacer(modifier = Modifier.weight(weight = 1f))
+                        Spacer(modifier = Modifier.weight(1f))
                         context1(Modifier)
                     }
 
@@ -189,7 +189,7 @@ fun LabelListItem(
                         modifier = Modifier
                             .height(22.dp)
                     ) {
-                        Spacer(modifier = Modifier.weight(weight = 1f))
+                        Spacer(modifier = Modifier.weight(1f))
                         context1(Modifier)
                     }
 
