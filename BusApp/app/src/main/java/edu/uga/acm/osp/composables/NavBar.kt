@@ -74,7 +74,7 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
 }
 
 @Composable
-fun searchBar() {
+fun searchBarOld() {
     var text by remember { mutableStateOf(" ") }
     TextField(
         value = text,
