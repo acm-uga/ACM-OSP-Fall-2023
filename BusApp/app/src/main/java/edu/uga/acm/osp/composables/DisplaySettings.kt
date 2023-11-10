@@ -5,9 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenu
@@ -30,57 +29,32 @@ import androidx.compose.ui.unit.dp
 @Preview(showBackground = true)
 @Composable
 fun DisplayBox() {
-    Card {
-        Row (modifier = Modifier.padding(24.dp)) {
-            Column(
-                modifier = Modifier
-                    .padding(bottom = 48.dp)
-                    .padding(bottom = 48.dp)
-
-            ) {
-                Row {
-                    Column{
-                        Text(text = "Display Settings", fontWeight = FontWeight.ExtraBold)
-                    }
-                }
-                Row {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(text = "Dark Mode: ")
-                    }
-                    Column{
-                        toggleButton()
-                    }
-                }
-                Row {
-                    Column{
-                        Text(text = "Distance Units: ")
-                    }
-                    Column{
-                        DropdownDistance()
-                    }
-
-                }
-                Row{
-                    Column{
-                        Text(text = "Time Format: ")
-                    }
-                    Column{
-                        DropdownTime()
-                    }
-                }
-                Row {
-                    Column{
-                        Text(text = "Language: ")
-                    }
-                    Column{
-                        DropdownLanguage()
-                    }
-                }
+    Card(modifier = Modifier
+        .size(width = 500.dp, height = 300.dp)
+        .padding(15.dp))
+    {
+        Column (modifier = Modifier.padding(24.dp)) {
+            Row {
+                Text(text = "Display Settings", fontWeight = FontWeight.ExtraBold)
             }
-        }
-    }
+            Row {
+                Text(text = "Dark Mode: ")
+                toggleButton()
+            }
+            Row {
+                Text(text = "Distance Units: ")
+                DropdownDistance()
+            }
+            Row{
+                Text(text = "Time Format: ")
+                DropdownTime()
+            }
+            Row {
+                Text(text = "Language: ")
+                DropdownLanguage()
+            }
+        } // main Col
+    } // Card
 }
 @Composable
 fun toggleButton() {
@@ -101,7 +75,8 @@ fun DropdownDistance() {
     val disabledValue = "B"
     var selectedIndex by remember { mutableStateOf(0) }
     Box(modifier = Modifier
-        .wrapContentSize(Alignment.TopStart)) {
+        .wrapContentSize(Alignment.TopStart))
+    {
         Text(items[selectedIndex],modifier = Modifier
             .clickable(onClick = { expanded = true })
             .background(
@@ -129,7 +104,7 @@ fun DropdownDistance() {
                 }
             }
         }
-    }
+    } // Card
 }
 
 @Composable
