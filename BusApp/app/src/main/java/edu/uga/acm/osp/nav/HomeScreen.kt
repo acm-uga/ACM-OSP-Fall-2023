@@ -1,6 +1,7 @@
 package edu.uga.acm.osp.nav
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,5 +24,11 @@ import edu.uga.acm.osp.ui.theme.BulldogRed
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Header(text = "Home")
+    Column(
+        verticalArrangement = Arrangement.Bottom,
+
+    ) {
+        Header(text = "Home Screen")
+        displayNavBar(navController = navController)
+    }
 }
