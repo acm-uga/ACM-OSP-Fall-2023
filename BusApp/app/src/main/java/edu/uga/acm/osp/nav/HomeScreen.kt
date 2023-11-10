@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,11 +26,20 @@ import edu.uga.acm.osp.ui.theme.BulldogRed
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Column(
-        verticalArrangement = Arrangement.Bottom,
-
-    ) {
-        Header(text = "Home Screen")
-        displayNavBar(navController = navController)
+    Scaffold(
+        topBar = {
+            Header(text = "Home")
+        },
+        bottomBar = {
+            displayNavBar(navController = navController)
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            // Put composables here!
+        }
     }
 }
