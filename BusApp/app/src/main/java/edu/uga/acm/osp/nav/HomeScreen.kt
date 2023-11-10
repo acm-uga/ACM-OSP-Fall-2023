@@ -24,11 +24,6 @@ import edu.uga.acm.osp.ui.theme.BulldogRed
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Column(
-        verticalArrangement = Arrangement.Bottom,
-
-    ) {
-        Header(text = "Home Screen")
-        displayNavBar(navController = navController)
-    }
+    Header(text = "Home Screen")
+    displayNavBar(navController = navController)
 }
