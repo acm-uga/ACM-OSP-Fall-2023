@@ -34,3 +34,4 @@ public class BusController {
 
 
 }
+//accept user commands and return JSON
