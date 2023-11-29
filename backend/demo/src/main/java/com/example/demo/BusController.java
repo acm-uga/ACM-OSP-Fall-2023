@@ -11,7 +11,7 @@ public class BusController {
     @GetMapping
     @RequestMapping(value = "/api/get/nearestStops")
     public void getNearestStops() {
-
+        
     }
 
     @GetMapping
