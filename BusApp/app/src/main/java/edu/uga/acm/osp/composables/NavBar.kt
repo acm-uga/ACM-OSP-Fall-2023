@@ -81,25 +81,6 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
     }
 }
 
-@Composable
-fun searchBarOld(searchViewModel: SearchViewModel = viewModel()) {
-    val searchUiState by searchViewModel.uiState.collectAsState()
-    OutlinedTextField(
-        keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = ImeAction.Search,
-        ),
-        keyboardActions = KeyboardActions(
-          onSearch = { searchViewModel.search()}
-        ),
-        singleLine = true,
-        value = searchViewModel.query,
-        onValueChange = { searchViewModel.query = it},
-        label = {
-            Text(searchUiState.query)},
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
 
 //Displaying the navbar. Creates the navbar to be used in the app
 @Composable
@@ -110,7 +91,7 @@ fun displayNavBar(navController: NavController) {
         modifier = Modifier.fillMaxSize()
     ) {
         Row() {
-            searchBarOld()
+            searchBar()
         }
         NavBar(items = listOf(
             NavBarItem(
