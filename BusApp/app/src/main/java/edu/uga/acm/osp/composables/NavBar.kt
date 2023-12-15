@@ -2,13 +2,17 @@ package edu.uga.acm.osp.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Badge
 import androidx.compose.material.BadgedBox
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
@@ -18,15 +22,19 @@ import androidx.compose.material.icons.outlined.Route
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import edu.uga.acm.osp.ui.theme.BusAppTheme
@@ -73,16 +81,6 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
     }
 }
 
-@Composable
-fun searchBar() {
-    var text by remember { mutableStateOf(" ") }
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        label = { Text("Search")},
-        modifier = Modifier.fillMaxWidth()
-    )
-}
 
 //Displaying the navbar. Creates the navbar to be used in the app
 @Composable
@@ -92,7 +90,9 @@ fun displayNavBar(navController: NavController) {
         verticalArrangement = Arrangement.Bottom,
         modifier = Modifier.fillMaxSize()
     ) {
-        //searchBar()
+        Row() {
+            searchBar()
+        }
         NavBar(items = listOf(
             NavBarItem(
                 name = "Home",
