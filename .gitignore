@@ -3,3 +3,8 @@
 .idea/ACM-OSP-Fall-2023.iml
 .idea/modules.xml
 .idea/vcs.xml
+*.ini
+*.iml
+osp-bus-app/src/.idea/misc.xml
+osp-bus-app/src/.idea/modules.xml
+osp-bus-app/src/.idea/vcs.xml

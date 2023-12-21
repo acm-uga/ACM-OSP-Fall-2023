@@ -1,16 +1,23 @@
 package ospbusapp;
 
+import routeSchedule.RouteSchedule;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Route {
-    //Fields:
-    private long routeId;
-    private String name;
-    //K: either weekend or weekday, V: start time - end time
-    private Map<String, String> schedule;
-    private List<Long> stopIds;
+    // Fields initialized at instantiation:
+    private long routeId; // Route ID as given by the Bus API. Derived from db
+    private String name; // Full, official route name
+    private String abbName; // Abbreviated route name, as displayed in current bus tracking tool
+    private String displayColor; // Hex code of the color used when displaying this route in UI components
+    private RouteSchedule schedule; // Contains all info pertaining to when the route is supposed to be operating
+    private Long[] stopIds; // Contains the IDs of the stops on this route in the order they are served
+
+    // Fields that update with each API call
+    private boolean active; // True when the route is operating AND buses are appearing in the API. Otherwise false
+
     private List<Bus> activeBuses;
 
     //Constructors:
@@ -18,10 +25,10 @@ public class Route {
         this.routeId = routeId;
 
         //Update this with DB calls
-//        this.name = name;
-//        this.schedule = schedule;
-//        this.stopIds = stopIds;
-//        this.activeBuses = activeBuses;
+        //this.name = name;
+        //this.schedule = RouteSchedule.decode(encodedScheduleInDb);
+        //this.stopIds = stopIds;
+        //this.activeBuses = activeBuses;
     }
 
     //Methods:
@@ -41,12 +48,12 @@ public class Route {
         this.name = name;
     }
 
-    public Map<String, String> getSchedule() {
+    public RouteSchedule getSchedule() {
         return schedule;
     }
 
-    public void setSchedule() {
-        //Populate new map with times from DB -- temporary values for now
+    public void setSchedule(String encodedRouteSchedule) {
+        //
         this.schedule = new HashMap<>();
 
         this.schedule.put("weekend", "9:00AM - 9:00PM");
