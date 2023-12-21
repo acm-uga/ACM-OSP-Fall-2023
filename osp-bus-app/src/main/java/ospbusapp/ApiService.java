@@ -10,18 +10,28 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ApiService {
-    public static void getRoute(long routeId) {
-        //Construct route object, which calls DB methods for getting route data
-        TestRoute testRoute = new TestRoute(routeId);
+    //Returns list of routes with each element as a map of stop ids to bus objects
+    public static List<Map<Long, Bus>> get() {
 
         //With this routeId, make an API call for each stop in route
-        List<Long> stopIds = testRoute.getStopIds();
+        List<Long> stopIds = new ArrayList<>();
+        stopIds.add(2737275L);
+        stopIds.add(2737276L);
+        stopIds.add(2746275L);
+        stopIds.add(2737279L);
+        stopIds.add(2736531L);
+
 
         //Base URL of the API
-        String baseUrl = "https://routes.uga.edu";
+        String baseUrl = "";
 
         //Construct new HTTP client for making API request and storing data in String
         HttpClient client = HttpClient.newHttpClient();
@@ -30,8 +40,14 @@ public class ApiService {
         //Get a parser object to parse each response's body
         JSONParser parser = new JSONParser();
 
+        Map<Long, Integer> routes = new HashMap<>();
+        List<Map<Long, Bus>> busesOnRoute = new ArrayList<>();
+
         //Parse data for each stop
         for (long stopId : stopIds) {
+
+
+            long first = -1;
             //Specify endpoint to be added to baseUrl for request
             String endpoint = "/Stop/" + stopId + "/Arrivals";
 
@@ -51,16 +67,62 @@ public class ApiService {
                 JSONObject route = (JSONObject) container.get(0);
                 //Get arrivals array from inside route object
                 JSONArray arrivals = (JSONArray) route.get("Arrivals");
-
+                Set<Long> vehicleIds = new HashSet<>();
                 for (int i = 0; i < arrivals.size(); i++) {
                     //Get each arrival object from within arrivals array
                     JSONObject arrival = (JSONObject) arrivals.get(i);
 
+                    int posRouteId;
+
+                    long currRouteId = (long) arrival.get("RouteID");
+
+                    if (routes.containsKey(currRouteId)) {
+                        posRouteId = routes.get(currRouteId);
+                    } else {
+                        posRouteId = routes.size();
+                        routes.put(currRouteId, routes.size());
+                        busesOnRoute.add(new HashMap<>());
+                    }
+
                     //Get specific attribute from arrival object (lookup by attribute name in response)
                     long vehicleId = (long) arrival.get("VehicleID");
+                    if (vehicleIds.contains(vehicleId)) continue;
+                    vehicleIds.add(vehicleId);
                     double secondsToArrival = (double) arrival.get("SecondsToArrival");
+                    // stopID, routeID already in for loop
+                    Bus bus;
+                    // adding to an existing bus object
+                    if (busesOnRoute.get(posRouteId).containsKey(vehicleId)) {
+                        bus = busesOnRoute.get(posRouteId).get(vehicleId);
+                        if (secondsToArrival < bus.getSecondsTillArrival().get(0)) {
+                            bus.setNextStopId(stopId);
+                            bus.getSecondsTillArrival().add(0, secondsToArrival);
+                        } else {
+                            // binary search possible (maybe in the future)
+                            // for loop for now
+                            boolean added = false;
+                            for (int j = 0; j < bus.getSecondsTillArrival().size(); j++) {
+                                if (bus.getSecondsTillArrival().get(j) > secondsToArrival) {
+                                    bus.getSecondsTillArrival().add(j, secondsToArrival);
+                                    added = true;
+                                    break;
+                                }
+                            }
+                            if (!added) {
+                                bus.getSecondsTillArrival().add(secondsToArrival);
+                            }
+                        }
+                    }
+                    // creating a new bus object
+                    else {
+                        List<Double> listSecondsToArrival = new ArrayList<>();
+                        listSecondsToArrival.add(secondsToArrival);
+                        bus = new Bus(vehicleId, currRouteId, stopId, listSecondsToArrival);
+                        busesOnRoute.get(posRouteId).put(vehicleId, bus);
+                    }
 
                     //Debugging:
+                    System.out.println("Route: " + currRouteId);
                     System.out.println("Vehicle " + vehicleId + " is arriving at stop " + stopId + " in " + secondsToArrival + " seconds.");
                 }
             } catch (IOException | InterruptedException e) {
@@ -69,5 +131,17 @@ public class ApiService {
                 System.err.println("Error with parsing response");
             }
         }
+
+//        for (Long routeId: routes.keySet()) {
+//            //Position in list
+//            int routePos = routes.get(routeId);
+//
+//            Map<Long, Bus> buses = busesOnRoute.get(routePos);
+//
+//            System.out.println("For Route: " + routeId);
+//
+//        }
+
+        return busesOnRoute;
     }
 }

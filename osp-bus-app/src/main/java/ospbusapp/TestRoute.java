@@ -82,10 +82,3 @@ public class TestRoute {
         );
     }
 }
-
-class Driver {
-    public static void main(String[] args) {
-        //Test getRoute() method
-        ApiService.getRoute(19369L);
-    }
-}
