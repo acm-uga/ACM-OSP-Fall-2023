@@ -15,10 +15,9 @@ public class Route {
     private RouteSchedule schedule; // Contains all info pertaining to when the route is supposed to be operating
     private Long[] stopIds; // Contains the IDs of the stops on this route in the order they are served
 
-    // Fields that update with each API call
+    // Fields that update with each batch of API data
     private boolean active; // True when the route is operating AND buses are appearing in the API. Otherwise false
-
-    private List<Bus> activeBuses;
+    private List<Bus> activeBuses; // Contains all Bus objects currently active on this Route. Unsorted.
 
     //Constructors:
     public Route(long routeId) {
@@ -26,7 +25,7 @@ public class Route {
 
         //Update this with DB calls
         //this.name = name;
-        //this.schedule = RouteSchedule.decode(encodedScheduleInDb);
+        //this.schedule = RouteSchedule.decode(routeSchedule);
         //this.stopIds = stopIds;
         //this.activeBuses = activeBuses;
     }
@@ -52,19 +51,15 @@ public class Route {
         return schedule;
     }
 
-    public void setSchedule(String encodedRouteSchedule) {
-        //
-        this.schedule = new HashMap<>();
-
-        this.schedule.put("weekend", "9:00AM - 9:00PM");
-        this.schedule.put("weekday", "7:00AM - 7:00PM");
+    public void setSchedule(RouteSchedule routeSchedule) {
+        this.schedule = routeSchedule;
     }
 
-    public List<Long> getStopIds() {
+    public Long[] getStopIds() {
         return stopIds;
     }
 
-    public void setStopIds(List<Long> stopIds) {
+    public void setStopIds(Long[] stopIds) {
         this.stopIds = stopIds;
     }
 

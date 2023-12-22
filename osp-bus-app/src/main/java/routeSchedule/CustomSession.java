@@ -1,13 +1,31 @@
 package routeSchedule;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
-public class CustomSession extends Session {	
+/**
+ * Represents a unique set of {@code OperatingDate}s during which the Route operates, not already defined in a
+ * {@code PredefinedSession}
+ */
+public class CustomSession extends Session {
+	/**
+	 * Instantiates a {@code CustomSession} object provided an array of {@code OperatingDate}s
+	 *
+	 * @param operatingDates the array of {@code OperatingDate} objects with which to populate the new
+	 * {@code CustomSession}'s {@code dates} field
+	 */
 	public CustomSession(OperatingDate[] operatingDates) {
 		super(operatingDates);
 	}
-	
-	/* Decode the encoded session (series of dates separated by semicolons) and instantiate */
+
+	/**
+	 * Decodes the encoded {@code CustomSession} and instantiates one given the extracted data
+	 *
+	 * @param encodedSession the encoded {@code CustomSession} {@code String} to decode
+	 *
+	 * @return an instantiated {@code CustomSession} representing the data encoded in {@code encodedSession}
+	 *
+	 * @see "README"
+	 */
 	protected static Session decodeSession(String encodedSession) {
 		// Parse the encoded OperatingDate strings into an Array of OperatingDates
 		String[] operatingDateStrings = RouteSchedule.parseToArray(encodedSession, 
@@ -24,17 +42,14 @@ public class CustomSession extends Session {
 	}
 	
 	/**
-	 * Encodes this CustomSession object as a String capable of being decoded back into an
-	 * identical, instantiated CustomSession object.
-	 * 
-	 * Permits storage of the CustomSession in a condensed format that is easy to understand and
-	 * modify as-is.
-	 * 
-	 * @return A String containing encoded CustomSession data, adhering to the guidelines outlined in README
-	 * 
+	 * Encodes this {@code CustomSession} object as a {@code String} capable of being decoded back into an
+	 * identical {@code CustomSession} object.
+	 *
+	 * @return a {@code String} containing encoded CustomSession data
+	 *
 	 * @see "README"
 	 */
-	public String encode() {
+	protected String encode() {
 		/* Encode the list of OperatingDates. Take each as a string, strip its formatting, then
 		* add them to a string separated by ',' if multiple exist. */
 		String[] operatingDateStrings = new String[this.dates().length];
@@ -46,12 +61,11 @@ public class CustomSession extends Session {
 		
 		return RouteSchedule.strArrayToStr(operatingDateStrings, ",");
 	}
+
 	/**
-	 * Creates a String representation of this CustomSession's data in an expanded,
-	 * human-friendly format.
+	 * Creates a textual representation of this {@code CustomSession}'s data in a brief but human-friendly format
 	 * 
-	 * @return A String of ", "-separated OperatingDates in human-friendly MM/DD/YY
-	 * format
+	 * @return a {@code String} of ", "-separated {@code OperatingDate}s in MM/DD/YY format
 	 */
 	public String toString() {
 		if (this.dates() != null) {
@@ -70,18 +84,24 @@ public class CustomSession extends Session {
 	}
 	
 	/**
-	 * Compares this CustomSession to the passed Session based on type and fields.
+	 * Compares this {@code CustomSession} to the passed {@code Session} based on type and fields
 	 * 
-	 * @param that  the Session object to compare to the invoking CustomSession
-	 * 
-	 * @return <code>true</code> if and only if <code>that</code> is of CustomSession type and contains the
-	 * same OperatingDate's as the invoking CustomSession
+	 * @param that the {@code Session} object to compare to the invoking {@code CustomSession}
+	 *
+	 * @return {@code true} if and only if {@code that} is of {@code CustomSession} type and contains the same
+	 * {@code OperatingDate}s as the invoking {@code CustomSession}
 	 */
 	public boolean equals(Session that) {
-		return that instanceof CustomSession && this.dates().equals(that.dates());
+		return that instanceof CustomSession && Arrays.equals(this.dates(), that.dates());
 	}
-	
-	// Return the correct error message String given the RouteSchedule ERROR provided as an argument.
+
+	/**
+	 * Provides a standardized error message to print to the console given the provided error
+	 *
+	 * @param error the type of error whose message needs to be retrieved
+	 *
+	 * @return the correct error message given the passed error
+	 */
 	private static String errorMessage(RouteSchedule.ERRORS error) {
 		switch (error) {
 		case INVALID_FIELDS:

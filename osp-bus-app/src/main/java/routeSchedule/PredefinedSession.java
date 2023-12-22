@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
-// TODO check final
 public class PredefinedSession extends Session {
 	private static HashMap<Character, String> namesByIndicator = new HashMap<>();
 	private static HashMap<String, OperatingDate[]> datesByName = new HashMap<>();
@@ -107,7 +106,7 @@ public class PredefinedSession extends Session {
 	}
 
 	// Returns the encoded form of this predefined session, given by this PredefinedSession's indicator.
-	public String encode() {
+	protected String encode() {
 		return String.valueOf(this.indicator);
 	}
 

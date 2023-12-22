@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public abstract class Session {
 	private OperatingDate[] dates;
 
-	public abstract String encode();
+	protected abstract String encode();
 	public abstract String toString();
 	public abstract boolean equals(Session that);
 	
@@ -24,7 +24,7 @@ public abstract class Session {
 	
 	// METHODS
 	/* Accepts an encoded Session String and returns an instantiated Session of the valid type. The
-	 * decoding algorithm to attempt is based on whether or not the encoded Session String appears
+	 * decoding algorithm to attempt is based on whether the encoded Session String appears
 	 * "custom." */
 	protected static Session decode(String encodedSession) {
 		if (isCustom(encodedSession)) {

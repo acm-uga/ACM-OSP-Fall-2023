@@ -33,6 +33,9 @@ public class RouteSchedule {
 	}
 	
 	// Encode this schedule object into a String
+
+	/* Permits storage of the {@code CustomSession} in a condensed format that is easy to understand and
+	 * modify as-is. */
 	public String encode() {
 		int itemNum = 1;
 		int numOfOWs = this.schedule.length;

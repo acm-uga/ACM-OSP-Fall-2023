@@ -25,7 +25,9 @@ of a `RouteSchedule` can be re-encoded into a database-storeable and decodable `
 
 This approach was chosen over traditional serialization to facilitate schedule writing/editing, minimize `String` size,
 and make encoded schedules that are stored in the database quick and easy to understand and modify.
+
 ---
+
 ### Encoding Format:
 Below are a few examples of valid formats demonstrating `RouteSchedule`'s ability to efficiently represent a variety of
 schedule types:
@@ -59,7 +61,9 @@ schedule types:
 * Where DD represents a day integer from 01-31, with a leading 0 included for single-digit days (day must be valid for
 given month and year)
 * Where YY represents a year integer from 00-99 (as in 20YY), with a leading 0 included for single-digit years
+
 ---
+
 ### Encoding Rules:
 1. At least one operating window must exist.
 2. 0-unlimited operating dates can exist (0 indicates indefinite operation with the DailySchedule that follows).
@@ -79,7 +83,9 @@ only times are necessary (no ?: needed).
 parent operating date.
 * Encoded operating times exist between '{' and '}' if they apply to all days included in the parent operating date or, if
 days of the week have unique operating times, between ':' and ';', as separated by ',' if multiple exist
+
 ---
+
 ### Encoding Examples:
 Every example below is a valid encoding. Feel free to use `System.out.println(RouteSchedule.decode(encodedString).toString())`
 to interpret any:

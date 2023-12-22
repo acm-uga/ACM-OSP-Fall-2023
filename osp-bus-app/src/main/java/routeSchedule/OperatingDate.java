@@ -2,6 +2,9 @@ package routeSchedule;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
+/**
+ * Represents a range of {@code java.util.LocalDate}s during which a Route operates
+ */
 public class OperatingDate {
 	// Public constant so Indefinite can be passed to an OperatingDate constructor
 	public static final String Indefinite = "";
@@ -22,6 +25,12 @@ public class OperatingDate {
 	private TYPE type;
 	
 	// Accepts a single, valid date String in MM/DD/YY or MM/DD/YY-MM/DD/YY ("HUMAN") format OR Indefinite ("Indefinite").
+
+	/**
+	 * Instantiates a
+	 *
+	 * @param dateString
+	 */
 	public OperatingDate(String dateString) {		
 		RouteSchedule.ERRORS error = RouteSchedule.ERRORS.NONE;
 		
@@ -199,7 +208,7 @@ public class OperatingDate {
 	}
 	
 	// Encode this OperatingDate as a String capable of being decoded back into an OperatingDate object
-	public String encode() {
+	protected String encode() {
 		switch (this.type) {
 			case INDEFINITE:
 				return OperatingDate.Indefinite;
