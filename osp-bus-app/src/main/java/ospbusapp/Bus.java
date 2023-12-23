@@ -1,29 +1,29 @@
 package ospbusapp;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Represents a single bus that travels along a Route, stopping at each Stop along the way
+ * <p></p>
+ * Contains the ID of the Stop being approached, the seconds till it arrives, and other relevant metadata
+ */
 public class Bus {
-    //Fields:
-    //VehicleID in API
-    private long busId;
-    //RouteID in API
-    private long routeId;
-    //Next upcoming stop and time to arrival till this stop (seconds)
-    private long nextStopId;
-    //Keep track of time bus was last updated locally on server (not retrieved from API)
-    private LocalDateTime lastUpdated;
-    //Keep list of seconds to arrival for each upcoming stop (index 0 is time till next stop)
-    private List<Double> secondsTillArrival;
+    // Fields that update with each batch of API data:
+    // Derived directly from API data:
+    private long busId; // VehicleID in API
+    private long routeId; // RouteID in API
+    private long nextStopId; // StopID in API of the stop currently being approached
+    private List<Double> secondsTillArrival; // Seconds to arrival for each upcoming stop (index 0 is time to next stop)
+    // Updated with each update:
+    private LocalDateTime lastUpdated; // Record of when the bus was last updated locally
 
     //Constructors:
     public Bus(long busId, long routeId, long nextStopId, List<Double> secondsTillArrival) {
         this.busId = busId;
         this.routeId = routeId;
         this.nextStopId = nextStopId;
-        //Set last updated to current time
-        this.lastUpdated = LocalDateTime.now();
         this.secondsTillArrival = secondsTillArrival;
+        this.lastUpdated = LocalDateTime.now(); //Set last updated to current time
     }
 
     //Methods:

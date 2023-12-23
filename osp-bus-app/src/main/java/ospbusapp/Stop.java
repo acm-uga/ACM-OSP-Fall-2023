@@ -1,27 +1,36 @@
 package ospbusapp;
 
-import java.util.List;
+/**
+ * Represents a bus stop: location that Buses stop at while operating on a Route.
+ * <p></p>
+ * Contains the location of the stop, its name, relevant metadata, and data used in UI components on the frontend
+ */
+public class Stop implements BasicUiDisplayable {
+    protected enum Type {TEST_TYPE} // The primary "purpose"/type of location a stop might serve
 
-public class Stop {
-    //Fields:
-    private int stopId;
+    // Fields derived from the database at instantiation:
+    private long stopId;
     private String name;
-    private Double latitude;
+    private Type type;
+    private double latitude;
     private double longitude;
     //List of route ids that this stop is connected to
-    private List<Integer> servesRoutesIds;
+    private long[] servesRouteIds;
 
     //Constructors:
-    public Stop(int stopId, String name, Double latitude, double longitude, List<Integer> servesRoutesIds) {
+    // From DB calls
+    public Stop(long stopId, String name, Type type, double latitude, double longitude, long[] servesRouteIds) {
         this.stopId = stopId;
         this.name = name;
+        this.type = type;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.servesRoutesIds = servesRoutesIds;
+        this.servesRouteIds = servesRouteIds;
     }
 
+
     //Methods:
-    public int getStopId() {
+    public long getStopId() {
         return stopId;
     }
 
@@ -53,12 +62,12 @@ public class Stop {
         this.longitude = longitude;
     }
 
-    public List<Integer> getServesRoutesIds() {
-        return servesRoutesIds;
+    public long[] getServesRoutesIds() {
+        return servesRouteIds;
     }
 
-    public void setServesRoutesIds(List<Integer> servesRoutesIds) {
-        this.servesRoutesIds = servesRoutesIds;
+    public void setServesRoutesIds(long[] servesRoutesIds) {
+        this.servesRouteIds = servesRoutesIds;
     }
 
     @Override
@@ -73,7 +82,7 @@ public class Stop {
             return false;
         }
 
-        int stopId = ((Stop) stop).stopId;
+        long stopId = ((Stop) stop).stopId;
 
         return this.stopId == stopId;
     }
@@ -85,8 +94,52 @@ public class Stop {
                 ", name='" + name + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
-                ", servesRoutesIds=" + servesRoutesIds +
+                ", servesRoutesIds=" + servesRouteIds +
                 '}'
         );
+    }
+
+    // BasicUiDisplayable Implementations:
+    /**
+     * Provides the name of the invoking Stop
+     *
+     * @return the name of {@code this} {@code Stop}
+     */
+    @Override
+    public String getHeader() {
+        return this.name;
+    }
+
+    /**
+     * Provides a brief overview of the Routes served
+     *
+     * @return the abbreviated names of the first 3 Routes {@code this} {@code Stop} serves if 
+     */
+    @Override
+    public String getSubHeader() {
+        Stop firstStop = DatabaseService.getStop(this.stopIds[0]);
+        Stop lastStop = DatabaseService.getStop(this.stopIds[this.stopIds.length - 1]);
+
+        return "Serves " + firstStop.getName() + " to " + lastStop.getName();
+    }
+
+    /**
+     * Provides the current, primary schedule of the invoking Stop
+     *
+     * @return the name of {@code this} {@code Route}
+     */
+    @Override
+    public String getContext1() {
+        return this.schedule.mainSchedule();
+    }
+
+    /**
+     * Provides the current, alternate schedule of the invoking Stop
+     *
+     * @return a {@code String} suitable for use as secondary context
+     */
+    @Override
+    public String getContext2() {
+        return this.schedule.altSchedule();
     }
 }
