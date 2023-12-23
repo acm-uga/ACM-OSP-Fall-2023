@@ -6,28 +6,50 @@ import java.time.format.TextStyle;
 import java.util.*;
 
 /**
- * Represents what {@code OperatingTime}s a given Route operates within on any given {@code java.time.DayOfWeek}
+ * Represents what {@code OperatingTime}s a given Route operates within on any given {@code DayOfWeek}
+ *
+ * @see OperatingTime
+ * @see DayOfWeek
  */
 public class DailySchedule {
-	/* DailySchedule's of type...
-	 * GENERAL contain OperatingTimes that are not mapped to specific days of the week.
-	 * SPECIFIC indicate OperatingTimes are mapped to specific days of the week. */
-	private enum TYPE {GENERAL, SPECIFIC};
+	/**
+	 * Valid types of schedules a {@code DailySchedule} object can represent:
+	 * <ul>
+	 *     <li>{@link #GENERAL}</li>
+	 *     <li>{@link #SPECIFIC}</li>
+	 * </ul>
+	 */
+	private enum Type {
+		/**
+		 * The {@code DailySchedule} was instantiated without mapping {@code OperatingTime}s to {@code DayOfWeek}s,
+		 * so the stored mapping of {@code OperatingTime}s to {@code DayOfWeek} was inferred, but will not be
+		 * represented
+		 *
+		 * @see DayOfWeek
+		 */
+		GENERAL,
+		/**
+		 * The {@code DailySchedule} was instantiated with {@code DayOfWeek}s specified for each array of
+		 * {@code OperatingTime}s, representing operation within the {@code OperatingTime}s specific to each {@code DayOfWeek}
+		 *
+		 * @see DayOfWeek
+		 */
+		SPECIFIC};
 	
 	private HashMap<DayOfWeek, OperatingTime[]> dailySchedule;
-	private TYPE type;
+	private Type type;
 
 	/**
-	 * Instantiates a {@code DailySchedule} object provided a {@code HashMap} mapping {@code java.time.DayOfWeek}s to
+	 * Instantiates a {@code DailySchedule} object provided a {@code HashMap} mapping {@code DayOfWeek}s to
 	 * arrays of {@code OperatingTime}s and a specification of the new {@code DailySchedule}'s type
 	 *
-	 * @param dailySchedule a {@code HashMap} mapping each {@code javatime.DayOfWeek} to an array of {@code OperatingTime}s
+	 * @param dailySchedule a {@code HashMap} mapping each {@code DayOfWeek} to an array of {@code OperatingTime}s
 	 * @param type the type of {@code DailySchedule} to instantiate
 	 *
 	 * @see java.time.DayOfWeek
-	 * @see TYPE
+	 * @see Type
 	 */
-	public DailySchedule(HashMap<DayOfWeek, OperatingTime[]> dailySchedule, TYPE type) {
+	public DailySchedule(HashMap<DayOfWeek, OperatingTime[]> dailySchedule, Type type) {
 		this.dailySchedule = dailySchedule;
 		this.type = type;
 	}
@@ -149,20 +171,21 @@ public class DailySchedule {
 			operatingTimes.clear();
 		}
 		
-		return new DailySchedule(decodedDailySchedule, TYPE.SPECIFIC);
+		return new DailySchedule(decodedDailySchedule, Type.SPECIFIC);
 	}
 
 	/**
 	 * Instantiates a {@code DailySchedule} object by extracting the data contained within an encoded {@code String} of
-	 * {@code DailyTime}s, mapping them to the {@code java.time.DayOfWeeks} represented in {@code operatingDates}, and
+	 * {@code DailyTime}s, mapping them to the {@code DayOfWeeks} represented in {@code operatingDates}, and
 	 * populating fields accordingly
 	 *
-	 * @param operatingDates the array of {@code OperatingDate}s to find corresponding {@code java.time.DayOfWeek}s for
-	 * @param encodedDailyTimes the encoded DailyTime {@code String} to decode and map to the found {@code java.time.DayOfWeek}s
+	 * @param operatingDates the array of {@code OperatingDate}s to find corresponding {@code DayOfWeek}s for
+	 * @param encodedDailyTimes the encoded DailyTime {@code String} to decode and map to the found {@code DayOfWeek}s
 	 *
 	 * @return an instantiated {@code DailySchedule} representing the data encoded in {@code encodedDailySchedule}
 	 *
 	 * @see "README"
+	 * @see DayOfWeek
 	 */
 	protected static DailySchedule decode(OperatingDate[] operatingDates, String encodedDailyTimes) {
 		// Initialize a HashMap
@@ -193,207 +216,216 @@ public class DailySchedule {
 			decodedDailySchedule.put(dayWithTimes, operatingTimes);
 		}
 		
-		return new DailySchedule(decodedDailySchedule, TYPE.GENERAL);
+		return new DailySchedule(decodedDailySchedule, Type.GENERAL);
 	}
 
 	/**
 	 * Encodes this {@code DailySchedule} object as a {@code String} capable of being decoded back into an
-	 * identical {@code DailySchedule} object.
+	 * identical {@code DailySchedule} object
 	 *
-	 * @return a {@code String} containing encoded {@code DailySchedule} data
+	 * @return a {@code String} concisely representing this {@code DailySchedule}'s data
 	 *
 	 * @see "README"
 	 */
 	protected String encode() {
-		HashMap<Character, String> fullDailySchedule = new HashMap<>();
-		char dayIndicator;
-		String operatingTimesString;
-		
-		/* Convert the dailySchedule HashMap<DayOfWeek,OperatingTime[]) into a HashMap of day indicator Characters
-		 * and encoded OperatingTime Strings */
-		int i = 0;
-		for (Map.Entry<DayOfWeek,OperatingTime[]> day : this.dailySchedule.entrySet()) {
-			if (day.getValue() != null) {
-				// Get the day of week indicator for the current day's DayOfWeek key
-				dayIndicator = toDayIndicator(day.getKey());
-				String[] operatingTimeStrings = new String[day.getValue().length];
-				
-				// Convert the value, an array of OperatingTimes, into an array of operating time Strings
-				i = 0;
-				for (OperatingTime operatingTime : day.getValue()) {
-					operatingTimeStrings[i] = operatingTime.encode();
-					i++;
+		String encodedDailySchedule = "";
+
+		if (this.type == Type.SPECIFIC) {
+			HashMap<Character, String> fullDailySchedule = new HashMap<>();
+			char dayIndicator;
+			String operatingTimesString;
+
+			/* Convert the dailySchedule HashMap<DayOfWeek,OperatingTime[]) into a HashMap of day indicator Characters
+			 * and encoded OperatingTime Strings */
+			int i = 0;
+			for (Map.Entry<DayOfWeek, OperatingTime[]> day : this.dailySchedule.entrySet()) {
+				if (day.getValue() != null) {
+					// Get the day of week indicator for the current day's DayOfWeek key
+					dayIndicator = toDayIndicator(day.getKey());
+					String[] operatingTimeStrings = new String[day.getValue().length];
+
+					// Convert the value, an array of OperatingTimes, into an array of operating time Strings
+					i = 0;
+					for (OperatingTime operatingTime : day.getValue()) {
+						operatingTimeStrings[i] = operatingTime.encode();
+						i++;
+					}
+
+					// Convert the array of operating time Strings to a string representing the array
+					operatingTimesString = RouteSchedule.strArrayToStr(operatingTimeStrings, ",");
+					fullDailySchedule.put(dayIndicator, operatingTimesString);
 				}
-				
-				// Convert the array of operating time Strings to a string representing the array
-				operatingTimesString = RouteSchedule.strArrayToStr(operatingTimeStrings, ",");
-				fullDailySchedule.put(dayIndicator, operatingTimesString);
 			}
-		}
-		
-		// Determine which days have the same operating times
-		HashMap<String, String> groupedDailySchedule = new HashMap<>();
-		String dailyScheduleString;
-		String dayIndicatorsString;
-		String keyToReplace;
-		int accountedFor = 0;
-		
-		/* Group days with the same list of operating times together and place into
-		* condensedDailySchedule */
-		for (char key : fullDailySchedule.keySet()) {
-			/* Prevents processing more days than we already have to, since one
-			 * iteration of the parent loop is capable of iterating through all other
-			 * entries. */
-			if (accountedFor < fullDailySchedule.size()) {
-				dayIndicatorsString = "";
-				keyToReplace = "";
-				
-				// Check if the daily times string already exists in condensedDailySchedule
-				dailyScheduleString = fullDailySchedule.get(key);
-				
-				for (Map.Entry<String, String> schedule : groupedDailySchedule.entrySet()) {
-					if (dailyScheduleString.equals(schedule.getValue())) {							
-						if (keyToReplace.isEmpty()) {
-							keyToReplace = schedule.getKey();
-							dayIndicatorsString = keyToReplace;
-							//System.out.println(String.valueOf(key)+ " is similar to " + keyToReplace);
+
+			// Determine which days have the same operating times
+			HashMap<String, String> groupedDailySchedule = new HashMap<>();
+			String dailyScheduleString;
+			String dayIndicatorsString;
+			String keyToReplace;
+			int accountedFor = 0;
+
+			/* Group days with the same list of operating times together and place into
+			 * condensedDailySchedule */
+			for (char key : fullDailySchedule.keySet()) {
+				/* Prevents processing more days than we already have to, since one
+				 * iteration of the parent loop is capable of iterating through all other
+				 * entries. */
+				if (accountedFor < fullDailySchedule.size()) {
+					dayIndicatorsString = "";
+					keyToReplace = "";
+
+					// Check if the daily times string already exists in condensedDailySchedule
+					dailyScheduleString = fullDailySchedule.get(key);
+
+					for (Map.Entry<String, String> schedule : groupedDailySchedule.entrySet()) {
+						if (dailyScheduleString.equals(schedule.getValue())) {
+							if (keyToReplace.isEmpty()) {
+								keyToReplace = schedule.getKey();
+								dayIndicatorsString = keyToReplace;
+							}
+							dayIndicatorsString = dayIndicatorsString + key;
+							accountedFor++;
 						}
-						dayIndicatorsString = dayIndicatorsString + String.valueOf(key);
+					}
+
+					// If this entry's daily times string does not exist in condensedDailySchedule, add it
+					if (dayIndicatorsString.isEmpty()) {
+						groupedDailySchedule.put(String.valueOf(key), dailyScheduleString);
 						accountedFor++;
+						/* Otherwise, remove the existing entry with the value of dailyScheduleString
+						 * and replace it with a new entry containing the same value but dayIndicatorsString
+						 * as the key (the "condensed" key) */
+					} else {
+						groupedDailySchedule.remove(keyToReplace);
+						groupedDailySchedule.put(dayIndicatorsString, dailyScheduleString);
 					}
 				}
-				
-				// If this entry's daily times string does not exist in condensedDailySchedule, add it
-				if (dayIndicatorsString.isEmpty()) {
-					//System.out.println("Added day " + String.valueOf(key));
-					groupedDailySchedule.put(String.valueOf(key), dailyScheduleString);
-					accountedFor++;
-				/* Otherwise, remove the existing entry with the value of dailyScheduleString
-				 * and replace it with a new entry containing the same value but dayIndicatorsString
-				 * as the key (the "condensed" key) */
+			}
+
+			// Sort the groupedDailySchedule's keys in ascending order
+			HashMap<String, String> sortedDailySchedule = new HashMap<>();
+
+			for (Map.Entry<String, String> schedule : groupedDailySchedule.entrySet()) {
+				// If the current key is more than one character, sort it
+				if (schedule.getKey().length() > 1) {
+					i = 0;
+					keyToReplace = schedule.getKey();
+					dayIndicatorsString = "";
+					DayOfWeek[] daysOfWeekArray = new DayOfWeek[keyToReplace.length()];
+
+					// Convert every day in schedule's key to a DayOfWeek so it can be sorted
+					while (i < keyToReplace.length()) {
+						daysOfWeekArray[i] = toDayOfWeek(keyToReplace.charAt(i));
+						i++;
+					}
+
+					// Sort daysArray in ascending order
+					Arrays.sort(daysOfWeekArray);
+
+					// Convert daysArray back into an array of characters
+					i = 0;
+					String[] dayIndicatorsArray = new String[daysOfWeekArray.length];
+					while (i < dayIndicatorsArray.length) {
+						dayIndicatorsArray[i] = String.valueOf(toDayIndicator(daysOfWeekArray[i]));
+						i++;
+					}
+
+					// Convert the array of characters back into a string
+					dayIndicatorsString = RouteSchedule.strArrayToStr(dayIndicatorsArray);
+
+					/* Remove the keyToReplace entry and replace with the sorted key
+					 * and same value */
+					sortedDailySchedule.put(dayIndicatorsString, schedule.getValue());
 				} else {
-					//System.out.println("Replace... " + keyToReplace);
-					//System.out.println("...with " + dayIndicatorsString);
-					groupedDailySchedule.remove(keyToReplace);
-					groupedDailySchedule.put(dayIndicatorsString, dailyScheduleString);
+					sortedDailySchedule.put(schedule.getKey(), schedule.getValue());
 				}
 			}
-		}
-		
-		//System.out.println("Grouped:");
-		//System.out.println(groupedDailySchedule.toString());
-		
-		// Sort the groupedDailySchedule's keys in ascending order
-		HashMap<String, String> sortedDailySchedule = new HashMap<>();
-		keyToReplace = "";
-		dayIndicatorsString = "";
-		
-		for (Map.Entry<String, String> schedule : groupedDailySchedule.entrySet()) {
-			// If the current key is more than one character, sort it
-			if (schedule.getKey().length() > 1) {
-				i = 0;
-				keyToReplace = schedule.getKey();
-				dayIndicatorsString = "";
-				DayOfWeek[] daysOfWeekArray = new DayOfWeek[keyToReplace.length()];
-				
-				// Convert every day in schedule's key to a DayOfWeek so it can be sorted
-				while (i < keyToReplace.length()) {
-					daysOfWeekArray[i] = toDayOfWeek(keyToReplace.charAt(i));
-					i++;
-				}
-				
-				// Sort daysArray in ascending order
-				Arrays.sort(daysOfWeekArray);
-				
-				// Convert daysArray back into an array of characters
-				i = 0;
-				String[] dayIndicatorsArray = new String[daysOfWeekArray.length];
-				while (i < dayIndicatorsArray.length) {
-					dayIndicatorsArray[i] = String.valueOf(toDayIndicator(daysOfWeekArray[i]));
-					i++;
-				}
-				
-				// Convert the array of characters back into a string
-				dayIndicatorsString = RouteSchedule.strArrayToStr(dayIndicatorsArray);
-				
-				/* Remove the keyToReplace entry and replace with the sorted key
-				* and same value */
-				sortedDailySchedule.put(dayIndicatorsString, schedule.getValue());
-			} else {
-				sortedDailySchedule.put(schedule.getKey(), schedule.getValue());
-			}
-		}
-		
-		//System.out.println("Sorted:");
-		//System.out.println(sortedDailySchedule.toString());
-		
-		// Now that groupedDailySchedule's keys are sorted, condense them when possible
-		HashMap<String, String> condensedDailySchedule = new HashMap<>();
-		boolean daysAreConsecutive;
-		DayOfWeek firstDay;
-		DayOfWeek secondDay;
-		keyToReplace = "";
-		dayIndicatorsString = "";
-		
-		for (Map.Entry<String, String> schedule : sortedDailySchedule.entrySet()) {
-			// If the current key is more than 2 characters, consider it for condensing
-			if (schedule.getKey().length() > 2) {
-				keyToReplace = schedule.getKey();
-				daysAreConsecutive = true;
-				i = 0;
-				
-				// Iterate through the characters to determine if the days are consecutive
-				while (i < (keyToReplace.length() - 1) && daysAreConsecutive) {
-					firstDay = toDayOfWeek(keyToReplace.charAt(i));
-					secondDay = toDayOfWeek(keyToReplace.charAt(i + 1));
-					
-					//System.out.println(firstDay.getValue());
-					//System.out.println(secondDay.getValue());
-					//System.out.println("Consecutive? " + ((secondDay.getValue() - firstDay.getValue()) == 1));
-					daysAreConsecutive = ((secondDay.getValue() - firstDay.getValue()) == 1);
-					i++;
-				}
-				
-				// If the days are consecutive, make them a range
-				if (daysAreConsecutive) {
-					dayIndicatorsString = keyToReplace.charAt(0) + "-" + keyToReplace.charAt(keyToReplace.length() - 1);
-					condensedDailySchedule.put(dayIndicatorsString, schedule.getValue());
+
+			// Now that groupedDailySchedule's keys are sorted, condense them when possible
+			HashMap<String, String> condensedDailySchedule = new HashMap<>();
+			boolean daysAreConsecutive;
+			DayOfWeek firstDay;
+			DayOfWeek secondDay;
+			keyToReplace = "";
+			dayIndicatorsString = "";
+
+			for (Map.Entry<String, String> schedule : sortedDailySchedule.entrySet()) {
+				// If the current key is more than 2 characters, consider it for condensing
+				if (schedule.getKey().length() > 2) {
+					keyToReplace = schedule.getKey();
+					daysAreConsecutive = true;
+					i = 0;
+
+					// Iterate through the characters to determine if the days are consecutive
+					while (i < (keyToReplace.length() - 1) && daysAreConsecutive) {
+						firstDay = toDayOfWeek(keyToReplace.charAt(i));
+						secondDay = toDayOfWeek(keyToReplace.charAt(i + 1));
+
+						daysAreConsecutive = ((secondDay.getValue() - firstDay.getValue()) == 1);
+						i++;
+					}
+
+					// If the days are consecutive, make them a range
+					if (daysAreConsecutive) {
+						dayIndicatorsString = keyToReplace.charAt(0) + "-" + keyToReplace.charAt(keyToReplace.length() - 1);
+						condensedDailySchedule.put(dayIndicatorsString, schedule.getValue());
+					} else {
+						condensedDailySchedule.put(keyToReplace, schedule.getValue());
+					}
 				} else {
-					condensedDailySchedule.put(keyToReplace, schedule.getValue());
+					condensedDailySchedule.put(schedule.getKey(), schedule.getValue());
 				}
-			} else {
-				condensedDailySchedule.put(schedule.getKey(), schedule.getValue());
 			}
+
+			// Convert condensedDailySchedule into a String Array
+			String[] dailyScheduleStrings = new String[condensedDailySchedule.size()];
+			i = 0;
+
+			for (Map.Entry<String, String> schedule : condensedDailySchedule.entrySet()) {
+				/* This, eventually, has the potential to be modified to remove the need for ; on the last day.
+				 * Doing so would require modification of OperatingWindow.decode() too. */
+				dailyScheduleStrings[i] = schedule.getKey() + ":" + schedule.getValue() + ";";
+				i++;
+			}
+
+			// Sort the array in ascending order of the first character of each element
+			dailyScheduleStrings = sortByDay(dailyScheduleStrings);
+
+			// Convert the sorted array into a string and return
+			encodedDailySchedule = RouteSchedule.strArrayToStr(dailyScheduleStrings);
+		} else if (this.type == Type.GENERAL) {
+			/* Since all the days of a general-type DailySchedule will have the same OperatingTime array, find
+			*  the first to contain a value and use that to generate the encoded DailySchedule */
+			int i = 1;
+			while (this.dailySchedule.get(DayOfWeek.of(i)).length == 0) {
+				i++;
+			}
+			OperatingTime[] operatingTimes = this.dailySchedule.get(DayOfWeek.of(i));
+
+			// Now that the set of OperatingTimes has been found, convert it into an array of encoded OperatingTimes
+			String[] operatingTimeStrings = new String[operatingTimes.length];
+			i = 0;
+			for (OperatingTime operatingTime : operatingTimes) {
+				operatingTimeStrings[i] = operatingTime.encode();
+			}
+
+			// Convert the array of encoded OperatingTimes into a single ","-separated String
+			encodedDailySchedule = RouteSchedule.strArrayToStr(operatingTimeStrings);
 		}
-		
-		//System.out.println("Condensed:");
-		//System.out.println(condensedDailySchedule.toString());
-		
-		// Convert condensedDailySchedule into a String Array
-		String[] dailyScheduleStrings = new String[condensedDailySchedule.size()];
-		i = 0;
-		
-		for (Map.Entry<String, String> schedule : condensedDailySchedule.entrySet()) {
-			/* This, eventually, has the potential to be modified to remove the need for ; on the last day.
-			* Doing so would require modification of OperatingWindow.decode() too. */
-			dailyScheduleStrings[i] = schedule.getKey() + ":" + schedule.getValue() + ";";
-			i++;
-		}
-		
-		// Sort the array in ascending order of the first character of each element
-		dailyScheduleStrings = sortByDay(dailyScheduleStrings);
-		
-		// Convert the sorted array into a string and return
-		return RouteSchedule.strArrayToStr(dailyScheduleStrings);
+
+		return encodedDailySchedule;
 	}
 
 	/**
 	 * Determines whether a Route is operating on the given {@code day} at the given {@code time}
 	 *
-	 * @param day the {@code java.time.DayOfWeek} in which to check for operation
-	 * @param time the {@code java.time.LocalTime} in which to check for operation on the given {@code day}
+	 * @param day the {@code DayOfWeek} in which to check for operation
+	 * @param time the {@code LocalTime} in which to check for operation on the given {@code day}
 	 *
 	 * @return {@code true} if the provided {@code day} has an {@code OperatingTime} that {@code time} falls within
+	 *
+	 * @see DayOfWeek
+	 * @see LocalTime
 	 */
 	protected boolean operatesOnAt(DayOfWeek day, LocalTime time) {
 		// Ensure a list of times exists for the specified day
@@ -416,11 +448,13 @@ public class DailySchedule {
 	}
 	
 	/**
-	 * Creates a blank "daily schedule" HashMap mapping every day of the week to a null "OperatingTime"
+	 * Creates a blank "daily schedule" {@code HashMap} mapping every day of the week to a null "{@code OpeartingTime}"
 	 * array.
 	 * 
-	 * @return a HashMap with keys of every Java.time.DayOfWeek and corresponding null values, intended
-	 * to be replaced with OperatingTime arrays
+	 * @return a {@code HashMap} with keys of every {@code DayOfWeek} and corresponding {@code null} values, intended
+	 * to be replaced with {@code OperatingTime} arrays
+	 *
+	 * @see DayOfWeek
 	 */
 	public static HashMap<DayOfWeek,OperatingTime[]> blankDailySchedule() {
 		HashMap<DayOfWeek,OperatingTime[]> emptyDailySchedule = new HashMap<>();
@@ -438,13 +472,15 @@ public class DailySchedule {
 	}
 
 	/**
-	 * Locates the index of the next day indicator (U,M,T,R,F, or S) in {@code encodedDailyTimes} past the index
+	 * Locates the index of the next day indicator in {@code encodedDailyTimes} past the index
 	 * specified by {@code startAt}
 	 *
 	 * @param startAt the index to begin the search at
 	 * @param encodedDailyTimes the encoded Daily Times {@code String} to search within
 	 *
 	 * @return the index of the first day indicator in {@code encodedDailyTimes} past index {@code startAt}
+	 *
+	 * @see #toDayIndicator(DayOfWeek)
 	 */
 	private static int findNextDay(int startAt, String encodedDailyTimes) {
 		/* Define the substring to search within as the characters from startAt to the end of 
@@ -470,10 +506,13 @@ public class DailySchedule {
 	}
 
 	/**
-	 * Converts the provided {@code dayIndicator} {@code Character} (U,M,T,W,R,F, or S) into a {@code java.time.DayOfWeek}
+	 * Converts the provided {@code dayIndicator} {@code Character} into its corresponding {@code DayOfWeek}
 	 *
-	 * @param dayIndicator the {@code Character} (U,M,T,W,R,F, or S) to convert into a {@code java.time.DayOfWeek}
-	 * @return the {@code java.time.DayOfWeek} represented by {@code dayIndicator}
+	 * @param dayIndicator the {@code Character} to convert into a {@code DayOfWeek}
+	 * @return the {@code DayOfWeek} represented by {@code dayIndicator}
+	 *
+	 * @see #toDayIndicator(DayOfWeek)
+	 * @see DayOfWeek
 	 */
 	private static DayOfWeek toDayOfWeek(char dayIndicator) {
 		switch (dayIndicator) {
@@ -498,7 +537,7 @@ public class DailySchedule {
 	}
 
 	/**
-	 * Converts the provided {@code java.time.DayOfWeek} into its corresponding "day indicator" ({@code Character})
+	 * Converts the provided {@code DayOfWeek} into its corresponding "day indicator" ({@code Character})
 	 * representation:
 	 * <ul>
 	 *   <li>Sunday -> U</li>
@@ -510,8 +549,11 @@ public class DailySchedule {
 	 *   <li>Saturday -> S</li>
 	 * </ul>
 	 *
-	 * @param day the {@code java.time.DayOfWeek} to convert into a "day indicator"
-	 * @return the "day indicator" ({@code Character}) representaion of {@code day}
+	 * @param day the {@code DayOfWeek} to convert into a "day indicator"
+	 *
+	 * @return the "day indicator" ({@code Character}) representation of {@code day}
+	 *
+	 * @see DayOfWeek
 	 */
 	private static char toDayIndicator(DayOfWeek day) {
 		switch (day) {
@@ -536,13 +578,14 @@ public class DailySchedule {
 	}
 
 	/**
-	 * Generates an ordered array of {@code java.time.DayOfWeek}s included in the provided range of "day indicators"
+	 * Generates an ordered array of {@code DayOfWeek}s included in the provided range of "day indicators"
 	 * {@code dayRange}, inclusive
 	 *
 	 * @param dayRange a range of "day indicators" (e.g. "M-F")
 	 *
-	 * @return an ordered array of the {@code java.time.DayOfWeek}s represented by {@code dayRange}, inclusive
+	 * @return an ordered array of the {@code DayOfWeek}s represented by {@code dayRange}, inclusive
 	 *
+	 * @see DayOfWeek
 	 * @see #toDayIndicator(DayOfWeek)
 	 */
 	private static DayOfWeek[] daysFromRange(String dayRange) {
@@ -575,13 +618,14 @@ public class DailySchedule {
 	}
 
 	/**
-	 * Generates an ordered array of {@code java.time.DayOfWeek}s included in the series of "day indicators,"
+	 * Generates an ordered array of {@code DayOfWeek}s included in the series of "day indicators,"
 	 * {@code daySet}, inclusive
 	 *
 	 * @param daySet an un-delimited series of "day indicators" (e.g. "MTW")
 	 *
-	 * @return an ordered array of the {@code java.time.DayOfWeek}s represented by {@code daySet}, inclusive
+	 * @return an ordered array of the {@code DayOfWeek}s represented by {@code daySet}, inclusive
 	 *
+	 * @see DayOfWeek
 	 * @see #toDayIndicator(DayOfWeek)
 	 */
 	private static DayOfWeek[] daysFromSet(String daySet) {
@@ -759,7 +803,7 @@ public class DailySchedule {
 	 *
 	 * @return <b>If {@code n <= this.uniqueScheduleCount()}:</b>
 	 * <p>The abbreviated, textual representation of the {@code n}th unique set of {@code OperatingTime}s and their
-	 * corresponding "day indicators"<p></p>
+	 * corresponding "day indicators" (or "Weekends" and "Weekdays" when applicable)<p></p>
 	 * <b>Else:</b> "Does not exist"
 	 *
 	 * @see #uniqueScheduleCount()
@@ -789,7 +833,7 @@ public class DailySchedule {
 				}
 			}
 			
-			DailySchedule nthSchedule = new DailySchedule(nthScheduleMap, TYPE.SPECIFIC);
+			DailySchedule nthSchedule = new DailySchedule(nthScheduleMap, Type.SPECIFIC);
 			
 			// Create the abbreviate schedule of the nth schedule
 			String abbreviatedSchedule = abbreviateSchedule(nthSchedule.encode());
@@ -814,11 +858,9 @@ public class DailySchedule {
 			
 			return abbreviatedSchedule;
 		} else {
-			return errorMessage(RouteSchedule.ERRORS.DOES_NOT_EXIST);
+			return errorMessage(RouteSchedule.Errors.DOES_NOT_EXIST);
 		}
 	}
-	
-	// Returns a String of the abbreviated, human-friendly form of the encoded Daily Schedule String.
 
 	/**
 	 * Abbreviates the {@code encodedSchedule} {@code String}, grouping days with the same list of Operating Times
@@ -844,7 +886,7 @@ public class DailySchedule {
 			// Find the day indicators and add them to the abbSchedule String
 			lookFrom = 0;
 			lookTo = encodedSchedule.indexOf(':');
-			boolean includeDayIndicators = this.type == TYPE.SPECIFIC;
+			boolean includeDayIndicators = this.type == Type.SPECIFIC;
 			abbSchedule += (includeDayIndicators) ? encodedSchedule.substring(lookFrom, lookTo) + ": " : "";
 			
 			// Determine the start and end of the encoded times
@@ -873,14 +915,13 @@ public class DailySchedule {
 					// If it's pre-continuity...
 					if (timeString.charAt(0) == '-') {
 						time = "-" + OperatingTime.formatEncodedTime(timeString.substring(1,5), true);
-						formattedTimeStrings[lookingAt] = time;
-					// If it's post-continuity...
+                        // If it's post-continuity...
 					} else {
 						time = OperatingTime.formatEncodedTime(timeString.substring(0,4), true) + "-";
-						formattedTimeStrings[lookingAt] = time;
-					}
-				
-				// If it spans the whole day (or an unknown edge case)
+                    }
+                    formattedTimeStrings[lookingAt] = time;
+
+                    // If it spans the whole day (or an unknown edge case)
 				} else {
 					formattedTimeStrings[lookingAt] = "-";
 				}
@@ -902,17 +943,19 @@ public class DailySchedule {
 
 	/**
 	 * Creates a textual representation of this {@code DailySchedule}'s data in a brief, but human-friendly format
-	 * 
-	 * @return a seven-line {@code String} where ", "-separated {@code OperatingTime}s in HH:MM format for each day
-	 * are preceded by the day of week they belong to. Every day of the week (and their corresponding
-	 * {@code OperatingTime})s is on its own line.
+	 *
+	 * @return a seven-line {@code String} where ", "-separated {@code OperatingTime}s in HH:MM format are preceded by
+	 * the day of week they belong to. Every day of the week (and their corresponding {@code OperatingTime}s) is on its
+	 * own line.
+	 *
+	 * @see OperatingTime#toString()
 	 */
 	public String toString() {
 		String fullString = "";
 		/* If the DailySchedule is "Specific" (as in, it was instantiated in the context
 		* of operating within a range of dates at different times for each day of the week),
 		* display the times alongside the day indicators. */
-		if (this.type == TYPE.SPECIFIC) {
+		if (this.type == Type.SPECIFIC) {
 			// Create an array here so that the days of week stay in when displayed
 			DayOfWeek[] daysOfWeek = new DayOfWeek[] {
 					DayOfWeek.SUNDAY,DayOfWeek.MONDAY,DayOfWeek.TUESDAY,
@@ -942,9 +985,9 @@ public class DailySchedule {
 			    }
 			}
 		/* If the DailySchedule is "General" (as in it was instantiated in the context of
-		* of operating at the same times "every" day (or more specifically, in relation to 
+		* operating at the same times "every" day (or more specifically, in relation to
 		* Sessions, the set of dates specified there)), just display the times. */
-		} else if (this.type == TYPE.GENERAL){
+		} else if (this.type == Type.GENERAL){
 			// Determine the number of times that are listed in this general schedule		
 			int numOfTimes = 0;
 			for (OperatingTime[] operatingTimesList : this.dailySchedule.values()) {
@@ -952,7 +995,7 @@ public class DailySchedule {
 					numOfTimes = operatingTimesList.length;
 				}
 			}
-			
+
 			// Find the first day with a list of operating times and refer to that
 			OperatingTime[] arrayOfTimes = new OperatingTime[numOfTimes];
 			boolean timesFound = false;
@@ -962,7 +1005,7 @@ public class DailySchedule {
 					timesFound = true;
 				}
 			}
-			
+
 			int i = 1;
 	    	int numOfItems = arrayOfTimes.length;
 			for (OperatingTime operatingTime : arrayOfTimes) {
@@ -985,7 +1028,7 @@ public class DailySchedule {
 	 *
 	 * @return the correct error message given the passed error
 	 */
-	private String errorMessage(RouteSchedule.ERRORS error) {
+	private String errorMessage(RouteSchedule.Errors error) {
 		switch (error) {
 			case DOES_NOT_EXIST:
 				return "Does Not Exist";

@@ -3,8 +3,10 @@ package routeSchedule;
 import java.util.Arrays;
 
 /**
- * Represents a unique set of {@code OperatingDate}s during which the Route operates, not already defined in a
+ * Represents a unique set of {@code OperatingDate}s during which a Route operates, not already defined in a
  * {@code PredefinedSession}
+ *
+ * @see OperatingDate
  */
 public class CustomSession extends Session {
 	/**
@@ -43,9 +45,9 @@ public class CustomSession extends Session {
 	
 	/**
 	 * Encodes this {@code CustomSession} object as a {@code String} capable of being decoded back into an
-	 * identical {@code CustomSession} object.
+	 * identical {@code CustomSession} object
 	 *
-	 * @return a {@code String} containing encoded CustomSession data
+	 * @return a {@code String} concisely representing this {@code CustomSession}'s data
 	 *
 	 * @see "README"
 	 */
@@ -65,7 +67,11 @@ public class CustomSession extends Session {
 	/**
 	 * Creates a textual representation of this {@code CustomSession}'s data in a brief but human-friendly format
 	 * 
-	 * @return a {@code String} of ", "-separated {@code OperatingDate}s in MM/DD/YY format
+	 * @return <b>If {@code this.dates == null}</b><p>"Uninitialized CustomSession"</p>
+	 * <b>Else:</b>
+	 * <p>a {@code String} of ", "-separated {@code OperatingDate}s in MM/DD/YY format</p>
+	 *
+	 * @see OperatingDate#toString()
 	 */
 	public String toString() {
 		if (this.dates() != null) {
@@ -78,7 +84,7 @@ public class CustomSession extends Session {
 			
 			return RouteSchedule.strArrayToStr(operatingDateStrings, ", ");
 		} else {
-			System.out.println(errorMessage(RouteSchedule.ERRORS.INVALID_FIELDS));
+			System.out.println(errorMessage(RouteSchedule.Errors.INVALID_FIELDS));
 			return "Uninitialized CustomSession";
 		}
 	}
@@ -89,7 +95,9 @@ public class CustomSession extends Session {
 	 * @param that the {@code Session} object to compare to the invoking {@code CustomSession}
 	 *
 	 * @return {@code true} if and only if {@code that} is of {@code CustomSession} type and contains the same
-	 * {@code OperatingDate}s as the invoking {@code CustomSession}
+	 * {@code OperatingDate}s in {@code operatingDate}s as the invoking {@code CustomSession}
+	 * 
+	 * @see OperatingDate#equals(OperatingDate) 
 	 */
 	public boolean equals(Session that) {
 		return that instanceof CustomSession && Arrays.equals(this.dates(), that.dates());
@@ -102,7 +110,7 @@ public class CustomSession extends Session {
 	 *
 	 * @return the correct error message given the passed error
 	 */
-	private static String errorMessage(RouteSchedule.ERRORS error) {
+	private static String errorMessage(RouteSchedule.Errors error) {
 		switch (error) {
 		case INVALID_FIELDS:
 			return "WARNING: CustomSessions has invalid field(s).";
