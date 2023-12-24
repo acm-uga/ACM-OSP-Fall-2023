@@ -1,6 +1,7 @@
 package ospbusapp;
 import routeSchedule.RouteSchedule;
 
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,16 +26,19 @@ public class Route implements BasicUiDisplayable {
 
     //Constructors:
     // From DB calls
-    public Route(long routeId, String name, String abbName, String displayColor, RouteSchedule schedule, long[] stopIds,
-                 boolean active, List<Bus> activeBuses) {
+    public Route(long routeId, String name, String abbName, String displayColor, RouteSchedule schedule, long[] stopIds) {
+        // Populate these static fields using constructor args
         this.routeId = routeId;
         this.name = name;
         this.abbName = abbName;
         this.displayColor = displayColor;
         this.schedule = schedule;
         this.stopIds = stopIds;
-        this.active = active;
-        this.activeBuses = activeBuses;
+
+        // Populate these dynamic fields with appropriate API calls
+        this.activeBuses = activeBuses; // TODO replace with API method that returns all active Buses on this Route provided the Route's ID
+        this.active = determineActivity();
+
     }
 
     //Methods:
@@ -54,6 +58,22 @@ public class Route implements BasicUiDisplayable {
         this.name = name;
     }
 
+    public String getAbbName() {
+        return abbName;
+    }
+
+    public void setAbbName(String abbName) {
+        this.abbName = abbName;
+    }
+
+    public String getDisplayColor() {
+        return displayColor;
+    }
+
+    public void setDisplayColor(String displayColor){
+        this.displayColor = displayColor;
+    }
+
     public RouteSchedule getSchedule() {
         return schedule;
     }
@@ -68,6 +88,10 @@ public class Route implements BasicUiDisplayable {
 
     public void setStopIds(long[] stopIds) {
         this.stopIds = stopIds;
+    }
+
+    public boolean isActive(){
+        return this.active;
     }
 
     public List<Bus> getActiveBuses() {
@@ -91,6 +115,42 @@ public class Route implements BasicUiDisplayable {
         );
     }
 
+    /**
+     * Determines the number of {@code timeUnit}s that have elapsed between the most recent update of a {@code Bus}'s
+     * data on {@code this} {@code Route} and the current time at invocation
+     *
+     * @param timeUnit the chronological time unit to measure in (such as {@code ChronoUnit.SECONDS})
+     *
+     * @return the number of {@code timeUnit}s between the last update of a {@code Bus}'s data on {@code this}
+     * {@code Route}'s data and the time at invocation, exclusive
+     *
+     * @see ChronoUnit
+     */
+    private long timeSinceMostRecentBusUpdate(ChronoUnit timeUnit) {
+        long leastUnits = 0;
+        long currentUnits;
+
+        /* Iterate through all of this Route's Bus objects and determine the number of time units since the most recent
+        * update of a Bus object's data */
+        for (Bus bus : getActiveBuses()) {
+            currentUnits = bus.timeSinceLastUpdate(timeUnit);
+            leastUnits = (currentUnits < leastUnits) ? currentUnits : leastUnits;
+        }
+
+        return leastUnits;
+    }
+
+    /**
+     * Determines whether {@code this} {@code Route} is active based on whether it is currently supposed to be operating
+     * according to its schedule and when the most recent update of a {@code Bus} in {@code activeBuses}' data occurred
+     *
+     * @return {@code true} if {@code this} {@code Route} is supposed to be operating at the time of invocation according
+     * to it's {@code schedule} and it has been less than five minutes since the last
+     */
+    protected boolean determineActivity() {
+        return (timeSinceMostRecentBusUpdate(ChronoUnit.MINUTES) <= 5) && (this.schedule.isOperatingNow());
+    }
+
     // BasicUiDisplayable Implementations:
     /**
      * Provides the name of the invoking Route
@@ -99,7 +159,7 @@ public class Route implements BasicUiDisplayable {
      */
     @Override
     public String getHeader() {
-        return this.name;
+        return getName();
     }
 
     /**
@@ -109,8 +169,9 @@ public class Route implements BasicUiDisplayable {
      */
     @Override
     public String getSubHeader() {
-        Stop firstStop = DatabaseService.getStop(this.stopIds[0]);
-        Stop lastStop = DatabaseService.getStop(this.stopIds[this.stopIds.length - 1]);
+        long[] stopIds = this.getStopIds();
+        Stop firstStop = DatabaseService.getStop(stopIds[0]);
+        Stop lastStop = DatabaseService.getStop(stopIds[stopIds.length - 1]);
 
         return "From " + firstStop.getName() + " to " + lastStop.getName();
     }
@@ -122,7 +183,7 @@ public class Route implements BasicUiDisplayable {
      */
     @Override
     public String getContext1() {
-        return this.schedule.mainSchedule();
+        return this.getSchedule().mainSchedule();
     }
 
     /**
@@ -132,6 +193,6 @@ public class Route implements BasicUiDisplayable {
      */
     @Override
     public String getContext2() {
-        return this.schedule.altSchedule();
+        return this.getSchedule().altSchedule();
     }
 }

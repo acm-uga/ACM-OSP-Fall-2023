@@ -111,16 +111,21 @@ public class Stop implements BasicUiDisplayable {
     }
 
     /**
-     * Provides a brief overview of the Routes served
+     * Provides an overview of the Routes served by this {@code Stop}
      *
-     * @return the abbreviated names of the first 3 Routes {@code this} {@code Stop} serves if 
+     * @return the abbreviated names of all the Routes {@code this} {@code Stop} serves
      */
     @Override
     public String getSubHeader() {
-        Stop firstStop = DatabaseService.getStop(this.stopIds[0]);
-        Stop lastStop = DatabaseService.getStop(this.stopIds[this.stopIds.length - 1]);
+        String serves = "Serves ";
 
-        return "Serves " + firstStop.getName() + " to " + lastStop.getName();
+        int itemNumber = 1;
+        for (Route route : BackendEngine.activeRoutes()) {
+            serves += route.getAbbName();
+            if (itemNumber < BackendEngine.activeRoutes().length) serves += ", ";
+        }
+
+        return serves;
     }
 
     /**

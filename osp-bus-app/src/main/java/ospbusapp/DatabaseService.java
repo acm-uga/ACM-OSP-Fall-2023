@@ -80,7 +80,7 @@ public class DatabaseService {
         RouteSchedule schedule = RouteSchedule.decode("f;s{M-F:0630-1945;}|u{M-F:0700-1900;}|i{M-F:0630-1945;}");
         long[] stopIds = {12, 34, 56, 78, 90};
 
-        return new Route(routeId, name, abbName, displayColor, schedule, stopIds, false, new ArrayList<Bus>());
+        return new Route(routeId, name, abbName, displayColor, schedule, stopIds);
     }
 
     //Calls the FinalCalculate stored procedure to get nearby stops for the specified location

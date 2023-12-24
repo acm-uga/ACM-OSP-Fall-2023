@@ -1,5 +1,7 @@
 package ospbusapp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -95,5 +97,20 @@ public class Bus {
                 ", secondsTillArrival=" + secondsTillArrival +
                 '}'
         );
+    }
+
+    /**
+     * Determines the number of {@code timeUnit}s that have elapsed since {@code this} {@code Bus} object had its data
+     * updated and the time at invocation
+     *
+     * @param timeUnit the chronological time unit to measure in (such as {@code ChronoUnit.SECONDS})
+     *
+     * @return the number of {@code timeUnit}s that have elapsed between {@code this} {@code Bus}'s last data update and
+     * the current time at invocation, exclusive
+     *
+     * @see ChronoUnit
+     */
+    protected long timeSinceLastUpdate(ChronoUnit timeUnit) {
+        return timeUnit.between(lastUpdated, LocalDateTime.now(ZoneId.of("UTC-5")));
     }
 }
