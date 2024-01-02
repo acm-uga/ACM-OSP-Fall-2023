@@ -19,7 +19,7 @@ public class BackendEngine {
     // Specifies the number of milliseconds between data updates
     private static final long MS_BETWEEN_DATA_UPDATES = TimeUnit.MINUTES.toMillis(1);
 
-    // Contains every Route, regardless of status
+    // Contains every Route, regardless of whether it's currently active
     private static HashMap<Long, Route> allRoutesById;
 
     public static void main(String[] args) {
@@ -37,6 +37,12 @@ public class BackendEngine {
         dataUpdateHandler.scheduleAtFixedRate(dataUpdater, 0, MS_BETWEEN_DATA_UPDATES);
     }
 
+
+    // GETTERS
+    public static HashMap<Long, Route> getAllRoutesById() {
+        return allRoutesById;
+    }
+
     // Methods
     /**
      * Generates an array of {@code Route} objects that are active at the time of invocation
@@ -45,7 +51,7 @@ public class BackendEngine {
      *
      * @see Route#determineActivity()
      */
-    protected static Route[] activeRoutes() {
+    public static Route[] activeRoutes() {
         // Determine which Routes are active
         ArrayList<Route> activeRoutesList = new ArrayList<>();
         for (Route route : allRoutesById.values()) {
@@ -61,5 +67,16 @@ public class BackendEngine {
         }
 
         return activeRoutesArray;
+    }
+
+    /**
+     * Get the {@code Route} with the corresponding {@code routeId} from the program's memory, as opposed to the database.
+     *
+     * @param routeId the ID of the desired {@code Route}
+     *
+     * @return the {@code Route} object that corresponds to {@code routeId}
+     */
+    public static Route getRoute(long routeId) {
+        return allRoutesById.get(routeId);
     }
 }

@@ -1,17 +1,20 @@
 package ospbusapp;
+import dataDisplay.ListItemData;
+import dataDisplay.UiContext;
 import routeSchedule.RouteSchedule;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Represents a bus route: a series of stops and the buses actively driving them
  * <p></p>
  * Contains a list of stops, buses active on the route, relevant metadata, and data used in UI components on the frontend
  */
-public class Route implements BasicUiDisplayable {
+public class Route implements ListItemData {
     // Fields derived from the database at instantiation:
     private long routeId; // Route ID as given by the Bus API. Derived from db
     private String name; // Full, official route name
@@ -22,7 +25,7 @@ public class Route implements BasicUiDisplayable {
 
     // Fields that update with each batch of API data
     private boolean active; // True when the route is operating AND buses are appearing in the API. Otherwise false
-    private List<Bus> activeBuses; // Contains all Bus objects currently active on this Route. Unsorted.
+    private HashMap<Long, Bus[]> activeBuses; // Contains all Bus objects currently active on this Route and the id of the Stop they're approaching. Sorted in Stop order.
 
     //Constructors:
     // From DB calls
@@ -36,7 +39,7 @@ public class Route implements BasicUiDisplayable {
         this.stopIds = stopIds;
 
         // Populate these dynamic fields with appropriate API calls
-        this.activeBuses = activeBuses; // TODO replace with API method that returns all active Buses on this Route provided the Route's ID
+        this.activeBuses = ApiService.getActiveBuses(routeId);
         this.active = determineActivity();
 
     }
@@ -98,7 +101,7 @@ public class Route implements BasicUiDisplayable {
         return activeBuses;
     }
 
-    public void setActiveBuses(List<Bus> activeBuses) {
+    public void setActiveBuses(HashMap<Long, Bus[]> activeBuses) {
         //What to update?
         this.activeBuses = activeBuses;
     }
@@ -158,41 +161,45 @@ public class Route implements BasicUiDisplayable {
      * @return the name of {@code this} {@code Route}
      */
     @Override
-    public String getHeader() {
+    public String listItemHeader(UiContext ctx) {
         return getName();
     }
 
     /**
-     * Provides a brief overview of the stops served along the invoking Route
+     * Provides an abbreviated view of the schedule currently in effect at the time of invocation
      *
      * @return the names of the first and last Stop along {@code this} {@code Route}
+     *
+     * @see routeSchedule.RouteSchedule#mainScheduleOn(LocalDateTime)
      */
     @Override
-    public String getSubHeader() {
-        long[] stopIds = this.getStopIds();
-        Stop firstStop = DatabaseService.getStop(stopIds[0]);
-        Stop lastStop = DatabaseService.getStop(stopIds[stopIds.length - 1]);
-
-        return "From " + firstStop.getName() + " to " + lastStop.getName();
+    public String listItemSubHeader(UiContext ctx) {
+        return this.schedule.mainScheduleOn(LocalDateTime.now(ZoneId.of("UTC-5")));
     }
 
+    // TODO change this to return distance to closest Stop along this Route
     /**
      * Provides the current, primary schedule of the invoking Route
      *
      * @return the name of {@code this} {@code Route}
      */
     @Override
-    public String getContext1() {
+    public String listItemContext1(UiContext ctx) {
+        // Get all the stops on this route in order of proximity to the user
+        Stop[] nearestStops = DatabaseService.getNearbyStops(ctx.getUserLat(), ctx.getUserLong(), this.stopIds.length);
+
+
         return this.getSchedule().mainSchedule();
     }
 
+    // TODO change this to return number of buses currently on this Route
     /**
      * Provides the current, alternate schedule of the invoking Route
      *
      * @return a {@code String} suitable for use as secondary context
      */
     @Override
-    public String getContext2() {
+    public String listItemContext2(UiContext ctx) {
         return this.getSchedule().altSchedule();
     }
 }

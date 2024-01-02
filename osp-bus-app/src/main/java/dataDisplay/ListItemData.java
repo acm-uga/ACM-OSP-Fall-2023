@@ -1,34 +1,34 @@
-package ospbusapp;
+package dataDisplay;
 
 /**
- * Enables classes to be displayed in basic UI components on the frontend
+ * Enables implementing classes to be displayed as list elements on the frontend
  */
-public interface BasicUiDisplayable {
+public interface ListItemData {
     /**
      * Provides appropriate info to be displayed as the header for the given object
      *
      * @return a {@code String} suitable for use as a header
      */
-    public String getHeader();
+    public String listItemHeader(UiContext ctx);
 
     /**
      * Provides appropriate info to be displayed as the subheader for the given object
      *
      * @return a {@code String} suitable for use as a subheader
      */
-    public String getSubHeader();
+    public String listItemSubHeader(UiContext ctx);
 
     /**
      * Provides appropriate info to be displayed as the primary context for the given object
      *
      * @return a {@code String} suitable for use as primary context
      */
-    public String getContext1();
+    public String listItemContext1(UiContext ctx);
 
     /**
      * Provides appropriate info to be displayed as the secondary context for the given object
      *
      * @return a {@code String} suitable for use as secondary context
      */
-    public String getContext2();
+    public String listItemContext2(UiContext ctx);
 }

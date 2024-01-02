@@ -1,12 +1,14 @@
 package ospbusapp;
 
+import dataDisplay.ListItemData;
+
 /**
  * Represents a bus stop: location that Buses stop at while operating on a Route.
  * <p></p>
  * Contains the location of the stop, its name, relevant metadata, and data used in UI components on the frontend
  */
-public class Stop implements BasicUiDisplayable {
-    protected enum Type {TEST_TYPE} // The primary "purpose"/type of location a stop might serve
+public class Stop implements ListItemData {
+    protected enum Type {UNKNOWN} // The primary "purpose"/type of location a stop might serve
 
     // Fields derived from the database at instantiation:
     private long stopId;
@@ -27,7 +29,6 @@ public class Stop implements BasicUiDisplayable {
         this.longitude = longitude;
         this.servesRouteIds = servesRouteIds;
     }
-
 
     //Methods:
     public long getStopId() {
@@ -99,6 +100,23 @@ public class Stop implements BasicUiDisplayable {
         );
     }
 
+    // Miscellaneous methods
+    /**
+     * Matches a {@code String} representation of {@code Stop.Type} to a valid {@code Stop.Type}
+     *
+     * @param typeString a {@code String} representing a valid {@code Stop.Type}
+     *
+     * @return the {@code Stop.Type} corresponding to the passed {@code String}
+     *
+     * @see #type
+     */
+    public static Stop.Type typeFromString(String typeString) {
+        switch (typeString) {
+            default:
+                return Stop.Type.UNKNOWN;
+        }
+    }
+
     // BasicUiDisplayable Implementations:
     /**
      * Provides the name of the invoking Stop
@@ -106,7 +124,7 @@ public class Stop implements BasicUiDisplayable {
      * @return the name of {@code this} {@code Stop}
      */
     @Override
-    public String getHeader() {
+    public String listItemHeader() {
         return this.name;
     }
 
@@ -116,7 +134,7 @@ public class Stop implements BasicUiDisplayable {
      * @return the abbreviated names of all the Routes {@code this} {@code Stop} serves
      */
     @Override
-    public String getSubHeader() {
+    public String listItemSubHeader() {
         String serves = "Serves ";
 
         int itemNumber = 1;
@@ -128,23 +146,25 @@ public class Stop implements BasicUiDisplayable {
         return serves;
     }
 
+    // TODO change this to return time to walk to this stop (#m walk) (3mph * distance to stop based on user's location)
     /**
      * Provides the current, primary schedule of the invoking Stop
      *
      * @return the name of {@code this} {@code Route}
      */
     @Override
-    public String getContext1() {
+    public String listItemContext1() {
         return this.schedule.mainSchedule();
     }
 
+    // TODO change this to return time until next bus arrives (regardless of Route): (Arriving in #m)
     /**
      * Provides the current, alternate schedule of the invoking Stop
      *
      * @return a {@code String} suitable for use as secondary context
      */
     @Override
-    public String getContext2() {
+    public String listItemContext2() {
         return this.schedule.altSchedule();
     }
 }

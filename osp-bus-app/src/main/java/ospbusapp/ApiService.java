@@ -18,17 +18,12 @@ import java.util.Map;
 import java.util.Set;
 
 public class ApiService {
-    //Returns list of routes with each element as a map of stop ids to bus objects
-    public static List<Map<Long, Bus>> get() {
+    //Returns a HashMap of stopIds mapped to a list of Bus objects
+    // TODO edit this to return a mapping of StopIds ot Buses, just for the route provided by RouteId
+    public static HashMap<Long, List<Bus>> getActiveBuses(long routeId) {
 
         //With this routeId, make an API call for each stop in route
-        List<Long> stopIds = new ArrayList<>();
-        stopIds.add(2737275L);
-        stopIds.add(2737276L);
-        stopIds.add(2746275L);
-        stopIds.add(2737279L);
-        stopIds.add(2736531L);
-
+        long[] stopIds = BackendEngine.getRoute(routeId).getStopIds();
 
         //Base URL of the API
         String baseUrl = "";

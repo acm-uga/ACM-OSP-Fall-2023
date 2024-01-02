@@ -1,4 +1,6 @@
 package ospbusapp;
+import dataDisplay.ListItemData;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -9,7 +11,7 @@ import java.util.List;
  * <p></p>
  * Contains the ID of the Stop being approached, the seconds till it arrives, and other relevant metadata
  */
-public class Bus {
+public class Bus implements ListItemData {
     // Fields that update with each batch of API data:
     // Derived directly from API data:
     private long busId; // VehicleID in API
@@ -112,5 +114,49 @@ public class Bus {
      */
     protected long timeSinceLastUpdate(ChronoUnit timeUnit) {
         return timeUnit.between(lastUpdated, LocalDateTime.now(ZoneId.of("UTC-5")));
+    }
+
+    // TODO "Bus #{busId}
+    /**
+     * Provides appropriate info to be displayed as the header for the given object
+     *
+     * @return a {@code String} suitable for use as a header
+     */
+    @Override
+    public String listItemHeader() {
+        return null;
+    }
+
+    // TODO "Heading to {stopName}"
+    /**
+     * Provides appropriate info to be displayed as the subheader for the given object
+     *
+     * @return a {@code String} suitable for use as a subheader
+     */
+    @Override
+    public String listItemSubHeader() {
+        return null;
+    }
+
+    // TODO Route "abbName"
+    /**
+     * Provides appropriate info to be displayed as the primary context for the given object
+     *
+     * @return a {@code String} suitable for use as primary context
+     */
+    @Override
+    public String listItemContext1() {
+        return null;
+    }
+
+    // TODO "secsToArrival"
+    /**
+     * Provides appropriate info to be displayed as the secondary context for the given object
+     *
+     * @return a {@code String} suitable for use as secondary context
+     */
+    @Override
+    public String listItemContext2() {
+        return null;
     }
 }

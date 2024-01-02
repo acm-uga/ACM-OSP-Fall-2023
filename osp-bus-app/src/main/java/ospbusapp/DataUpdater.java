@@ -12,6 +12,8 @@ public class DataUpdater extends TimerTask {
      */
     @Override
     public void run() {
+
+
         // TODO employ ApiService functions to obtain new data
         // TODO use data from above to adjust Route and Bus fields, instantiate Routes and Buses, and destroy them
     }
