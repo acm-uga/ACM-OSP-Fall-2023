@@ -1,20 +1,27 @@
 package ospbusapp;
+import dataDisplay.DisplayableObject;
 import dataDisplay.ListItemData;
+import dataDisplay.MeasurementSystem;
 import dataDisplay.UiContext;
 import routeSchedule.RouteSchedule;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 /**
- * Represents a bus route: a series of stops and the buses actively driving them
+ * Represents a bus route: a series of stops and the buses actively driving through them in order
  * <p></p>
  * Contains a list of stops, buses active on the route, relevant metadata, and data used in UI components on the frontend
+ *
+ * @see Stop
+ * @see Bus
  */
-public class Route implements ListItemData {
+public class Route implements DisplayableObject, ListItemData {
     // Fields derived from the database at instantiation:
     private long routeId; // Route ID as given by the Bus API. Derived from db
     private String name; // Full, official route name
@@ -97,7 +104,7 @@ public class Route implements ListItemData {
         return this.active;
     }
 
-    public List<Bus> getActiveBuses() {
+    public HashMap<Long, Bus[]> getActiveBuses() {
         return activeBuses;
     }
 
@@ -135,9 +142,11 @@ public class Route implements ListItemData {
 
         /* Iterate through all of this Route's Bus objects and determine the number of time units since the most recent
         * update of a Bus object's data */
-        for (Bus bus : getActiveBuses()) {
-            currentUnits = bus.timeSinceLastUpdate(timeUnit);
-            leastUnits = (currentUnits < leastUnits) ? currentUnits : leastUnits;
+        for (Bus[] listOfApproachingBuses : activeBuses.values()) {
+            for (Bus bus : listOfApproachingBuses) {
+                currentUnits = bus.timeSinceLastUpdate(timeUnit);
+                leastUnits = (currentUnits < leastUnits) ? currentUnits : leastUnits;
+            }
         }
 
         return leastUnits;
@@ -150,56 +159,121 @@ public class Route implements ListItemData {
      * @return {@code true} if {@code this} {@code Route} is supposed to be operating at the time of invocation according
      * to it's {@code schedule} and it has been less than five minutes since the last
      */
-    protected boolean determineActivity() {
+    public boolean determineActivity() {
         return (timeSinceMostRecentBusUpdate(ChronoUnit.MINUTES) <= 5) && (this.schedule.isOperatingNow());
     }
 
-    // BasicUiDisplayable Implementations:
     /**
-     * Provides the name of the invoking Route
+     * Finds the nearest {@code Stop} to the provided coordinates along {@code this} {@code Route}
+     *
+     * @param latitude the latitude with which to base proximity
+     * @param longitude the longitude with which to base proximity
+     *
+     * @return the nearest {@code Stop} to the given location that is served by {@code this} {@code Route}
+     */
+    public Stop getNearestStop(double latitude, double longitude) {
+        Stop[] nearestStops = DatabaseService.getNearbyStops(latitude, longitude, DatabaseService.stopCount());
+
+        // Determine the first stop on nearestStops that serves this Route
+        Stop nearestStopOnRoute = null;
+        int i = 0;
+        while (nearestStopOnRoute == null && i < nearestStops.length) {
+            if (Arrays.stream(nearestStops[i].getServesRoutesIds()).anyMatch(id -> id == this.routeId)) {
+                nearestStopOnRoute = nearestStops[i];
+            }
+            i++;
+        }
+
+        return nearestStopOnRoute;
+    }
+
+    /**
+     * Counts the number of unique buses that are active on {@code this} {@code Route} at invocation
+     *
+     * @return the number of unique busIds active on {@code this} {@code Route} at invocation
+     */
+    public int totalUniqueBuses() {
+        ArrayList<Long> idsSeen = new ArrayList<Long>();
+        long currentId;
+        for (Bus[] arrayOfBusesApproachingStop: activeBuses.values()) {
+            for (Bus busApproachingStop : arrayOfBusesApproachingStop) {
+                currentId = busApproachingStop.getBusId();
+                if (!idsSeen.contains(currentId)) {
+                    idsSeen.add(currentId);
+                }
+            }
+        }
+
+        return idsSeen.size();
+    }
+
+    // ListItemData Implementations:
+    /**
+     * Provides the name of the invoking {@code Route}
+     *
+     * @param ctx the context in which this data is being displayed in the UI
      *
      * @return the name of {@code this} {@code Route}
      */
-    @Override
     public String listItemHeader(UiContext ctx) {
-        return getName();
+        return this.name;
     }
 
     /**
      * Provides an abbreviated view of the schedule currently in effect at the time of invocation
      *
-     * @return the names of the first and last Stop along {@code this} {@code Route}
+     * @param ctx the context in which this data is being displayed in the UI
      *
-     * @see routeSchedule.RouteSchedule#mainScheduleOn(LocalDateTime)
+     * @return a {@code String} containing the containing condensed information about the schedule in effect at the time
+     * of invocation
+     *
+     * @see routeSchedule.RouteSchedule#mainSchedule
      */
-    @Override
     public String listItemSubHeader(UiContext ctx) {
-        return this.schedule.mainScheduleOn(LocalDateTime.now(ZoneId.of("UTC-5")));
+        return this.schedule.mainSchedule();
     }
 
-    // TODO change this to return distance to closest Stop along this Route
     /**
-     * Provides the current, primary schedule of the invoking Route
+     * Provides the distance to the closest {@code Stop} along this {@code Route} to the user's
+     * location
      *
-     * @return the name of {@code this} {@code Route}
+     * @param ctx the context in which this data is being displayed in the UI
+     *
+     * @return a {@code String} containing the distance (in the desired unit) to the closest {@code Stop} along this
+     * {@code Route} to the user's location
      */
-    @Override
     public String listItemContext1(UiContext ctx) {
         // Get all the stops on this route in order of proximity to the user
-        Stop[] nearestStops = DatabaseService.getNearbyStops(ctx.getUserLat(), ctx.getUserLong(), this.stopIds.length);
+        double userLat = ctx.getUserLat(), userLong = ctx.getUserLong();
 
+        // Determine the first stop on nearestStops that serves this Route
+        Stop nearestStopOnRoute = getNearestStop(userLat, userLong);
 
-        return this.getSchedule().mainSchedule();
+        // Determine the distance to this stop
+        double distanceToStop = nearestStopOnRoute.distanceToStop(userLat, userLong, ctx.getMeasurementSystem());
+
+        // Create the final string
+        String finalString = "";
+        String unit = (ctx.getMeasurementSystem() == MeasurementSystem.IMPERIAL) ? "mi" : "km";
+        if (Math.abs(distanceToStop - 0.1) <= 0.01) {
+            finalString = "<0.1" + unit;
+        } else {
+            finalString = String.format("%.1f%b", distanceToStop, unit);
+        }
+
+        finalString += " walk";
+
+        return finalString;
     }
 
-    // TODO change this to return number of buses currently on this Route
     /**
-     * Provides the current, alternate schedule of the invoking Route
+     * Provides the number of buses currently active on this {@code Route}
      *
-     * @return a {@code String} suitable for use as secondary context
+     * @param ctx the context in which this data is being displayed in the UI
+     *
+     * @return a {@code String} containing the number of buses currently running on this {@code Route}
      */
-    @Override
     public String listItemContext2(UiContext ctx) {
-        return this.getSchedule().altSchedule();
+        return this.totalUniqueBuses() + " active";
     }
 }

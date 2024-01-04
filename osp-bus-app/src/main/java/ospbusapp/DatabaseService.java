@@ -11,6 +11,7 @@ public class DatabaseService {
     private static final String username = "root";
     private static final String password = "Password123";
 
+    // STOP DATA
     /**
      * Retrieves the data for the {@code Stop} with ID {@code stopId} from the database and returns an instantiated
      * {@code Stop} using it
@@ -60,6 +61,31 @@ public class DatabaseService {
     }
 
     /**
+     * Retrieves the data for every {@code Stop} in the database and returns an array of their instantiated objects
+     *
+     * @return an array containing every {@code Stop} stored in the database
+     */
+    public static Stop[] getAllStops() {
+        //Use try-with-resources to make code more concise
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+
+            String query = "SELECT * FROM stopinfo";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            Stop[] allStops = new Stop[stopCount()];
+            int i = 0;
+            while (rs.next()) {
+                allStops[i] = stopFromResultSet(rs);
+            }
+
+            return allStops;
+        } catch (SQLException ex) {
+            throw new RuntimeException("Error: ", ex);
+        }
+    }
+
+    /**
      * Constructs a {@code Stop} object given the {@code ResultSet} from a database query
      *
      * @param rs the {@code ResultSet} with which to derive data from
@@ -95,6 +121,64 @@ public class DatabaseService {
         }
     }
 
+    /**
+     * Counts the number of {@code Stop} records stored in the database
+     *
+     * @return the number of {@code Stop} records in the {@code stopinfo} database table
+     */
+    public static int stopCount() {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            //Need to parameterize query to prevent possible SQL injection?
+            String query = "SELECT COUNT(*) FROM stopinfo" +
+                    "\n";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            return rs.getInt(1);
+        } catch (SQLException ex) {
+            throw new RuntimeException("Error: ", ex);
+        }
+    }
+
+    /**
+     * Invokes the {@code FinalCalculate} stored procedure in the database to obtain a list of the {@code numOfStops}
+     * nearest stops to the provided {@code latitude} and {@code longitude} coordinates
+     *
+     * @param latitude the latitude of the location in which to base proximity
+     * @param longitude the longitude of the location in which to base proximity
+     * @param numOfStops the desired number of closest stops to determine
+     *
+     * @return <b>If {@code numOfStops <=} the total number of stops on campus:</b>
+     * <p>An array of {@code Stop}s sorted in order of proximity to the provided coordinates (closest i=0) </p>
+     * <b>Else:</b> "Every stop on campus, sorted in order of proximity to the provided coordinates (closest i=0)"
+     */
+    public static Stop[] getNearbyStops(double latitude, double longitude, int numOfStops) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            //Need to parameterize query to prevent possible SQL injection?
+            String query = "CALL FinalCalculate(" + latitude + ", " + longitude + ", " + numOfStops + ")";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            // Holds the fields of the current Stop being instantiated from db fields below
+            String name;
+            long stopId, stopLatitude, stopLongitude;
+            long[] servesRouteIds;
+            Stop.Type type;
+
+            int actualNumOfStops = (numOfStops <= stopCount()) ? numOfStops : stopCount();
+            Stop[] nearbyStops = new Stop[actualNumOfStops];
+            int i = 0;
+            while (rs.next()) {
+                nearbyStops[i] = stopFromResultSet(rs);
+            }
+
+            return nearbyStops;
+        } catch (SQLException ex) {
+            throw new RuntimeException("Error: ", ex);
+        }
+    }
+
+    // ROUTE DATA
     /**
      * Retrieves the data for the {@code Route} with ID {@code routeId} from the database and returns an instantiated
      * {@code Route} using it
@@ -142,6 +226,50 @@ public class DatabaseService {
     }
 
     /**
+     * Counts the number of {@code Route} records stored in the database
+     *
+     * @return the number of {@code Route} records in the {@code routeinfo} database table
+     */
+    public static int routeCount() {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            //Need to parameterize query to prevent possible SQL injection?
+            String query = "SELECT COUNT(*) FROM routeinfo" +
+                    "\n";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            return rs.getInt(1);
+        } catch (SQLException ex) {
+            throw new RuntimeException("Error: ", ex);
+        }
+    }
+
+    /**
+     * Retrieves the data for every {@code Route} in the database and returns an array of their instantiated objects
+     *
+     * @return an array containing every {@code Route} stored in the database
+     */
+    public static Route[] getAllRoutes() {
+        //Use try-with-resources to make code more concise
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+
+            String query = "SELECT * FROM routeinfo";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            Route[] allRoutes = new Route[routeCount()];
+            int i = 0;
+            while (rs.next()) {
+                allRoutes[i] = routeFromResultSet(rs);
+            }
+
+            return allRoutes;
+        } catch (SQLException ex) {
+            throw new RuntimeException("Error: ", ex);
+        }
+    }
+
+    /**
      * Constructs a {@code Route} object given the {@code ResultSet} from a database query
      *
      * @param rs the {@code ResultSet} with which to derive data from
@@ -168,52 +296,6 @@ public class DatabaseService {
             }
 
             return new Route(routeId, name, abbName, displayColor, schedule, stopIds);
-        } catch (SQLException ex) {
-            throw new RuntimeException("Error: ", ex);
-        }
-    }
-
-    /**
-     * Invokes the {@code FinalCalculate} stored procedure in the database to obtain a list of the {@code numOfStops}
-     * nearest stops to the provided {@code latitude} and {@code longitude} coordinates
-     *
-     * @param latitude the latitude of the location in which to base proximity
-     * @param longitude the longitude of the location in which to base proximity
-     * @param numOfStops the desired number of closest stops to determine
-     *
-     * @return <b>If {@code numOfStops <=} the total number of stops on campus:</b>
-     * <p>An array of {@code Stop}s sorted in order of proximity to the provided coordinates (closest i=0) </p>
-     * <b>Else:</b> "Every stop on campus, sorted in order of proximity to the provided coordinates (closest i=0)"
-     */
-    public static Stop[] getNearbyStops(double latitude, double longitude, int numOfStops) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            /* The final number of elements is unknown as numOfStops may exceed the number of stops present on a given
-            * Route. For this reason, use an ArrayList */
-            List<Stop> nearbyStopsList = new ArrayList<>();
-
-            //Need to parameterize query to prevent possible SQL injection?
-            String query = "CALL FinalCalculate(" + latitude + ", " + longitude + ", " + numOfStops + ")";
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(query);
-
-            // Holds the fields of the current Stop being instantiated from db fields below
-            String name;
-            long stopId, stopLatitude, stopLongitude;
-            long[] servesRouteIds;
-            Stop.Type type;
-
-            while (rs.next()) {
-                nearbyStopsList.add(stopFromResultSet(rs));
-            }
-
-            int i = 0;
-            Stop[] nearbyStops = new Stop[nearbyStopsList.size()];
-            for (Stop nearbyStop : nearbyStopsList) {
-                nearbyStops[i] = nearbyStop;
-                i++;
-            }
-
-            return nearbyStops;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }

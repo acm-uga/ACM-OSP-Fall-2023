@@ -1,5 +1,7 @@
 package ospbusapp;
+import dataDisplay.DisplayableObject;
 import dataDisplay.ListItemData;
+import dataDisplay.UiContext;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -7,11 +9,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
- * Represents a single bus that travels along a Route, stopping at each Stop along the way
+ * Represents a single bus that travels along a route, stopping at each stop along the way
  * <p></p>
  * Contains the ID of the Stop being approached, the seconds till it arrives, and other relevant metadata
+ *
+ * @see Route
  */
-public class Bus implements ListItemData {
+public class Bus implements DisplayableObject, ListItemData {
     // Fields that update with each batch of API data:
     // Derived directly from API data:
     private long busId; // VehicleID in API
@@ -116,47 +120,128 @@ public class Bus implements ListItemData {
         return timeUnit.between(lastUpdated, LocalDateTime.now(ZoneId.of("UTC-5")));
     }
 
-    // TODO "Bus #{busId}
     /**
-     * Provides appropriate info to be displayed as the header for the given object
+     * Determines the seconds until {@code this} {@code Bus} arrives at the {@code Stop} with id {@code stopId}
      *
-     * @return a {@code String} suitable for use as a header
+     * @param stopId the id of the {@code Stop} to find seconds until arrival at
+     *
+     * @return <b>If the given {@code Stop} is along {@code this} {@code Bus}'s {@code Route} and the seconds till it
+     * arrives there is known:</b> The seconds until {@code this} {@code Bus} arrives at the {@code Stop} with id
+     * {@code stopId}
+     * <br>
+     * <b>Else:</b> {@code Double.NaN}
      */
-    @Override
-    public String listItemHeader() {
-        return null;
+    public double secondsTillArrivalAt(long stopId) {
+        /*
+        Context:
+        REAL order of stops along this Bus's route:
+        "Stop Ids": A B C D E F
+        Indices:    0 1 2 3 4 5
+
+        BUS' seconds till arrival order (index 0 is always the stop this Bus is approaching):
+        C D E F A B
+        0 1 2 3 4 5
+
+        Approach:
+        1. Index of secsToArrival to use = Real Index of desired STA stop - Real Index of nextStopId
+        2. If the result of Step #1 negative add the length of Real to the result of Step #1
+
+        Examples:
+        Want STA to C, currently approaching F: 2 - 5 = -3 ... -3 + 6 = *3*
+        Want STA to B, currently approaching C: 1 - 2 = -1 ... -1 + 6 = *5*
+        Want STA to F, currently approaching C: 5 - 2 = *3*
+        */
+
+        long[] stopIdsAlongRoute = BackendEngine.getRoute(routeId).getStopIds();
+
+        // Determine the real index of the desired stop
+        // Employ a linear search since StopIds are sorted by the order they're served, not numerically
+        int realIndexDesiredStop = 0;
+        while (realIndexDesiredStop < stopIdsAlongRoute.length && stopIdsAlongRoute[realIndexDesiredStop] != stopId) {
+            realIndexDesiredStop++;
+        }
+
+        // If the provided stop does not exist on this bus' route, stop here and return -1
+        if (stopIdsAlongRoute[realIndexDesiredStop] != stopId) return -1;
+
+        // Determine the real index of the stop currently being approached
+        int realIndexNextStop = 0;
+        while (realIndexNextStop < stopIdsAlongRoute.length && stopIdsAlongRoute[realIndexNextStop] != nextStopId) {
+            realIndexNextStop++;
+        }
+
+        int indexOfSTA = realIndexDesiredStop - realIndexDesiredStop;
+        if (indexOfSTA < 0) indexOfSTA += stopIdsAlongRoute.length;
+
+        // If the STA to the desired stop for this bus is unknown, return Double.NaN
+        if (indexOfSTA >= secondsTillArrival.size()) {
+            return Double.NaN;
+        } else {
+            return secondsTillArrival.get(indexOfSTA);
+        }
     }
 
-    // TODO "Heading to {stopName}"
+    // ListItemData Implementations
     /**
-     * Provides appropriate info to be displayed as the subheader for the given object
+     * Provides the identification number of the invoking {@code Bus}
      *
-     * @return a {@code String} suitable for use as a subheader
+     * @param ctx the context in which this data is being displayed in the UI
+     *
+     * @return a {@code String} containing the invoking {@code Bus}'s identification number, such as "Bus #1234"
      */
-    @Override
-    public String listItemSubHeader() {
-        return null;
+     public String listItemHeader(UiContext ctx) {
+        return "Bus #" + this.busId;
     }
 
-    // TODO Route "abbName"
     /**
-     * Provides appropriate info to be displayed as the primary context for the given object
+     * Provides the name of the {@code Route} that the invoking {@code Bus} is running along
      *
-     * @return a {@code String} suitable for use as primary context
+     * @param ctx the context in which this data is being displayed in the UI
+     *
+     * @return the name of the {@code Route} this {@code Bus} is operating on
      */
-    @Override
-    public String listItemContext1() {
-        return null;
+     public String listItemSubHeader(UiContext ctx) {
+        return BackendEngine.getRoute(this.routeId).getName();
     }
 
-    // TODO "secsToArrival"
     /**
-     * Provides appropriate info to be displayed as the secondary context for the given object
+     * Provides an approximate time until arrival at the stop this data is displayed under in the appropriate time units
      *
-     * @return a {@code String} suitable for use as secondary context
+     * @param ctx the context in which this data is being displayed in the UI
+     *
+     * @return <b>If the the seconds till arrival at the stop is known:</b>
+     * <p>a {@code String} containing the seconds until {@code this} {@code Bus} arrives at there</p>
+     * <b>Else:</b> "Unknown"
      */
-    @Override
-    public String listItemContext2() {
-        return null;
+    public String listItemContext1(UiContext ctx) {
+        String finalString = "Unknown";
+        if (ctx.getDisplayedUnder() instanceof Stop) {
+            // Determine the correct seconds to arrival element to display given the context
+            long stopId = ((Stop)ctx.getDisplayedUnder()).getStopId();
+            double timeQuantity = secondsTillArrivalAt(stopId);
+
+            // Ensure the secondsTillArrival is actually known and doesn't indicate the bus has already arrived (STA <= 0)
+            if (timeQuantity != Double.NaN && timeQuantity > 0) {
+                finalString = Stop.condenseSecsToString(timeQuantity) + " away";
+            } else if (timeQuantity != Double.NaN && timeQuantity <= 0) {
+                finalString = "Arrived";
+            }
+        }
+        return finalString;
+    }
+
+    /**
+     * Provides the approximate time since {@code this} {@code Bus}'s data was updated from the API in the appropriate
+     * time units
+     *
+     * @param ctx the context in which this data is being displayed in the UI
+     *
+     * @return a {@code String} containing the approximate time that has elapsed since {@code this} {@code Bus}'s data
+     * was updated from the API, in the appropriate time units
+     */
+    public String listItemContext2(UiContext ctx) {
+        double timeQuantity = timeSinceLastUpdate(ChronoUnit.SECONDS);
+        String finalString = "Last updated " + Stop.condenseSecsToString(timeQuantity) + " ago";
+        return finalString;
     }
 }
