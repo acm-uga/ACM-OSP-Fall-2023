@@ -96,7 +96,7 @@ public class DatabaseService {
         try {
             String name = rs.getString("stopname");
             long stopId = rs.getLong("stopid");
-            Stop.Type type = Stop.typeFromString(rs.getString("type_info"));
+            Stop.StopType type = Stop.typeFromString(rs.getString("type_info"));
             double stopLatitude = rs.getDouble("latitude");
             double stopLongitude = rs.getDouble("longitude");
 
@@ -163,7 +163,7 @@ public class DatabaseService {
             String name;
             long stopId, stopLatitude, stopLongitude;
             long[] servesRouteIds;
-            Stop.Type type;
+            Stop.StopType type;
 
             int actualNumOfStops = (numOfStops <= stopCount()) ? numOfStops : stopCount();
             Stop[] nearbyStops = new Stop[actualNumOfStops];

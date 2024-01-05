@@ -1,17 +1,15 @@
 package ospbusapp;
+
 import dataDisplay.DisplayableObject;
 import dataDisplay.ListItemData;
 import dataDisplay.MeasurementSystem;
 import dataDisplay.UiContext;
 import routeSchedule.RouteSchedule;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Represents a bus route: a series of stops and the buses actively driving through them in order
@@ -44,11 +42,8 @@ public class Route implements DisplayableObject, ListItemData {
         this.displayColor = displayColor;
         this.schedule = schedule;
         this.stopIds = stopIds;
-
-        // Populate these dynamic fields with appropriate API calls
-        this.activeBuses = ApiService.getActiveBuses(routeId);
-        this.active = determineActivity();
-
+        this.activeBuses = new HashMap<>();
+        this.active = false;
     }
 
     //Methods:
@@ -104,23 +99,34 @@ public class Route implements DisplayableObject, ListItemData {
         return this.active;
     }
 
+    public void setActive(boolean isActive) {
+        this.active = isActive;
+    }
+
     public HashMap<Long, Bus[]> getActiveBuses() {
         return activeBuses;
     }
 
     public void setActiveBuses(HashMap<Long, Bus[]> activeBuses) {
-        //What to update?
         this.activeBuses = activeBuses;
+    }
+
+    public void update(HashMap<Long, Bus[]> activeBuses) {
+        this.activeBuses = activeBuses;
+        this.active = this.determineActivity();
     }
 
     @Override
     public String toString() {
         return ("Route{" +
                 "routeId=" + routeId +
-                ", name='" + name + '\'' +
-                ", schedule=" + schedule +
-                ", stopIds=" + stopIds +
-                ", activeBuses=" + activeBuses +
+                ", name=" + name +
+                ", abbName=" + abbName +
+                ", displayColor=" + displayColor +
+                ", schedule=\n" + schedule.toString() +
+                "\n, stopIds=" + Arrays.toString(stopIds) +
+                " active=" + active +
+                ", activeBuses=" + activeBuses.toString() +
                 '}'
         );
     }
@@ -160,7 +166,7 @@ public class Route implements DisplayableObject, ListItemData {
      * to it's {@code schedule} and it has been less than five minutes since the last
      */
     public boolean determineActivity() {
-        return (timeSinceMostRecentBusUpdate(ChronoUnit.MINUTES) <= 5) && (this.schedule.isOperatingNow());
+        return (this.timeSinceMostRecentBusUpdate(ChronoUnit.MINUTES) <= 5) && (this.schedule.isOperatingNow());
     }
 
     /**

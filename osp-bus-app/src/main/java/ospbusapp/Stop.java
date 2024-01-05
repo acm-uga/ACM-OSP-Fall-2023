@@ -2,7 +2,7 @@ package ospbusapp;
 
 import dataDisplay.*;
 
-import java.sql.Time;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -13,12 +13,15 @@ import java.util.concurrent.TimeUnit;
  * @see Route
  */
 public class Stop implements DisplayableObject, ListItemData {
-    protected enum Type {UNKNOWN} // The primary "purpose"/type of location a stop might serve
+    /**
+     * The primary "type" of location a {@code Stop} may serve, such as housing or parking
+     */
+    protected enum StopType {UNKNOWN}
 
     // Fields derived from the database at instantiation:
     private long stopId;
     private String name;
-    private Type type;
+    private StopType type;
     private double latitude;
     private double longitude;
     //List of route ids that this stop is connected to
@@ -26,7 +29,7 @@ public class Stop implements DisplayableObject, ListItemData {
 
     //Constructors:
     // From DB calls
-    public Stop(long stopId, String name, Type type, double latitude, double longitude, long[] servesRouteIds) {
+    public Stop(long stopId, String name, StopType type, double latitude, double longitude, long[] servesRouteIds) {
         this.stopId = stopId;
         this.name = name;
         this.type = type;
@@ -97,17 +100,18 @@ public class Stop implements DisplayableObject, ListItemData {
     public String toString() {
         return ("Stop{" +
                 "stopId=" + stopId +
-                ", name='" + name + '\'' +
+                ", name=" + name +
+                ", type=" + stringFromType(type) +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
-                ", servesRoutesIds=" + servesRouteIds +
+                ", servesRoutesIds=" + Arrays.toString(servesRouteIds) +
                 '}'
         );
     }
 
     // Miscellaneous methods
     /**
-     * Matches a {@code String} representation of {@code Stop.Type} to a valid {@code Stop.Type}
+     * Matches a {@code String} representation of {@code Stop.StopType} to a valid {@code Stop.Type}
      *
      * @param typeString a {@code String} representing a valid {@code Stop.Type}
      *
@@ -115,10 +119,28 @@ public class Stop implements DisplayableObject, ListItemData {
      *
      * @see #type
      */
-    public static Stop.Type typeFromString(String typeString) {
+    public static Stop.StopType typeFromString(String typeString) {
         switch (typeString) {
             default:
-                return Stop.Type.UNKNOWN;
+                return Stop.StopType.UNKNOWN;
+        }
+    }
+
+    /**
+     * Matches a {@code StopType} to a {@code String} representing it
+     *
+     * @param stopType the {@code StopType} to textually represent
+     *
+     * @return <b>If {@code stopType} is a valid {@code StopType}:</b><br>
+     * A textual representation fo {@code stopType}<br>
+     * <b>Else:</b> Unknown
+     *
+     * @see StopType
+     */
+    public static String stringFromType(StopType stopType) {
+        switch(stopType) {
+            default:
+                return "Unknown";
         }
     }
 
@@ -172,7 +194,7 @@ public class Stop implements DisplayableObject, ListItemData {
      * <br><br>
      * Resulting durations are approximate due to rounding "half-up."
      *
-     * @param timeQuantity the number of seconds to create a textually represent in the most appropriate unit
+     * @param timeQuantity the number of seconds to textually represent in the most appropriate unit
      *
      * @return a {@code String} representing the {@code timeQuantity} in the most appropriate units
      *
@@ -228,7 +250,7 @@ public class Stop implements DisplayableObject, ListItemData {
     }
 
     /**
-     * Finds the next bus arriving at {@code this} {@code Stop}, regardless of what {@code Route} it's on
+     * Finds the next {@code Bus} arriving at {@code this} {@code Stop}, regardless of what {@code Route} it's on
      *
      * @return the next bus arriving at {@code this} {@code Stop}
      */

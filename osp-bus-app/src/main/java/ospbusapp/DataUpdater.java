@@ -1,5 +1,7 @@
 package ospbusapp;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimerTask;
 
 /**
@@ -7,14 +9,17 @@ import java.util.TimerTask;
  */
 public class DataUpdater extends TimerTask {
     /**
-     * Update all {@link Route} and {@link Bus} data with fresh API data by fetching new data from the mirror server
-     * and updating these existing objects' fields with to reflect it
+     * Update all {@link Route} and {@link Bus} data with fresh API data by fetching that data from the API mirror and
+     * passing it to {@link Route#update}
      */
     @Override
     public void run() {
+        HashMap<Long, HashMap<Long, Bus[]>> apiData = ApiService.getAllActiveBuses();
+        HashMap<Long, Route> existingData = BackendEngine.getAllRoutesById();
 
-
-        // TODO employ ApiService functions to obtain new data
-        // TODO use data from above to adjust Route and Bus fields, instantiate Routes and Buses, and destroy them
+        for (Map.Entry<Long, HashMap<Long, Bus[]>> newData : apiData.entrySet()) {
+            // Update each the Buses stored in each Route stored in BackendEngine
+            existingData.get(newData.getKey()).update(newData.getValue());
+        }
     }
 }

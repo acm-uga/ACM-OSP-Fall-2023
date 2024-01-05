@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents a single bus that travels along a route, stopping at each stop along the way
@@ -99,8 +100,11 @@ public class Bus implements DisplayableObject, ListItemData {
                 "busId=" + busId +
                 ", routeId=" + routeId +
                 ", nextStopId=" + nextStopId +
+
+                // Line below from: https://stackoverflow.com/a/23183963
+                ", secondsTillArrival=" + secondsTillArrival.stream().map(Object::toString).collect(Collectors.joining(", ")) +
+
                 ", lastUpdated=" + lastUpdated +
-                ", secondsTillArrival=" + secondsTillArrival +
                 '}'
         );
     }
@@ -116,7 +120,7 @@ public class Bus implements DisplayableObject, ListItemData {
      *
      * @see ChronoUnit
      */
-    protected long timeSinceLastUpdate(ChronoUnit timeUnit) {
+    public long timeSinceLastUpdate(ChronoUnit timeUnit) {
         return timeUnit.between(lastUpdated, LocalDateTime.now(ZoneId.of("UTC-5")));
     }
 

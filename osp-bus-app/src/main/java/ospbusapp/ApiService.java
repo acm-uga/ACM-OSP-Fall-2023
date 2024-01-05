@@ -19,13 +19,14 @@ import java.util.Set;
 
 public class ApiService {
     // TODO make this return a HashMap of Route Ids to StopId-Bus Object array HashMaps
-    public static HashMap<Long,HashMap<Long, Bus[]>[]> getAllActiveBuses() {
+    public static HashMap<Long,HashMap<Long, Bus[]>> getAllActiveBuses() {
         // Make an API call for every known stop ID. First, determine those IDs
         Stop[] allStops = DatabaseService.getAllStops();
         long[] stopIds = new long[allStops.length];
         int i = 0;
         for (Stop stop : allStops) {
             stopIds[i] = stop.getStopId();
+            i++;
         }
 
         //Base URL of the API
@@ -141,11 +142,5 @@ public class ApiService {
 //        }
 
         return busesOnRoute;
-    }
-
-    // TODO implement the API calls and such similar to above, just for getting bus data for buses on one specific route
-    public static HashMap<Long, Bus[]> getActiveBuses(long routeId) {
-        // Make an API call for every stop ID along the given route
-        long[] stopIdsOnRoute = BackendEngine.getRoute(routeId).getStopIds();
     }
 }
