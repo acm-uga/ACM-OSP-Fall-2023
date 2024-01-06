@@ -31,7 +31,7 @@ public class CustomSession extends Session {
 	protected static Session decodeSession(String encodedSession) {
 		// Parse the encoded OperatingDate strings into an Array of OperatingDates
 		String[] operatingDateStrings = RouteSchedule.parseToArray(encodedSession, 
-				RouteSchedule.FromBeginning, RouteSchedule.ToEnd, ',');
+				RouteSchedule.FROM_BEGINNING, RouteSchedule.TO_END, ',');
 		OperatingDate[] operatingDates = new OperatingDate[operatingDateStrings.length];
 		
 		int i = 0;

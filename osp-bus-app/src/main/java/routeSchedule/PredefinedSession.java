@@ -238,7 +238,7 @@ public class PredefinedSession extends Session {
 	 * @see "README"
 	 */
 	private static OperatingDate[] datesOf(String encodedOperatingDates) {
-		String[] operatingDateStrings = RouteSchedule.parseToArray(encodedOperatingDates, RouteSchedule.FromBeginning, RouteSchedule.ToEnd, ',');
+		String[] operatingDateStrings = RouteSchedule.parseToArray(encodedOperatingDates, RouteSchedule.FROM_BEGINNING, RouteSchedule.TO_END, ',');
 		OperatingDate[] operatingDates = new OperatingDate[operatingDateStrings.length];
 		
 		int i = 0;
@@ -267,7 +267,7 @@ public class PredefinedSession extends Session {
 	private static String datesExcluding(String encodedBaseDates, String encodedExclusions) {
 		// Establish the base dates in which to later make exclusions from.
 		// Parse encodedBaseDates into an array of encoded OperatingDate Strings
-		String[] operatingDateStrings = RouteSchedule.parseToArray(encodedBaseDates, RouteSchedule.FromBeginning, RouteSchedule.ToEnd, ',');
+		String[] operatingDateStrings = RouteSchedule.parseToArray(encodedBaseDates, RouteSchedule.FROM_BEGINNING, RouteSchedule.TO_END, ',');
 		OperatingDate[] baseDates = new OperatingDate[operatingDateStrings.length];
 		
 		// Decode the encoded OperatingDate Strings
@@ -278,7 +278,7 @@ public class PredefinedSession extends Session {
 		}
 		
 		// Parse the encodedExclusions into an array of encoded OperatingDate Strings
-		String[] exclusionDateStrings = RouteSchedule.parseToArray(encodedExclusions, RouteSchedule.FromBeginning, RouteSchedule.ToEnd, ',');
+		String[] exclusionDateStrings = RouteSchedule.parseToArray(encodedExclusions, RouteSchedule.FROM_BEGINNING, RouteSchedule.TO_END, ',');
 		OperatingDate[] exclusionDates = new OperatingDate[exclusionDateStrings.length];
 		
 		// Decode the encoded OperatingDate Strings

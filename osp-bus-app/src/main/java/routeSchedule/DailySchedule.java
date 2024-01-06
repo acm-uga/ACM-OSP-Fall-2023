@@ -90,7 +90,7 @@ public class DailySchedule {
 			/* Add all the operating time Strings for this iteration's set of days to the ArrayList to be instantiated
 			* as OperatingTimes */
 			Collections.addAll(operatingTimeStrings, 
-					RouteSchedule.parseToArray(encodedDailySchedule, RouteSchedule.FromBeginning, RouteSchedule.ToEnd, ','));
+					RouteSchedule.parseToArray(encodedDailySchedule, RouteSchedule.FROM_BEGINNING, RouteSchedule.TO_END, ','));
 			
 			// Instantiate all the operatingTimes and add them to the operatingTimes ArrayList
 			for (String timeString : operatingTimeStrings) {
@@ -145,7 +145,7 @@ public class DailySchedule {
 			/* Add all the operating time Strings for this iteration's set of days to the ArrayList to be instantiated
 			* as OperatingTimes */
 			Collections.addAll(operatingTimeStrings, RouteSchedule.parseToArray(timesString,
-					RouteSchedule.FromBeginning, RouteSchedule.ToEnd, ','));
+					RouteSchedule.FROM_BEGINNING, RouteSchedule.TO_END, ','));
 			
 			// Instantiate all the operatingTimes and add them to the operatingTimes ArrayList
 			for (String timeString : operatingTimeStrings) {
@@ -202,7 +202,7 @@ public class DailySchedule {
 		
 		// Parse the encodedDailyTimes String and save the OperatingTimes to the operatingTimes Array
 		String[] operatingTimeStrings = RouteSchedule.parseToArray(encodedDailyTimes,
-				RouteSchedule.FromBeginning, RouteSchedule.ToEnd, ',');
+				RouteSchedule.FROM_BEGINNING, RouteSchedule.TO_END, ',');
 		OperatingTime[] operatingTimes = new OperatingTime[operatingTimeStrings.length];
 		
 		int i = 0;
@@ -897,7 +897,7 @@ public class DailySchedule {
 			encodedSchedule = encodedSchedule.substring(lookTo + 1);
 			
 			// Parse the encoded timesString into an array of Strings
-			String[] timeStrings = RouteSchedule.parseToArray(timesString, RouteSchedule.FromBeginning, RouteSchedule.ToEnd, ',');
+			String[] timeStrings = RouteSchedule.parseToArray(timesString, RouteSchedule.FROM_BEGINNING, RouteSchedule.TO_END, ',');
 			String[] formattedTimeStrings = new String[timeStrings.length];
 			
 			// Format each of those timeStrings

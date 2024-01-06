@@ -1,4 +1,4 @@
-package ospbusapp;
+package busAppCore;
 
 import routeSchedule.RouteSchedule;
 
@@ -7,9 +7,9 @@ import java.util.*;
 
 public class DatabaseService {
     //Add to properties file for security
-    private static final String url = "jdbc:mysql://localhost:3306/OSPDB";
-    private static final String username = "root";
-    private static final String password = "Password123";
+    private static final String URL = "jdbc:mysql://localhost:3306/OSPDB";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "Password123";
 
     // STOP DATA
     /**
@@ -24,7 +24,7 @@ public class DatabaseService {
      */
     public static Stop getStop(long stopId) {
         //Use try-with-resources to make code more concise
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
 
             String query = "SELECT * FROM stopinfo WHERE stopid = " + stopId;
             Statement st = connection.createStatement();
@@ -37,18 +37,18 @@ public class DatabaseService {
     }
 
     /**
-     * Retrieves the data for the {@code Stop} with ID {@code stopId} from the database and returns an instantiated
+     * Retrieves the data for the {@code Stop} with name {@code stopName} from the database and returns an instantiated
      * {@code Stop} using it
      * <br>
      * Alternative to {@link #getStop(long)}} (which is preferred when possible).
      *
-     * @param stopId the ID of the {@code Stop} to instantiate
+     * @param stopName the name of the {@code Stop} to instantiate
      *
      * @return the {@code Stop} object of ID {@code stopId}, constructed from database data
      */
     public static Stop getStop(String stopName) {
         //Use try-with-resources to make code more concise
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
 
             String query = "SELECT * FROM stopinfo WHERE stopname = " + stopName;
             Statement st = connection.createStatement();
@@ -67,7 +67,7 @@ public class DatabaseService {
      */
     public static Stop[] getAllStops() {
         //Use try-with-resources to make code more concise
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
 
             String query = "SELECT * FROM stopinfo";
             Statement st = connection.createStatement();
@@ -127,7 +127,7 @@ public class DatabaseService {
      * @return the number of {@code Stop} records in the {@code stopinfo} database table
      */
     public static int stopCount() {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
             //Need to parameterize query to prevent possible SQL injection?
             String query = "SELECT COUNT(*) FROM stopinfo" +
                     "\n";
@@ -153,7 +153,7 @@ public class DatabaseService {
      * <b>Else:</b> "Every stop on campus, sorted in order of proximity to the provided coordinates (closest i=0)"
      */
     public static Stop[] getNearbyStops(double latitude, double longitude, int numOfStops) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
             //Need to parameterize query to prevent possible SQL injection?
             String query = "CALL FinalCalculate(" + latitude + ", " + longitude + ", " + numOfStops + ")";
             Statement st = connection.createStatement();
@@ -190,7 +190,7 @@ public class DatabaseService {
      * @return the {@code Route} object of ID {@code routeId}, constructed from database data
      */
     public static Route getRoute(long routeId) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
             //Need to parameterize query to prevent possible SQL injection?
             String query = "SELECT * FROM routeinfo WHERE routeid = " + routeId;
             Statement st = connection.createStatement();
@@ -213,7 +213,7 @@ public class DatabaseService {
      * @return the {@code Route} object of ID {@code routeId}, constructed from database data
      */
     public static Route getRoute(String routeName) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
             //Need to parameterize query to prevent possible SQL injection?
             String query = "SELECT * FROM routeinfo WHERE routename = " + routeName;
             Statement st = connection.createStatement();
@@ -231,7 +231,7 @@ public class DatabaseService {
      * @return the number of {@code Route} records in the {@code routeinfo} database table
      */
     public static int routeCount() {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
             //Need to parameterize query to prevent possible SQL injection?
             String query = "SELECT COUNT(*) FROM routeinfo" +
                     "\n";
@@ -251,7 +251,7 @@ public class DatabaseService {
      */
     public static Route[] getAllRoutes() {
         //Use try-with-resources to make code more concise
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
 
             String query = "SELECT * FROM routeinfo";
             Statement st = connection.createStatement();

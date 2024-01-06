@@ -1,4 +1,4 @@
-package ospbusapp;
+package busAppCore;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,8 +1,8 @@
 package dataDisplay;
 
-import ospbusapp.Bus;
-import ospbusapp.Route;
-import ospbusapp.Stop;
+import busAppCore.Bus;
+import busAppCore.Route;
+import busAppCore.Stop;
 
 /**
  * Labels a data type such as {@link Route}, {@link Stop}, or {@link Bus} as displayable on the frontend

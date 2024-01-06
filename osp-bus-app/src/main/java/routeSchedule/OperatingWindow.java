@@ -28,7 +28,7 @@ public class OperatingWindow {
 	 */
 	public OperatingWindow(String sessionsString, String dailyScheduleString) {		
 		// Parse datesString into an array of encoded OperatingDate Strings.
-		String[] sessionStrings = RouteSchedule.parseToArray(sessionsString, RouteSchedule.FromBeginning, RouteSchedule.ToEnd, ';');
+		String[] sessionStrings = RouteSchedule.parseToArray(sessionsString, RouteSchedule.FROM_BEGINNING, RouteSchedule.TO_END, ';');
 		
 		// Convert all the session Strings into Sessions stored in sessions
 		Session[] sessions = new Session[sessionStrings.length];
@@ -98,7 +98,7 @@ public class OperatingWindow {
 		
 		// Parse the encoded Sessions String into an Array of Session Strings
 		String[] sessionStrings = RouteSchedule.parseToArray(sessionsString, 
-				RouteSchedule.FromBeginning, RouteSchedule.ToEnd, ';');
+				RouteSchedule.FROM_BEGINNING, RouteSchedule.TO_END, ';');
 		Session[] sessions = new Session[sessionStrings.length];
 		
 		int i = 0;

@@ -9,7 +9,7 @@ import java.time.ZoneId;
  */
 public class OperatingDate {
 	// Public constant so Indefinite can be passed to an OperatingDate constructor
-	public static final String Indefinite = "";
+	public static final String INDEFINITE = "";
 
 	/**
 	 * Valid types of date ranges an {@code OperatingDate} can represent:
@@ -53,7 +53,7 @@ public class OperatingDate {
 
 	/**
 	 * Instantiates an {@code OperatingDate} object provided a {@code String} date (MM/DD/YY), inclusive date range
-	 * (MM/DD/YY-MM/DD/YY), or {@code Indefinite} ("")
+	 * (MM/DD/YY-MM/DD/YY), or {@code INDEFINITE} ("")
 	 *
 	 * @param dateString the single date, date range, or {@code Indefinite} with which to populate the new
 	 * {@code OperatingDate}'s {@code startDate} and {@code endDate} fields
@@ -274,7 +274,7 @@ public class OperatingDate {
 			
 			return new OperatingDate(startDateFormatted + "-" + endDateFormatted);
 		} else {
-			return new OperatingDate(OperatingDate.Indefinite);
+			return new OperatingDate(OperatingDate.INDEFINITE);
 		}
 	}
 
@@ -287,7 +287,7 @@ public class OperatingDate {
 	protected String encode() {
 		switch (this.type) {
 			case INDEFINITE:
-				return OperatingDate.Indefinite;
+				return OperatingDate.INDEFINITE;
 			case SINGLE:
 				return stripDateString(this.startDate.toString(), true);
 			case PRE:
@@ -414,11 +414,11 @@ public class OperatingDate {
 	 * @return {@code true} if {@code dateString} is equal to {@code Indefinite}
 	 *
 	 * @see Type#INDEFINITE
-	 * @see #Indefinite
+	 * @see #INDEFINITE
 	 * @see "README"
 	 */
 	private static boolean isIndefinite(String dateString) {
-		return dateString.equals(Indefinite);
+		return dateString.equals(INDEFINITE);
 	}
 
 	/**
@@ -581,18 +581,6 @@ public class OperatingDate {
 		return encodedDate.substring(0,2) + "/" + encodedDate.substring(2,4) + "/" + encodedDate.substring(4,6);
 	}
 
-	/**
-	 * Formats the {@code date} {@code String} into MMDDYY, encoded form
-	 *
-	 * @param date the date {@code String} to format
-	 * @param isLocalDateFormat whether {@code date} follows {@code LocalDate} (YYYY-MM-DD) or {@code routeSchedule}
-	 * (MM/DD/YY) date formatting
-	 *
-	 * @return {@code date} in encoded MMDDYY form
-	 *
-	 * @see "README"
-	 * @see LocalDate#toString()
-	 */
 	/**
 	 * Formats the {@code date} {@code String} into MMDDYY, encoded form
 	 *

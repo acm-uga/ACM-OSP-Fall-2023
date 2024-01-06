@@ -172,7 +172,7 @@ public class OperatingTime {
 		} else if ((startTime != null && endTime != null) && (startTime.equals(LocalTime.of(0, 0)) && endTime.equals(LocalTime.of(23, 59)))) {
 			this.startTime = startTime;
 			this.endTime = endTime;
-			this.type = Type.SPANSDAY;
+			this.type = Type.SPANS_DAY;
 		} else if ((startTime != null && endTime != null) && startTime.isBefore(endTime)){
 			this.startTime = startTime;
 			this.endTime = endTime;
@@ -348,7 +348,7 @@ public class OperatingTime {
 	 * @return {@code true} if the provided {@code time} falls between this {@code OperatingTime}'s
 	 * {@code startTime} and {@code endTime}, inclusive
 	 */
-	public boolean operatesAt(LocalTime time) {		
+	protected boolean operatesAt(LocalTime time) {
 		boolean isAfterStart = this.startTime.isBefore(time);
 		boolean isBeforeEnd = this.endTime.plusSeconds(59).isAfter(time); // Allow checks to be inclusive
 		

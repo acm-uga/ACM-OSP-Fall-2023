@@ -29,12 +29,13 @@ public class RouteSchedule {
 		/** The object's fields are invalid or unable to be interpreted */
 		INVALID_FIELDS,
 		/** The default state of an error. No error has occurred */
-		NONE};
-	
-	// ArrayList of operating windows
+		NONE
+	};
+
+	// Array of operating windows
 	private OperatingWindow[] operatingWindows;
-	protected static final char FromBeginning = '\u0000'; // Used in parseToArray
-	protected static final char ToEnd = '\u0000'; // Used in parseToArray
+	public static final char FROM_BEGINNING = '\u0000'; // Used in parseToArray
+	public static final char TO_END = '\u0000'; // Used in parseToArray
 
 	/**
 	 * Instantiates a {@code RouteSchedule} object provided an array of {@code OperatingWindow}s
@@ -58,7 +59,7 @@ public class RouteSchedule {
 	 */
 	public static RouteSchedule decode(String encodedRouteSchedule) {
 		// Parse the encodedRouteSchedule into encoded Operating Windows
-		String[] operatingWindowStrings = parseToArray(encodedRouteSchedule, FromBeginning, ToEnd, '|');
+		String[] operatingWindowStrings = parseToArray(encodedRouteSchedule, FROM_BEGINNING, TO_END, '|');
 		OperatingWindow[] operatingWindows = new OperatingWindow[operatingWindowStrings.length];
 		int i = 0;
 		for (String encodedOperatingWindow : operatingWindowStrings) {
@@ -395,10 +396,10 @@ public class RouteSchedule {
 		// Determine what part of fullString contains the array to parse
 		int startIndex = 0;
 		int endIndex = fullString.length();
-		if (startOfArray != FromBeginning) {
+		if (startOfArray != FROM_BEGINNING) {
 			startIndex = fullString.indexOf(startOfArray) + 1;
 		}
-		if (endOfArray != ToEnd) {
+		if (endOfArray != TO_END) {
 			endIndex = fullString.indexOf(endOfArray);
 		}
 		String arrayString = fullString.substring(startIndex, endIndex);

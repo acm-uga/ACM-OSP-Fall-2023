@@ -1,4 +1,4 @@
-package ospbusapp;
+package busAppCore;
 
 import dataDisplay.DisplayableObject;
 import dataDisplay.ListItemData;

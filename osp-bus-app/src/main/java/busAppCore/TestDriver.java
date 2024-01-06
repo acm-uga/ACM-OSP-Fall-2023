@@ -1,4 +1,4 @@
-package ospbusapp;
+package busAppCore;
 
 public class TestDriver {
     public static void main(String[] args) {
