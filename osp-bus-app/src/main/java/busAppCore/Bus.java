@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -181,8 +182,14 @@ public class Bus implements DisplayableObject, ListItemData {
         if (indexOfSTA >= secondsTillArrival.size()) {
             return Double.NaN;
         } else {
-            return secondsTillArrival.get(indexOfSTA);
+            return accountForElapsedTime(secondsTillArrival.get(indexOfSTA));
         }
+    }
+
+    public double accountForElapsedTime(double ogSecondsToArrival) {
+        /* Accounting for the amount of time that's passed since STA was updated, STA at the moment of invocation
+         * should equal (approximately) the originalSTA minus the time that's elapsed since that data was updated */
+        return ogSecondsToArrival - (double)(timeSinceLastUpdate(ChronoUnit.SECONDS));
     }
 
     // ListItemData Implementations
