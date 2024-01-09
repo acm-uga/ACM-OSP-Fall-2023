@@ -35,7 +35,7 @@ public class Route implements DisplayableObject, ListItemData {
     //Constructors:
     // From DB calls
     public Route(long routeId, String name, String abbName, String displayColor, RouteSchedule schedule, long[] stopIds) {
-        // Populate these static fields using constructor args
+        // Populate these "static" (unchanging) fields using constructor args
         this.routeId = routeId;
         this.name = name;
         this.abbName = abbName;
@@ -111,9 +111,25 @@ public class Route implements DisplayableObject, ListItemData {
         this.activeBuses = activeBuses;
     }
 
-    public void update(HashMap<Long, Bus[]> activeBuses) {
+    /**
+     * Update {@code this} {@code Route}'s activeBuses field with new API data and determine its activity status given
+     * the new bus data and existing schedule.
+     *
+     * @param activeBuses the new {@code HashMap<Long, Bus[]>} to replace {@code this} {@code Route}'s activeBuses field
+     * with
+     */
+    public void updateBuses(HashMap<Long, Bus[]> activeBuses) {
         this.activeBuses = activeBuses;
         this.active = this.determineActivity();
+    }
+
+    public void refreshWithDbData(long routeId, String name, String abbName, String displayColor, String schedule, String stopIds) {
+        this.routeId = routeId;
+        this.name = name;
+        this.abbName = abbName;
+        this.displayColor = displayColor;
+        this.schedule = RouteSchedule.decode(schedule);
+        this.stopIds = parseStopIdsString(stopIds);
     }
 
     @Override
@@ -129,6 +145,25 @@ public class Route implements DisplayableObject, ListItemData {
                 ", activeBuses=" + activeBuses.toString() +
                 '}'
         );
+    }
+
+    /**
+     * Parses a string of {@code long} stop IDs into an array of {@code long}s, provided it is in the "id-id-id" format
+     * used in the database.
+     *
+     * @param stopIdsString a String in "stopId-stopId-stopId" format
+     *
+     * @return an array of {@code long}s, with each element derived from the '-'-delimited {@code stopIdsString}
+     */
+    public static long[] parseStopIdsString(String stopIdsString) {
+        String[] stopIdStrings = stopIdsString.split("-");
+        long[] stopIds = new long[stopIdStrings.length];
+        int i = 0;
+        for (String stopIdString : stopIdStrings) {
+            stopIds[i] = Long.getLong(stopIdString);
+            i++;
+        }
+        return stopIds;
     }
 
     /**

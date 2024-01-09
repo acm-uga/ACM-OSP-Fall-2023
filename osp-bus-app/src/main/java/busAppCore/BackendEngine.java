@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class BackendEngine {
     // Necessary to instantiate all Route objects through database queries
-    private static final long[] ALL_ROUTE_IDS = new long[]{
+    public static final long[] ALL_ROUTE_IDS = new long[]{
             22472, 22473, 19367, 20003, 19376, 19369, 20032, 20051, 20002, 14736, 22473, 22698, 20056, 20233, 18724,
             20156, 18689, 20049, 13439
     };
@@ -37,8 +37,7 @@ public class BackendEngine {
         dataUpdateHandler.scheduleAtFixedRate(dataUpdater, 0, MS_BETWEEN_DATA_UPDATES);
     }
 
-
-    // GETTERS
+    // GETTERS / SETTERS
     public static HashMap<Long, Route> getAllRoutesById() {
         return allRoutesById;
     }

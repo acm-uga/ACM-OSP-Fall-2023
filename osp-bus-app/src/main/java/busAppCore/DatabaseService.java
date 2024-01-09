@@ -5,6 +5,9 @@ import routeSchedule.RouteSchedule;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * Handles data retrieval from the database
+ */
 public class DatabaseService {
     //Add to properties file for security
     private static final String URL = "jdbc:mysql://localhost:3306/OSPDB";
@@ -284,16 +287,7 @@ public class DatabaseService {
             String abbName = rs.getString("routenameabrv");
             String displayColor = rs.getString("hexcolor");
             RouteSchedule schedule = RouteSchedule.decode(rs.getString("schedule")); // TODO edit to reflect actual field name when determined
-
-            // Convert the stopIds String into an array of Longs
-            String stopIdsString = rs.getString("stopidsordered");
-            String[] stopIdStrings = stopIdsString.split("-");
-            long[] stopIds = new long[stopIdStrings.length];
-            int i = 0;
-            for (String stopIdString : stopIdStrings) {
-                stopIds[i] = Long.getLong(stopIdString);
-                i++;
-            }
+            long[] stopIds = Route.parseStopIdsString(rs.getString("stopidsordered"));
 
             return new Route(routeId, name, abbName, displayColor, schedule, stopIds);
         } catch (SQLException ex) {

@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Handles data retrieval from the API mirror
+ */
 public class ApiService {
     // TODO make this return a HashMap of Route Ids to StopId-Bus Object array HashMaps
     public static HashMap<Long,HashMap<Long, Bus[]>> getAllActiveBuses() {
