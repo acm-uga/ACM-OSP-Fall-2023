@@ -21,8 +21,49 @@ import java.util.Set;
  * Handles data retrieval from the API mirror
  */
 public class ApiService {
-    // TODO make this return a HashMap of Route Ids to StopId-Bus Object array HashMaps
-    public static HashMap<Long,HashMap<Long, Bus[]>> getAllActiveBuses() {
+    /**
+     * Maps Route IDs to a mapping of Stop IDs to the Buses approaching them, updated with each batch of data from the
+     * API mirror. For example:
+     * <br><br>
+     * <b>First Key is any RouteID. Second Key is a StopID along that Route.</b>
+     * <ul>
+     *     <li> Route ID 123456: <ul>
+     *         <li> Stop ID 000001: <ul>
+     *             <li>Next approaching Bus,</li>
+     *             <li>Second-next approaching Bus,</li>
+     *             <li><i>Any other Buses approaching this stop on this Route that we receive from the API, ordered.</i></li>
+     *         </ul></li>
+     *         <li> Stop ID 000002: <ul>
+     *             <li>Next approaching Bus,</li>
+     *             <li>Second-next approaching Bus,</li>
+     *             <li><i>Any other Buses approaching this stop on this Route that we receive from the API, ordered.</i></li>
+     *         </ul></li>
+     *         <li><i>Every other Stop on this Route, unordered.</i></li>
+     *     </ul></li>
+     *     <li> Route ID 789101 <ul>
+     *         <li> Stop ID 000010 <ul>
+     *             <li>Next approaching Bus</li>
+     *             <li>Second-next approaching Bus</li>
+     *             <li><i>Any other Buses approaching this stop on this Route that we receive from the API, ordered.</i></li>
+     *         </ul></li>
+     *         <li> Stop ID 000020 <ul>
+     *             <li>Next approaching Bus</li>
+     *             <li>Second-next approaching Bus</li>
+     *             <li><i>Any other Buses approaching this stop on this Route that we receive from the API, ordered.</i></li>
+     *         </ul></li>
+     *         <li><i>Every other Stop on this Route, unordered.</i></li>
+     *     </ul></li>
+     *     <li><i>Every other Route, unordered.</i></li>
+     * </ul>
+     */
+    private static HashMap<Long,HashMap<Long, Bus[]>> busDataByRouteId;
+
+    /* This method is responsible for getting all the Bus data from the API mirror, organizing it, and changing
+     * the busDataByRouteId field that provides bus data for the rest of this program.
+     *
+     * TODO: change the method below to create a a mapping of Route ID keys to values of Stop ID-Bus array HashMaps.
+     * Then, set busDataByRouteId to this new data (SEE ABOVE). Add JavaDoc to this method when complete :) */
+    public static void updateBusData() {
         // Make an API call for every known stop ID. First, determine those IDs
         Stop[] allStops = DatabaseService.getAllStops();
         long[] stopIds = new long[allStops.length];
@@ -145,5 +186,31 @@ public class ApiService {
 //        }
 
         return busesOnRoute;
+    }
+
+    /**
+     * Gets the entire mapping of Route IDs to their Stop ID-Approaching Bus Array mappings, which is constantly
+     * updated with new data from the API mirror
+     *
+     * @return a {@code HashMap} mapping the ID of every {@code Route} to its own {@code HashMap} mapping the ID of every
+     * {@code Stop} along that {@code Route} to its own array of {@code Bus}es approaching it, in order of seconds to
+     * arrival
+     */
+    public static HashMap<Long,HashMap<Long, Bus[]>> getAllBusData() {
+        return busDataByRouteId;
+    }
+
+    /**
+     * Gets a mapping of Stop IDs to an array of {@code Bus}es approaching each, which is constantly updated with new
+     * data from the API mirror
+     *
+     * @param routeId the ID of the {@code Route} whose {@code Bus} data is desired
+     *
+     * @return a mapping of the ID of every {@code Stop} along the {@code Route} with ID {@code routeId} to its own array
+     * of {@code Bus}es approaching it, in ascending order of seconds to arrival
+     *
+     */
+    public static HashMap<Long, Bus[]> getBusDataFromId(long routeId) {
+        return busDataByRouteId.get(routeId);
     }
 }

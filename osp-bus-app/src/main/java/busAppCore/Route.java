@@ -33,17 +33,23 @@ public class Route implements DisplayableObject, ListItemData {
     private HashMap<Long, Bus[]> activeBuses; // Contains all Bus objects currently active on this Route and the id of the Stop they're approaching. Sorted in Stop order.
 
     //Constructors:
-    // From DB calls
-    public Route(long routeId, String name, String abbName, String displayColor, RouteSchedule schedule, long[] stopIds) {
-        // Populate these "static" (unchanging) fields using constructor args
+    public Route(
+            long routeId,
+            String name,
+            String abbName,
+            String displayColor,
+            RouteSchedule schedule,
+            long[] stopIds,
+            HashMap<Long, Bus[]> activeBuses
+    ) {
         this.routeId = routeId;
         this.name = name;
         this.abbName = abbName;
         this.displayColor = displayColor;
         this.schedule = schedule;
         this.stopIds = stopIds;
-        this.activeBuses = new HashMap<>();
-        this.active = false;
+        this.activeBuses =activeBuses;
+        this.active = this.determineActivity();
     }
 
     //Methods:
@@ -111,27 +117,6 @@ public class Route implements DisplayableObject, ListItemData {
         this.activeBuses = activeBuses;
     }
 
-    /**
-     * Update {@code this} {@code Route}'s activeBuses field with new API data and determine its activity status given
-     * the new bus data and existing schedule.
-     *
-     * @param activeBuses the new {@code HashMap<Long, Bus[]>} to replace {@code this} {@code Route}'s activeBuses field
-     * with
-     */
-    public void updateBuses(HashMap<Long, Bus[]> activeBuses) {
-        this.activeBuses = activeBuses;
-        this.active = this.determineActivity();
-    }
-
-    public void refreshWithDbData(long routeId, String name, String abbName, String displayColor, String schedule, String stopIds) {
-        this.routeId = routeId;
-        this.name = name;
-        this.abbName = abbName;
-        this.displayColor = displayColor;
-        this.schedule = RouteSchedule.decode(schedule);
-        this.stopIds = parseStopIdsString(stopIds);
-    }
-
     @Override
     public String toString() {
         return ("Route{" +
@@ -186,7 +171,7 @@ public class Route implements DisplayableObject, ListItemData {
         for (Bus[] listOfApproachingBuses : activeBuses.values()) {
             for (Bus bus : listOfApproachingBuses) {
                 currentUnits = bus.timeSinceLastUpdate(timeUnit);
-                leastUnits = (currentUnits < leastUnits) ? currentUnits : leastUnits;
+                leastUnits = Math.min(currentUnits, leastUnits);
             }
         }
 

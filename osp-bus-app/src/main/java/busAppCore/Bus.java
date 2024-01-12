@@ -1,4 +1,5 @@
 package busAppCore;
+
 import dataDisplay.DisplayableObject;
 import dataDisplay.ListItemData;
 import dataDisplay.UiContext;
@@ -7,7 +8,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -77,24 +77,6 @@ public class Bus implements DisplayableObject, ListItemData {
         this.secondsTillArrival = secondsTillArrival;
     }
 
-    //Same bus vs same instance?
-    @Override
-    public boolean equals(Object bus) {
-        //Check if same object
-        if (this == bus) {
-            return true;
-        }
-
-        //Verify object isn't null and that object is same class
-        if (bus == null || getClass() != bus.getClass()) {
-            return false;
-        }
-
-        long busId = ((Bus) bus).busId;
-
-        return this.busId == busId;
-    }
-
     @Override
     public String toString() {
         return ("Bus{" +
@@ -157,7 +139,7 @@ public class Bus implements DisplayableObject, ListItemData {
         Want STA to F, currently approaching C: 5 - 2 = *3*
         */
 
-        long[] stopIdsAlongRoute = BackendEngine.getRoute(routeId).getStopIds();
+        long[] stopIdsAlongRoute = DatabaseService.getRoute(routeId).getStopIds();
 
         // Determine the real index of the desired stop
         // Employ a linear search since StopIds are sorted by the order they're served, not numerically
@@ -175,7 +157,7 @@ public class Bus implements DisplayableObject, ListItemData {
             realIndexNextStop++;
         }
 
-        int indexOfSTA = realIndexDesiredStop - realIndexDesiredStop;
+        int indexOfSTA = realIndexDesiredStop - realIndexNextStop;
         if (indexOfSTA < 0) indexOfSTA += stopIdsAlongRoute.length;
 
         // If the STA to the desired stop for this bus is unknown, return Double.NaN
@@ -186,6 +168,14 @@ public class Bus implements DisplayableObject, ListItemData {
         }
     }
 
+    /**
+     * Approximates the current seconds until something happens given the last recorded seconds until completion,
+     * {@code ogSecondsToArrival}, the time that that was recorded, and the current time at invocation
+     *
+     * @param ogSecondsToArrival the last recorded seconds until something happens
+     *
+     * @return the approximate number of seconds until that same thing happens, elapsed time accounted for
+     */
     public double accountForElapsedTime(double ogSecondsToArrival) {
         /* Accounting for the amount of time that's passed since STA was updated, STA at the moment of invocation
          * should equal (approximately) the originalSTA minus the time that's elapsed since that data was updated */
@@ -212,7 +202,7 @@ public class Bus implements DisplayableObject, ListItemData {
      * @return the name of the {@code Route} this {@code Bus} is operating on
      */
      public String listItemSubHeader(UiContext ctx) {
-        return BackendEngine.getRoute(this.routeId).getName();
+        return DatabaseService.getRoute(this.routeId).getName();
     }
 
     /**
@@ -252,7 +242,6 @@ public class Bus implements DisplayableObject, ListItemData {
      */
     public String listItemContext2(UiContext ctx) {
         double timeQuantity = timeSinceLastUpdate(ChronoUnit.SECONDS);
-        String finalString = "Last updated " + Stop.condenseSecsToString(timeQuantity) + " ago";
-        return finalString;
+        return "Last updated " + Stop.condenseSecsToString(timeQuantity) + " ago";
     }
 }

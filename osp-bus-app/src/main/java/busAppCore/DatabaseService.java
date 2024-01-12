@@ -105,7 +105,7 @@ public class DatabaseService {
 
             // Determine the Routes served by this Stop
             ArrayList<Long> servesRouteIdsList = new ArrayList<Long>();
-            for (Route route : BackendEngine.getAllRoutesById().values()) {
+            for (Route route : DatabaseService.getAllRoutes()) {
                 if (Arrays.stream(route.getStopIds()).anyMatch(id -> id == stopId)) {
                     servesRouteIdsList.add(route.getRouteId());
                 }
@@ -162,13 +162,7 @@ public class DatabaseService {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            // Holds the fields of the current Stop being instantiated from db fields below
-            String name;
-            long stopId, stopLatitude, stopLongitude;
-            long[] servesRouteIds;
-            Stop.StopType type;
-
-            int actualNumOfStops = (numOfStops <= stopCount()) ? numOfStops : stopCount();
+            int actualNumOfStops = Math.min(numOfStops, stopCount());
             Stop[] nearbyStops = new Stop[actualNumOfStops];
             int i = 0;
             while (rs.next()) {
@@ -281,7 +275,7 @@ public class DatabaseService {
      */
     private static Route routeFromResultSet(ResultSet rs) {
         try {
-            // Holds the fields of the current Stop being instantiated from db fields below
+            // Holds the fields of the current Route being instantiated from db fields below
             long routeId = rs.getLong("routeid");
             String name = rs.getString("routename");
             String abbName = rs.getString("routenameabrv");
@@ -289,7 +283,9 @@ public class DatabaseService {
             RouteSchedule schedule = RouteSchedule.decode(rs.getString("schedule")); // TODO edit to reflect actual field name when determined
             long[] stopIds = Route.parseStopIdsString(rs.getString("stopidsordered"));
 
-            return new Route(routeId, name, abbName, displayColor, schedule, stopIds);
+            HashMap<Long, Bus[]> activeBuses = ApiService.getBusDataFromId(routeId);
+
+            return new Route(routeId, name, abbName, displayColor, schedule, stopIds, activeBuses);
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }

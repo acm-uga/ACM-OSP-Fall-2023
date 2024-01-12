@@ -80,23 +80,6 @@ public class Stop implements DisplayableObject, ListItemData {
     }
 
     @Override
-    public boolean equals(Object stop) {
-        //Check if same object
-        if (this == stop) {
-            return true;
-        }
-
-        //Verify object isn't null and that object is same class
-        if (stop == null || getClass() != stop.getClass()) {
-            return false;
-        }
-
-        long stopId = ((Stop) stop).stopId;
-
-        return this.stopId == stopId;
-    }
-
-    @Override
     public String toString() {
         return ("Stop{" +
                 "stopId=" + stopId +
@@ -239,7 +222,7 @@ public class Stop implements DisplayableObject, ListItemData {
      * {@code this} {@code Stop}
      */
     public double secondsToArrivalOnRoute(long routeId) {
-        Route route = BackendEngine.getRoute(routeId);
+        Route route = DatabaseService.getRoute(routeId);
         double secondsTillArrival = Double.NaN;
 
         if (route != null) {
@@ -258,7 +241,7 @@ public class Stop implements DisplayableObject, ListItemData {
         Bus lookingAtBus, nextBus = null;
         double leastSecondsTillArrival = Double.MAX_VALUE;
 
-        for (Route route : BackendEngine.activeRoutes()) {
+        for (Route route : BackendEngine.getActiveRoutes()) {
             lookingAtBus = route.getActiveBuses().get(stopId)[0];
             if (lookingAtBus.secondsTillArrivalAt(stopId) < leastSecondsTillArrival) {
                 nextBus = lookingAtBus;
@@ -296,26 +279,28 @@ public class Stop implements DisplayableObject, ListItemData {
      * <b>Else:</b> "Arrived""<br><br>
      * <u><b>Else:</b></u> "Unknown"
      *
-     * @see BackendEngine#activeRoutes()
+     * @see BackendEngine#getActiveRoutes()
      */
     public String listItemSubHeader(UiContext ctx) {
         String finalString = "Unknown";
 
         if (ctx.getDisplayedUnder() == ParentContainer.GENERAL) {
             finalString = "Serves ";
+            Route[] activeRoutes = BackendEngine.getActiveRoutes();
 
-            if (BackendEngine.activeRoutes().length >= 1) {
+            if (activeRoutes.length >= 1) {
                 int itemNumber = 1;
-                for (Route route : BackendEngine.activeRoutes()) {
+                for (Route route : BackendEngine.getActiveRoutes()) {
                     finalString += route.getAbbName();
                     if (itemNumber <
-                            BackendEngine.activeRoutes().length) finalString += ", ";
+                            BackendEngine.getActiveRoutes().length) finalString += ", ";
                 }
             } else {
+                Route[] allRoutes = DatabaseService.getAllRoutes();
                 int itemNumber = 1;
-                for (Route route : BackendEngine.getAllRoutesById().values()) {
+                for (Route route : allRoutes) {
                     finalString += route.getAbbName();
-                    if (itemNumber < BackendEngine.getAllRoutesById().size()) finalString += ", ";
+                    if (itemNumber < allRoutes.length) finalString += ", ";
                 }
             }
         } else if (ctx.getDisplayedUnder() instanceof Route) {
@@ -361,7 +346,7 @@ public class Stop implements DisplayableObject, ListItemData {
      * <p>The distance to {@code this} {@code Stop}'s location from the user's current location in the user's
      * units</p>
      * <b>Else (or if a calculation is indeterminate):</b> Unknown
-     * @see BackendEngine#activeRoutes()
+     * @see BackendEngine#getActiveRoutes()
      */
     public String listItemContext2(UiContext ctx) {
         String finalString = "Unknown";
@@ -370,7 +355,7 @@ public class Stop implements DisplayableObject, ListItemData {
             Bus nextArrivingBus = nextArrivingBus();
             if (nextArrivingBus != null){
                 String timeString = condenseSecsToString(nextArrivingBus.secondsTillArrivalAt(stopId));
-                String abbRouteName = BackendEngine.getRoute(nextArrivingBus.getRouteId()).getAbbName();
+                String abbRouteName = DatabaseService.getRoute(nextArrivingBus.getRouteId()).getAbbName();
                 finalString = timeString + " away (" + abbRouteName + ")";
             }
         } else if (ctx.getDisplayedUnder() instanceof Route) {
