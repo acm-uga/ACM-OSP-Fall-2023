@@ -1,4 +1,4 @@
-package ospbusapp;
+package busAppCore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +8,7 @@ import java.util.Map;
 //Test class for working with similar data to what would be retrieved via DB methods
 //Hardcoded with some sample values from BH route
 public class TestRoute {
+    /*
     //Fields:
     private final long routeId;
     private String name;
@@ -81,4 +82,5 @@ public class TestRoute {
                 '}'
         );
     }
+     */
 }
