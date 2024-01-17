@@ -47,7 +47,7 @@ fun Header(text: String) {
            .requiredHeight(55.dp)
            .height(55.dp)
            .fillMaxWidth()
-           .background(color = BusAppTheme.colors.onBackgroundPrimary, shape = RectangleShape)
+           .background(color = BusAppTheme.colors.accent, shape = RectangleShape)
    ) {
        Row(
            modifier = Modifier
