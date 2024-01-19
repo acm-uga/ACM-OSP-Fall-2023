@@ -57,7 +57,7 @@ public class ApiService {
      * </ul>
      */
     private static HashMap<Long,HashMap<Long, Bus[]>> busDataByRouteId;
-
+    
     /* This method is responsible for getting all the Bus data from the API mirror, organizing it, and changing
      * the busDataByRouteId field that provides bus data for the rest of this program.
      *
@@ -84,11 +84,20 @@ public class ApiService {
         JSONParser parser = new JSONParser();
 
         Map<Long, Integer> routes = new HashMap<>();
+
+        //List where each index is a route
+        //Map of each bus ID to its object in this route
         List<Map<Long, Bus>> busesOnRoute = new ArrayList<>();
 
-        //Parse data for each stop
+        // Route ID (key) to value of map where stopid is key along this route and value is array of bus objs on this route
+        // Instance field reference will be updated to this local variable at end of method
+        Map<Long,HashMap<Long, Bus[]>> busDataByRouteId = new HashMap<>();
+
+        //Parse data for each stop, iterating through stops
         for (long stopId : stopIds) {
 
+            // List of bus objects for this stop (put in map and update this list with objects as we iterate through)
+            List<Bus> stopBuses = new ArrayList<>();
 
             long first = -1;
             //Specify endpoint to be added to baseUrl for request
@@ -134,35 +143,39 @@ public class ApiService {
                     double secondsToArrival = (double) arrival.get("SecondsToArrival");
                     // stopID, routeID already in for loop
                     Bus bus;
-                    // adding to an existing bus object
-                    if (busesOnRoute.get(posRouteId).containsKey(vehicleId)) {
-                        bus = busesOnRoute.get(posRouteId).get(vehicleId);
-                        if (secondsToArrival < bus.getSecondsTillArrival().get(0)) {
-                            bus.setNextStopId(stopId);
-                            bus.getSecondsTillArrival().add(0, secondsToArrival);
-                        } else {
-                            // binary search possible (maybe in the future)
-                            // for loop for now
-                            boolean added = false;
-                            for (int j = 0; j < bus.getSecondsTillArrival().size(); j++) {
-                                if (bus.getSecondsTillArrival().get(j) > secondsToArrival) {
-                                    bus.getSecondsTillArrival().add(j, secondsToArrival);
-                                    added = true;
-                                    break;
-                                }
-                            }
-                            if (!added) {
-                                bus.getSecondsTillArrival().add(secondsToArrival);
-                            }
-                        }
-                    }
+                    
+                    // // adding to an existing bus object
+                    // if (busesOnRoute.get(posRouteId).containsKey(vehicleId)) {
+                    //     bus = busesOnRoute.get(posRouteId).get(vehicleId);
+                    //     if (secondsToArrival < bus.getSecondsTillArrival().get(0)) {
+                    //         bus.setNextStopId(stopId);
+                    //         bus.getSecondsTillArrival().add(0, secondsToArrival);
+                    //     } else {
+                    //         // binary search possible (maybe in the future)
+                    //         // for loop for now
+                    //         boolean added = false;
+                    //         for (int j = 0; j < bus.getSecondsTillArrival().size(); j++) {
+                    //             if (bus.getSecondsTillArrival().get(j) > secondsToArrival) {
+                    //                 bus.getSecondsTillArrival().add(j, secondsToArrival);
+                    //                 added = true;
+                    //                 break;
+                    //             }
+                    //         }
+                    //         if (!added) {
+                    //             bus.getSecondsTillArrival().add(secondsToArrival);
+                    //         }
+                    //     }
+                    // }
                     // creating a new bus object
-                    else {
-                        List<Double> listSecondsToArrival = new ArrayList<>();
-                        listSecondsToArrival.add(secondsToArrival);
-                        bus = new Bus(vehicleId, currRouteId, stopId, listSecondsToArrival);
-                        busesOnRoute.get(posRouteId).put(vehicleId, bus);
-                    }
+                    // else {
+                    
+                    // For now, just creating new bus object -- maybe fix later to update existing ones
+                    List<Double> listSecondsToArrival = new ArrayList<>();
+                    listSecondsToArrival.add(secondsToArrival);
+                    bus = new Bus(vehicleId, currRouteId, stopId, listSecondsToArrival); 
+                    // Add bus to list for this stop    
+                    stopBuses.add(bus);
+                    // }
 
                     //Debugging:
                     System.out.println("Route: " + currRouteId);
@@ -173,19 +186,19 @@ public class ApiService {
             } catch (ParseException e) {
                 System.err.println("Error with parsing response");
             }
+
+            // Get existing stop ids map for this route, then put this stop id with its buses as an entry in the map
+            // Verify entry already exists in map for this route id or create new map
+            Map<Long, Bus[]> stopIdsToBuses = busDataByRouteId.getOrDefault(currRouteId, new HashMap<>());
+            stopIdsToBuses.put(stopId, stopBuses);
+
+            // Update entry in map
+            busDataByRouteId.put(currRouteId, stopIdsToBuses);
+               
         }
 
-//        for (Long routeId: routes.keySet()) {
-//            //Position in list
-//            int routePos = routes.get(routeId);
-//
-//            Map<Long, Bus> buses = busesOnRoute.get(routePos);
-//
-//            System.out.println("For Route: " + routeId);
-//
-//        }
-
-        return busesOnRoute;
+        // Update reference
+        this.busDataByRouteId = busDataByRouteId;
     }
 
     /**
