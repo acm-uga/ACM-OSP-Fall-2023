@@ -2,11 +2,14 @@ package edu.uga.acm.osp.nav
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.uga.acm.osp.components.TextButton
@@ -33,7 +36,12 @@ fun SearchScreen(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             // Put composables here!
-            TextButton(textButton = "test", colorBackground = BusAppTheme.colors.container, colorText = BusAppTheme.colors.onBackgroundPrimary)
+            // NOTE: Composables put here do not display for some reason.
+        }
+        // Put composables here instead
+        Row(verticalAlignment = Alignment.Bottom) {
+            TextButton(textButton = "test", colorBackground = Color.Black, colorText = Color.Red)
+            TextButton(textButton = "test2", colorBackground = Color.Black, colorText = Color.Red)
         }
     }
 }
