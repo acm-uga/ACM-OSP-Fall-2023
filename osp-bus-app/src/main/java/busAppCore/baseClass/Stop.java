@@ -1,4 +1,4 @@
-package busAppCore;
+package baseClass;
 
 import dataDisplay.*;
 
