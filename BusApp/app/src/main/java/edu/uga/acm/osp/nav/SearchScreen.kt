@@ -52,7 +52,7 @@ fun SearchScreen(navController: NavController) {
                 .height(590.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
-        ) {// I don't know why this isn't changing the position of the row
+        ) {
             TextButton(textButton = "Bus Routes", 
                 colorBackground = BusAppTheme.colors.container,
                 colorText = BusAppTheme.colors.onBackgroundPrimary)
