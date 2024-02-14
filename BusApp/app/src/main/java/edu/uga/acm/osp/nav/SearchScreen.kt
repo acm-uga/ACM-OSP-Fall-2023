@@ -30,38 +30,23 @@ import edu.uga.acm.osp.ui.theme.BusAppTheme
 
 @Composable
 fun SearchScreen(navController: NavController) {
-    Scaffold(
-        topBar = {
-            Header(text = "Search All")
-        },
-        bottomBar = {
-            displayNavBar(navController = navController, enableSearch = true)
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            // Put composables here!
-            // NOTE: Composables put here do not display for some reason.
-        }
-        // Put composables here instead
-        Row(verticalAlignment = Alignment.Bottom,
-            modifier = Modifier
-                .height(590.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            TextButton(textButton = "Bus Routes", 
-                colorBackground = BusAppTheme.colors.container,
-                colorText = BusAppTheme.colors.onBackgroundPrimary)
-            TextButton(textButton = "Bus Stops", 
-                colorBackground = BusAppTheme.colors.container,
-                colorText = BusAppTheme.colors.onBackgroundPrimary)
-            IconButton(iconName = Icons.Outlined.MenuOpen,
-                colorBackground = BusAppTheme.colors.container,
-                description = "test")
-        }
+    Header(text = "Search All")
+    displayNavBar(navController = navController, enableSearch = true)
+
+    Row(verticalAlignment = Alignment.Bottom,
+        modifier = Modifier
+            .height(590.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        TextButton(textButton = "Bus Routes",
+            colorBackground = BusAppTheme.colors.container,
+            colorText = BusAppTheme.colors.onBackgroundPrimary)
+        TextButton(textButton = "Bus Stops",
+            colorBackground = BusAppTheme.colors.container,
+            colorText = BusAppTheme.colors.onBackgroundPrimary)
+        IconButton(iconName = Icons.Outlined.MenuOpen,
+            colorBackground = BusAppTheme.colors.container,
+            description = "test")
     }
 }
