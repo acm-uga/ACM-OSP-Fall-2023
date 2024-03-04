@@ -1,9 +1,14 @@
 package busAppCore;
 
+import baseClasses.Bus;
+import baseClasses.Route;
+import baseClasses.Stop;
 import routeSchedule.RouteSchedule;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Handles data retrieval from the database

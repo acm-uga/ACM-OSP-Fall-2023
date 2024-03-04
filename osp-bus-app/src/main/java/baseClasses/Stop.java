@@ -1,5 +1,7 @@
-package baseClass;
+package baseClasses;
 
+import busAppCore.BackendEngine;
+import busAppCore.DatabaseService;
 import dataDisplay.*;
 
 import java.util.Arrays;
@@ -16,7 +18,7 @@ public class Stop implements DisplayableObject, ListItemData {
     /**
      * The primary "type" of location a {@code Stop} may serve, such as housing or parking
      */
-    protected enum StopType {UNKNOWN}
+    public enum StopType {UNKNOWN}
 
     // Fields derived from the database at instantiation:
     private long stopId;

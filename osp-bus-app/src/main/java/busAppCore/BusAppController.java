@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class BusController {
+public class BusAppController {
 
     @GetMapping
     @RequestMapping(value = "/api/get/nearestStops")
