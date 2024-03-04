@@ -1,8 +1,8 @@
-package edu.uga.acm.osp.nav
+package edu.uga.acm.osp.screens
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import edu.uga.acm.osp.composables.*
+import edu.uga.acm.osp.components.*
 
 
 @Composable

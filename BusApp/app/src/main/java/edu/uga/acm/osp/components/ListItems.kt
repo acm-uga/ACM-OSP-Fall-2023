@@ -1,4 +1,4 @@
-package edu.uga.acm.osp.composables
+package edu.uga.acm.osp.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,6 +22,20 @@ import androidx.compose.ui.unit.dp
 import edu.uga.acm.osp.ui.theme.BusAppTheme
 
 // List item with an icon badge
+/**
+ * A list item with icon badge and two optional context modules.
+ *
+ * @param header the text to display as the item's primary identifier
+ * @param subheader supporting text displayed beneath the header, providing further details
+ * @param onListElementClick optional method to invoke when this list item is clicked
+ * @param badgeIcon the icon resource to display alongside this list item
+ * @param badgeIconDesc a brief description of the list item's contents for accessibility
+ * @param context1 optional context module (upper)
+ * @param context2 optional context module (lower)
+ * @param modifier optional {@code Modifier}
+ *
+ * @see Contexts
+ */
 @Composable
 fun IconListItem(
     header: String, // List item header
@@ -81,7 +95,7 @@ fun IconListItem(
                 }
             }
 
-            // Context composables
+            // Context components
             Box(contentAlignment = Alignment.CenterEnd, modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .weight(weight = .75f, fill = true) // Change weight arg to change primary/context priority
@@ -115,7 +129,19 @@ fun IconListItem(
     }
 }
 
-// List item with a text label badge
+/**
+ * A list item with text badge and two optional context modules.
+ *
+ * @param header the text to display as the item's primary identifier
+ * @param subheader supporting text displayed beneath the header, providing further details
+ * @param onListElementClick optional method to invoke when this list item is clicked
+ * @param badgeLabel the short {@code String} or acronym to display beside this list item
+ * @param context1 optional context module (upper)
+ * @param context2 optional context module (lower)
+ * @param modifier optional {@code Modifier}
+ *
+ * @see Contexts
+ */
 @Composable
 fun LabelListItem(
     header: String, // List item header
@@ -174,7 +200,7 @@ fun LabelListItem(
                 }
             }
 
-            // Context composables
+            // Context components
             Box(contentAlignment = Alignment.CenterEnd, modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .weight(weight = .75f, fill = true) // Change weight arg to change primary/context priority

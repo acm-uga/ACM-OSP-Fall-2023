@@ -19,11 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import edu.uga.acm.osp.composables.BasicContainer
-import edu.uga.acm.osp.composables.ContextAction
-import edu.uga.acm.osp.composables.ContextInfo
-import edu.uga.acm.osp.composables.IconListItem
-import edu.uga.acm.osp.composables.LabelListItem
+import edu.uga.acm.osp.components.BasicContainer
+import edu.uga.acm.osp.components.ContextAction
+import edu.uga.acm.osp.components.ContextInfo
+import edu.uga.acm.osp.components.IconListItem
+import edu.uga.acm.osp.components.LabelListItem
 import edu.uga.acm.osp.ui.theme.BusAppTheme
 
 class MainActivity : ComponentActivity() {
