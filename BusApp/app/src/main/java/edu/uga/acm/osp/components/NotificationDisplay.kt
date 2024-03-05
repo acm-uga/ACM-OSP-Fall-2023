@@ -10,6 +10,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+<<<<<<< HEAD:BusApp/app/src/main/java/edu/uga/acm/osp/composables/NotificationDisplay.kt
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+=======
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Icon
@@ -20,10 +25,23 @@ import androidx.compose.material.icons.filled.BusAlert
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+>>>>>>> JQB-Front-End-Development:BusApp/app/src/main/java/edu/uga/acm/osp/components/NotificationDisplay.kt
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+<<<<<<< HEAD:BusApp/app/src/main/java/edu/uga/acm/osp/composables/NotificationDisplay.kt
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.Icons.Default
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import edu.uga.acm.osp.ui.theme.BusAppTheme
+=======
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -34,7 +52,9 @@ import androidx.compose.ui.unit.sp
 // Not used but could be applied for optimization
 var titles = listOf("Notifications", "Status", "Remind")
 val height = 225.sp
+>>>>>>> JQB-Front-End-Development:BusApp/app/src/main/java/edu/uga/acm/osp/components/NotificationDisplay.kt
 
+// How to use theme: BusAppTheme.colors.onB[whatever you need]
 /**
  * Composes the entire Notification tab.
  */
@@ -50,13 +70,14 @@ fun NotificationComposable() {
         Column(
             modifier = Modifier
                 .height(400.dp)
-                .background(color = Color.White)
+                .background(color = BusAppTheme.colors.onBackgroundPrimary)
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             Row {
                 Text(text = "Notifications", fontSize = 25.sp, fontWeight = FontWeight.Bold, modifier = Modifier
-                    .offset(0.dp, -3.dp)
+                    .offset(0.dp, -3.dp),
+                    color = BusAppTheme.colors.onAccent
                 )
                 //Icon(Icons.iconCategory.iconName
                 Row (
@@ -75,8 +96,14 @@ fun NotificationComposable() {
             Row (modifier = Modifier
                 .height(30.dp)
             ){
+<<<<<<< HEAD:BusApp/app/src/main/java/edu/uga/acm/osp/composables/NotificationDisplay.kt
+                DefaultIcon(imageVector = Default.ArrowForward, contentDescription = "Status Updates")
+                Text(text = "Status Updates", fontSize = 15.sp, modifier = Modifier.offset(8.dp),
+                    color = BusAppTheme.colors.onAccent)
+=======
                 DefaultIcon(imageVector = Default.BusAlert, contentDescription = "Status Updates")
                 Text(text = "Status Updates", fontSize = 15.sp, modifier = Modifier.offset(8.dp))
+>>>>>>> JQB-Front-End-Development:BusApp/app/src/main/java/edu/uga/acm/osp/components/NotificationDisplay.kt
                 Spacer(modifier = Modifier.padding(15.dp))
                 CheckboxLabelled()
                 Spacer(modifier = Modifier.padding(5.dp))
@@ -87,8 +114,14 @@ fun NotificationComposable() {
             Row (modifier = Modifier
                 .height(30.dp)
             ) {
+<<<<<<< HEAD:BusApp/app/src/main/java/edu/uga/acm/osp/composables/NotificationDisplay.kt
+                DefaultIcon(imageVector = Default.Notifications, contentDescription = "Your Reminders")
+                Text(text = "Your Reminders", fontSize = 15.sp, modifier = Modifier.offset(8.dp),
+                    color = BusAppTheme.colors.onAccent)
+=======
                 DefaultIcon(imageVector = Default.Alarm, contentDescription = "Your Reminders")
                 Text(text = "Your Reminders", fontSize = 15.sp, modifier = Modifier.offset(8.dp))
+>>>>>>> JQB-Front-End-Development:BusApp/app/src/main/java/edu/uga/acm/osp/components/NotificationDisplay.kt
                 Spacer(modifier = Modifier.padding(12.5.dp))
                 CheckboxLabelled()
                 Spacer(modifier = Modifier.padding(5.dp))
@@ -101,30 +134,6 @@ fun NotificationComposable() {
     } // Card
 } // NotifCom
 
-/**
- * Creates one checkbox that can toggle b/w checked and unchecked. Not functional as of now.
- */
-@Preview
-@Composable
-fun CheckboxLabelled() {
-    val checked = remember { mutableStateOf(false) }
-    //TODO("Be able to take in preset parameters concerning checkboxes(ie if user
-    // enabled text notifications")
-    Column (
-        verticalArrangement = Arrangement.SpaceEvenly
-    ){
-        /*Text("Label for checkbox")
-        Spacer(modifier = Modifier.padding(5.dp)) */
-        Checkbox(
-            checked = checked.value,
-            onCheckedChange = { isChecked -> checked.value = isChecked },
-            modifier = Modifier.offset(0.dp, -5.dp),
-            colors = CheckboxDefaults.colors(Color.Red)
-            // Can change color with: colors =
-        )
-
-    }
-}
 
 /**
  * Creates an icon based on inputs.
@@ -137,6 +146,6 @@ fun DefaultIcon(imageVector: ImageVector, contentDescription: String) {
     Icon(
         imageVector = imageVector,
         contentDescription = contentDescription,
-        tint = Color.Black
+        tint = BusAppTheme.colors.onAccent
     )
 }
