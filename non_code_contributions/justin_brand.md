@@ -1,6 +1,6 @@
 **Title of contribution:** UI Component Mockups
 
-**Date of contribution:** 9/24/2023
+**Date of contribution:** 9/24/2023-
 
 **Description of contribution:**
 Determine and mockup all the UI components necessary to achieve our functionality goals in Figma.
@@ -11,7 +11,7 @@ Determine and mockup all the UI components necessary to achieve our functionalit
 ---
 **Title of contribution:** Screen Mockups
 
-**Date of contribution:** 9/24/2023
+**Date of contribution:** 9/24/2023-
 
 **Description of contribution:**
 Determine and mockup all the screens necessary to achieve our functionality goals in Figma.
