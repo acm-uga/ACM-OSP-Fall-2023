@@ -1,4 +1,4 @@
-package edu.uga.acm.osp.composables
+package edu.uga.acm.osp.components
 
 data class SearchUiState(
     val searchCalled: Boolean = false,

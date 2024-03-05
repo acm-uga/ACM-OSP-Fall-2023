@@ -1,4 +1,4 @@
-package edu.uga.acm.osp.composables
+package edu.uga.acm.osp.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+<<<<<<< HEAD:BusApp/app/src/main/java/edu/uga/acm/osp/composables/DisplaySettings.kt
 import androidx.compose.foundation.layout.offset
+=======
+>>>>>>> JQB-Front-End-Development:BusApp/app/src/main/java/edu/uga/acm/osp/components/DisplaySettings.kt
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
