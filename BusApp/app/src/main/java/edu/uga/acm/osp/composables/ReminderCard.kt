@@ -21,10 +21,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.uga.acm.osp.components.IconListItem
 import edu.uga.acm.osp.components.LabelListItem
+import edu.uga.acm.osp.components.TextButton
 import edu.uga.acm.osp.ui.theme.BoydGray
+import edu.uga.acm.osp.ui.theme.ChapelBellWhite
+import edu.uga.acm.osp.ui.theme.GloryGloryRed
+import edu.uga.acm.osp.ui.theme.TripleGray
 
 @Composable
-fun HomeCard(cardName: String, stop: List<String>, desc: List<String>, badge: List<String>, routes: List<Boolean>) {
+fun ReminderCard(cardName: String, stop: List<String>, desc: List<String>, badge: List<String>, routes: List<Boolean>) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -79,6 +83,10 @@ fun HomeCard(cardName: String, stop: List<String>, desc: List<String>, badge: Li
                     }
                 }
 
+                Row {
+                    TextButton(textButton = "Import Trip", colorBackground = TripleGray, colorText = ChapelBellWhite)
+                    TextButton(textButton = "Add Reminder", colorBackground = GloryGloryRed, colorText = ChapelBellWhite)
+                }
             }
         }
     }
