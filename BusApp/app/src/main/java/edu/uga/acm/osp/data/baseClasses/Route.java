@@ -1,16 +1,16 @@
 package edu.uga.acm.osp.data.baseClasses;
 
-import busAppCore.DatabaseService;
-import dataDisplay.DisplayableObject;
-import dataDisplay.ListItemData;
-import dataDisplay.MeasurementSystem;
-import dataDisplay.UiContext;
-import routeSchedule.RouteSchedule;
-
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+
+import edu.uga.acm.osp.data.display.DisplayableObject;
+import edu.uga.acm.osp.data.display.ListItemData;
+import edu.uga.acm.osp.data.display.MeasurementSystem;
+import edu.uga.acm.osp.data.display.UiContext;
+import edu.uga.acm.osp.data.routeSchedule.RouteSchedule;
+import edu.uga.acm.osp.data.sources.SpringBootService;
 
 /**
  * Represents a bus route: a series of stops and the buses actively driving through them in order
@@ -199,7 +199,7 @@ public class Route implements DisplayableObject, ListItemData {
      * @return the nearest {@code Stop} to the given location that is served by {@code this} {@code Route}
      */
     public Stop getNearestStop(double latitude, double longitude) {
-        Stop[] nearestStops = DatabaseService.getNearbyStops(latitude, longitude, DatabaseService.stopCount());
+        Stop[] nearestStops = SpringBootService.getAllNearbyStops(latitude, longitude);
 
         // Determine the first stop on nearestStops that serves this Route
         Stop nearestStopOnRoute = null;
@@ -254,7 +254,7 @@ public class Route implements DisplayableObject, ListItemData {
      * @return a {@code String} containing the containing condensed information about the schedule in effect at the time
      * of invocation
      *
-     * @see routeSchedule.RouteSchedule#mainSchedule
+     * @see RouteSchedule#mainSchedule()
      */
     public String listItemSubHeader(UiContext ctx) {
         return this.schedule.mainSchedule();

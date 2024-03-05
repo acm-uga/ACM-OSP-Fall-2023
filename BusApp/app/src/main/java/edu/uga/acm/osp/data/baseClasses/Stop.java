@@ -1,11 +1,14 @@
 package edu.uga.acm.osp.data.baseClasses;
 
-import busAppCore.BackendEngine;
-import busAppCore.DatabaseService;
-import dataDisplay.*;
-
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+
+import edu.uga.acm.osp.data.display.UiContext;
+import edu.uga.acm.osp.data.display.ParentContainer;
+import edu.uga.acm.osp.data.sources.SpringBootService;
+import edu.uga.acm.osp.data.display.DisplayableObject;
+import edu.uga.acm.osp.data.display.ListItemData;
+import edu.uga.acm.osp.data.display.MeasurementSystem;
 
 /**
  * Represents a bus stop: a location that buses stop at while operating on a route
@@ -187,7 +190,7 @@ public class Stop implements DisplayableObject, ListItemData {
      */
     public static String condenseSecsToString(double timeQuantity) {
         String finalString = "Unknown";
-        if (timeQuantity != Double.NaN) {
+        if (!Double.isNaN(timeQuantity)) {
             finalString = "<1m";
             // If the number of seconds exceeds one minute...
             if (timeQuantity >= 60.0) {
@@ -224,7 +227,7 @@ public class Stop implements DisplayableObject, ListItemData {
      * {@code this} {@code Stop}
      */
     public double secondsToArrivalOnRoute(long routeId) {
-        Route route = DatabaseService.getRoute(routeId);
+        Route route = SpringBootService.getRoute(routeId);
         double secondsTillArrival = Double.NaN;
 
         if (route != null) {
@@ -243,7 +246,7 @@ public class Stop implements DisplayableObject, ListItemData {
         Bus lookingAtBus, nextBus = null;
         double leastSecondsTillArrival = Double.MAX_VALUE;
 
-        for (Route route : BackendEngine.getActiveRoutes()) {
+        for (Route route : SpringBootService.getActiveRoutes()) {
             lookingAtBus = route.getActiveBuses().get(stopId)[0];
             if (lookingAtBus.secondsTillArrivalAt(stopId) < leastSecondsTillArrival) {
                 nextBus = lookingAtBus;
@@ -281,24 +284,24 @@ public class Stop implements DisplayableObject, ListItemData {
      * <b>Else:</b> "Arrived""<br><br>
      * <u><b>Else:</b></u> "Unknown"
      *
-     * @see BackendEngine#getActiveRoutes()
+     * @see SpringBootService#getActiveRoutes()
      */
     public String listItemSubHeader(UiContext ctx) {
         String finalString = "Unknown";
 
         if (ctx.getDisplayedUnder() == ParentContainer.GENERAL) {
             finalString = "Serves ";
-            Route[] activeRoutes = BackendEngine.getActiveRoutes();
+            Route[] activeRoutes = SpringBootService.getActiveRoutes();
 
             if (activeRoutes.length >= 1) {
                 int itemNumber = 1;
-                for (Route route : BackendEngine.getActiveRoutes()) {
+                for (Route route : activeRoutes) {
                     finalString += route.getAbbName();
                     if (itemNumber <
-                            BackendEngine.getActiveRoutes().length) finalString += ", ";
+                            activeRoutes.length) finalString += ", ";
                 }
             } else {
-                Route[] allRoutes = DatabaseService.getAllRoutes();
+                Route[] allRoutes = SpringBootService.getAllRoutes();
                 int itemNumber = 1;
                 for (Route route : allRoutes) {
                     finalString += route.getAbbName();
@@ -348,7 +351,7 @@ public class Stop implements DisplayableObject, ListItemData {
      * <p>The distance to {@code this} {@code Stop}'s location from the user's current location in the user's
      * units</p>
      * <b>Else (or if a calculation is indeterminate):</b> Unknown
-     * @see BackendEngine#getActiveRoutes()
+     * @see SpringBootService#getActiveRoutes()
      */
     public String listItemContext2(UiContext ctx) {
         String finalString = "Unknown";
@@ -357,7 +360,7 @@ public class Stop implements DisplayableObject, ListItemData {
             Bus nextArrivingBus = nextArrivingBus();
             if (nextArrivingBus != null){
                 String timeString = condenseSecsToString(nextArrivingBus.secondsTillArrivalAt(stopId));
-                String abbRouteName = DatabaseService.getRoute(nextArrivingBus.getRouteId()).getAbbName();
+                String abbRouteName = SpringBootService.getRoute(nextArrivingBus.getRouteId()).getAbbName();
                 finalString = timeString + " away (" + abbRouteName + ")";
             }
         } else if (ctx.getDisplayedUnder() instanceof Route) {

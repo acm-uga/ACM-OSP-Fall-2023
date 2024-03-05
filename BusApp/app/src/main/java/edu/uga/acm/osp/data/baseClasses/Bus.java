@@ -1,15 +1,15 @@
 package edu.uga.acm.osp.data.baseClasses;
 
-import busAppCore.DatabaseService;
-import dataDisplay.DisplayableObject;
-import dataDisplay.ListItemData;
-import dataDisplay.UiContext;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import edu.uga.acm.osp.data.display.DisplayableObject;
+import edu.uga.acm.osp.data.display.ListItemData;
+import edu.uga.acm.osp.data.display.UiContext;
+import edu.uga.acm.osp.data.sources.SpringBootService;
 
 /**
  * Represents a single bus that travels along a route, stopping at each stop along the way
@@ -140,7 +140,7 @@ public class Bus implements DisplayableObject, ListItemData {
         Want STA to F, currently approaching C: 5 - 2 = *3*
         */
 
-        long[] stopIdsAlongRoute = DatabaseService.getRoute(routeId).getStopIds();
+        long[] stopIdsAlongRoute = SpringBootService.getRoute(routeId).getStopIds();
 
         // Determine the real index of the desired stop
         // Employ a linear search since StopIds are sorted by the order they're served, not numerically
@@ -203,7 +203,7 @@ public class Bus implements DisplayableObject, ListItemData {
      * @return the name of the {@code Route} this {@code Bus} is operating on
      */
      public String listItemSubHeader(UiContext ctx) {
-        return DatabaseService.getRoute(this.routeId).getName();
+        return SpringBootService.getRoute(this.routeId).getName();
     }
 
     /**
