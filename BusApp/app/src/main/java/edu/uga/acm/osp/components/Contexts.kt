@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsBus
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,10 +19,38 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import edu.uga.acm.osp.ui.theme.BusAppTheme
 
-// Right-justified tiny button context module, primarily for use in a ListItem composable
+@Preview
+@Composable
+fun ContextActionPreview() {
+    ContextAction(
+        actionIcon = Icons.Default.DirectionsBus,
+        actionDesc = "Icon description",
+        action = {}
+    )
+}
+
+@Preview
+@Composable
+fun ContextInfoPreview() {
+    ContextInfo(
+        contextText = "Context Info",
+        contextIcon = Icons.Default.DirectionsBus,
+        contextDesc = "Icon description"
+    )
+}
+
+/**
+ * Tiny context icon button.
+ *
+ * @param actionIcon the icon to display in the button
+ * @param actionDesc a brief description of the {@code action}
+ * @param action the method to invoke on click
+ * @param modifier optional {@code Modifier} applied only to the module's structure
+ */
 @Composable
 fun ContextAction(
     actionIcon: ImageVector, // Context action icon (Icons.StyleName.IconName)
@@ -46,6 +76,14 @@ fun ContextAction(
 }
 
 // Right-justified info + icon context module, primarily for use in a ListItem composable
+/**
+ * Context information/data and icon.
+ *
+ * @param contextText the information to display in this context module
+ * @param contextIcon a matching icon ot display alongside the {@code contextText}
+ * @param contextDesc a brief description of the icon or context's meaning for accessibility
+ * @param modifier optional {@code Modifier} applied only to the module's structure
+ */
 @Composable
 fun ContextInfo(
     contextText: String, // Context text
@@ -61,7 +99,7 @@ fun ContextInfo(
             textAlign = TextAlign.Right,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
-                .weight(weight = 1f, fill = true)
+                //.weight(weight = 1f, fill = true)
                 .graphicsLayer(translationY = 7f)
                 .padding(end = 2.dp))
         Icon(

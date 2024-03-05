@@ -1,4 +1,4 @@
-package edu.uga.acm.osp.nav
+package edu.uga.acm.osp.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import edu.uga.acm.osp.composables.Header
-import edu.uga.acm.osp.composables.displayNavBar
+import edu.uga.acm.osp.components.Header
+import edu.uga.acm.osp.components.displayNavBar
 
 
 @Composable
