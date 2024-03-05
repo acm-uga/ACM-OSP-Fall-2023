@@ -19,19 +19,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons.Default
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.BusAlert
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Sms
+import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import edu.uga.acm.osp.ui.theme.BusAppTheme
 
-// How to use theme: BusAppTheme.colors.onB[whatever you need]
 /**
  * Composes the entire Notification tab.
  */
-@Preview(showBackground = false)
+@Preview(showBackground = true)
 @Composable
 fun NotificationComposable() {
     Card(
@@ -57,19 +59,19 @@ fun NotificationComposable() {
                     modifier = Modifier
                         .offset(25.dp, 5.dp)
                 ){
-                    DefaultIcon(imageVector = Default.Phone, contentDescription = "SMS Notifications")
+                    DefaultIcon(imageVector = Default.Vibration, contentDescription = "App Notifications")
                     Spacer(modifier = Modifier.padding(17.dp))
-                    DefaultIcon(imageVector = Default.Email, contentDescription = "Email Notifications")
+                    DefaultIcon(imageVector = Default.Sms, contentDescription = "SMS Notifications")
                     Spacer(modifier = Modifier.padding(17.dp))
                     //Need a better icon for APP
-                    DefaultIcon(imageVector = Default.Person, contentDescription = "App Notifications")
+                    DefaultIcon(imageVector = Default.Email, contentDescription = "Email Notifications")
                 }
 
             }
             Row (modifier = Modifier
                 .height(30.dp)
             ){
-                DefaultIcon(imageVector = Default.ArrowForward, contentDescription = "Status Updates")
+                DefaultIcon(imageVector = Default.BusAlert, contentDescription = "Status Updates")
                 Text(text = "Status Updates", fontSize = 15.sp, modifier = Modifier.offset(8.dp),
                     color = BusAppTheme.colors.onAccent)
                 Spacer(modifier = Modifier.padding(15.dp))
