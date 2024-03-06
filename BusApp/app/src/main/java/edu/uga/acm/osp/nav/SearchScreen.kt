@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -33,20 +34,31 @@ fun SearchScreen(navController: NavController) {
     Header(text = "Search All")
     displayNavBar(navController = navController, enableSearch = true)
 
-    Row(verticalAlignment = Alignment.Bottom,
-        modifier = Modifier
-            .height(590.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        TextButton(textButton = "Bus Routes",
-            colorBackground = BusAppTheme.colors.container,
-            colorText = BusAppTheme.colors.onBackgroundPrimary)
-        TextButton(textButton = "Bus Stops",
-            colorBackground = BusAppTheme.colors.container,
-            colorText = BusAppTheme.colors.onBackgroundPrimary)
-        IconButton(iconName = Icons.Outlined.MenuOpen,
-            colorBackground = BusAppTheme.colors.container,
-            description = "test")
+    LazyColumn {
+
+    }
+
+    Column {
+
+
+
+
+        // Buttons
+        Row(verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .height(590.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            TextButton(textButton = "Bus Routes",
+                colorBackground = BusAppTheme.colors.container,
+                colorText = BusAppTheme.colors.onBackgroundPrimary)
+            TextButton(textButton = "Bus Stops",
+                colorBackground = BusAppTheme.colors.container,
+                colorText = BusAppTheme.colors.onBackgroundPrimary)
+            IconButton(iconName = Icons.Outlined.MenuOpen,
+                colorBackground = BusAppTheme.colors.container,
+                description = "test")
+        }
     }
 }
