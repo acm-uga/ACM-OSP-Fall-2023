@@ -19,7 +19,7 @@ public class SpringBootService {
      * @return the {@code Route} object for the route with id {@code routeId}
      */
     public static Route getRoute(long routeId) {
-        return ExampleGenerator.getRoute();
+        return ExampleGenerator.getRoute(routeId);
     }
 
     /**
@@ -30,7 +30,7 @@ public class SpringBootService {
      * @return the {@code Stop} object for the stop with id {@code stopId}
      */
     public static Stop getStop(long stopId) {
-        return ExampleGenerator.getStop();
+        return ExampleGenerator.getStop(stopId);
     }
 
     /**
@@ -55,7 +55,7 @@ public class SpringBootService {
      * @return {@code count}-many {@code Stop}s in ascending order by proximity to the user
      */
     public static Stop[] getNearbyStops(double latitude, double longitude, int count) {
-        return ExampleGenerator.getStops();
+        return ExampleGenerator.getNearbyStops();
     }
 
     /**
@@ -64,7 +64,7 @@ public class SpringBootService {
      * @return the {@code Stop} object of every Stop in the UGA Bus System.
      */
     public static Stop[] getAllStops() {
-        return ExampleGenerator.getStops();
+        return ExampleGenerator.getAllStops();
     }
 
     /**
@@ -77,7 +77,7 @@ public class SpringBootService {
      * @see Route#determineActivity()
      */
     public static Route[] getActiveRoutes() {
-        return ExampleGenerator.getRoutes();
+        return ExampleGenerator.getActiveRoutes();
     }
 
     /**
@@ -86,6 +86,6 @@ public class SpringBootService {
      * @return the {@code Route} object of every Route in the UGA Bus System.
      */
     public static Route[] getAllRoutes() {
-        return ExampleGenerator.getRoutes();
+        return ExampleGenerator.getAllRoutes();
     }
 }
