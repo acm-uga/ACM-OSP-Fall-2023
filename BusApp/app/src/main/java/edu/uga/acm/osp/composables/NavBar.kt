@@ -84,14 +84,16 @@ fun NavBar(items: List<NavBarItem>, navController: NavController, modifier: Modi
 
 //Displaying the navbar. Creates the navbar to be used in the app
 @Composable
-fun displayNavBar(navController: NavController) {
+fun displayNavBar(navController: NavController, enableSearch: Boolean = false){
 // For navigation
     Column(
         verticalArrangement = Arrangement.Bottom,
         modifier = Modifier.fillMaxSize()
     ) {
         Row() {
-            searchBar()
+            if (enableSearch) {
+                searchBar()
+            }
         }
         NavBar(items = listOf(
             NavBarItem(
@@ -99,21 +101,25 @@ fun displayNavBar(navController: NavController) {
                 route = "home_screen",
                 icon = Icons.Outlined.Home
             ),
+            /*
             NavBarItem(
                 name = "Alerts",
                 route = "alert_screen",
                 icon = Icons.Outlined.Notifications
             ),
+            */
             NavBarItem(
                 name = "Search",
                 route = "search_screen",
                 icon = Icons.Outlined.Search
             ),
+            /*
             NavBarItem(
                 name = "Planner",
                 route = "planner_screen",
                 icon = Icons.Outlined.Route
             ),
+            */
             NavBarItem(
                 name = "Settings",
                 route = "setting_screen",
