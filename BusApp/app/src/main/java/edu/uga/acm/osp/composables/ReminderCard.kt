@@ -88,9 +88,9 @@ fun ReminderCard(cardName: String, stop: List<String>, desc: List<String>, badge
                     item {
                         Row {
                             Spacer(modifier = Modifier.padding(20.dp))
-                            TextButton(textButton = "Import Trip", colorBackground = TripleGray, colorText = ChapelBellWhite)
+                            TextButton({}, textButton = "Import Trip", colorBackground = TripleGray, colorText = ChapelBellWhite)
                             Spacer(modifier = Modifier.padding(20.dp))
-                            TextButton(textButton = "Add Reminder", colorBackground = GloryGloryRed, colorText = ChapelBellWhite)
+                            TextButton({}, textButton = "Add Reminder", colorBackground = GloryGloryRed, colorText = ChapelBellWhite)
                         }
                     }
                 }
