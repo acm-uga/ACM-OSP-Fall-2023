@@ -33,7 +33,7 @@ fun SearchScreen(navController: NavController) {
         // Buttons
         Row(verticalAlignment = Alignment.Bottom,
             modifier = Modifier
-                .height(590.dp)
+                .height(730.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
