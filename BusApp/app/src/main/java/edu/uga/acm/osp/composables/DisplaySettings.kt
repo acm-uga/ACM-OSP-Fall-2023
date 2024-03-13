@@ -77,7 +77,7 @@ fun DisplayBox() {
                 DefaultIcon(imageVector = Icons.Default.Straighten, contentDescription = "Your Reminders")
                 Text(text = "Distance Units", fontSize = 15.sp, modifier = Modifier.offset(8.dp),
                     color = BusAppTheme.colors.onAccent)
-                Spacer(modifier = Modifier.padding(35.dp))
+                Spacer(modifier = Modifier.padding(25.dp))
                 DropdownGeneric(items = listOf("Miles/Feet", "Meters/Kilometers"))
             }
 
@@ -87,7 +87,7 @@ fun DisplayBox() {
                 DefaultIcon(imageVector = Icons.Default.AccessTime, contentDescription = "Your Reminders")
                 Text(text = "Distance Units", fontSize = 15.sp, modifier = Modifier.offset(8.dp),
                     color = BusAppTheme.colors.onAccent)
-                Spacer(modifier = Modifier.padding(35.dp))
+                Spacer(modifier = Modifier.padding(25.dp))
                 DropdownGeneric(items = listOf("12 Hour", "24 Hour"))
             }
 
@@ -97,7 +97,7 @@ fun DisplayBox() {
                 DefaultIcon(imageVector = Icons.Default.Language, contentDescription = "Your Reminders")
                 Text(text = "Language", fontSize = 15.sp, modifier = Modifier.offset(8.dp),
                     color = BusAppTheme.colors.onAccent)
-                Spacer(modifier = Modifier.padding(50.dp))
+                Spacer(modifier = Modifier.padding(40.dp))
                 DropdownGeneric(items = listOf("English"))
             }
         } // Col
@@ -129,13 +129,13 @@ fun DropdownGeneric(items: List<String>) {
     var expanded by remember { mutableStateOf(false) }
     val disabledValue = "B"
     var selectedIndex by remember { mutableStateOf(0) }
-    Card(modifier = Modifier.size(width = 130.dp, height = 100.dp).padding(5.dp).fillMaxSize().wrapContentSize(Alignment.TopStart)) {
+    Card(modifier = Modifier.size(width = 150.dp, height = 100.dp).padding(5.dp).fillMaxSize().wrapContentSize(Alignment.TopStart)) {
         Text(items[selectedIndex],modifier = Modifier.padding(10.dp, 0.dp).fillMaxWidth().clickable(onClick = { expanded = true }).background(
             BoydGray))
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.fillMaxWidth().background(
+            modifier = Modifier.size(width = 150.dp, height = 120.dp).background(
                 BoydGray)
         ) {
             items.forEachIndexed { index, s ->

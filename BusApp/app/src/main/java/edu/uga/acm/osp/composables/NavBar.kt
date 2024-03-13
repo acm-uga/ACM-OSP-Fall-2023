@@ -101,21 +101,25 @@ fun displayNavBar(navController: NavController, enableSearch: Boolean = false){
                 route = "home_screen",
                 icon = Icons.Outlined.Home
             ),
+            /*
             NavBarItem(
                 name = "Alerts",
                 route = "alert_screen",
                 icon = Icons.Outlined.Notifications
             ),
+            */
             NavBarItem(
                 name = "Search",
                 route = "search_screen",
                 icon = Icons.Outlined.Search
             ),
+            /*
             NavBarItem(
                 name = "Planner",
                 route = "planner_screen",
                 icon = Icons.Outlined.Route
             ),
+            */
             NavBarItem(
                 name = "Settings",
                 route = "setting_screen",
