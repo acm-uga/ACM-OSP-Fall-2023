@@ -1,6 +1,5 @@
 package edu.uga.acm.osp.data.sources;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,12 +13,15 @@ import edu.uga.acm.osp.data.routeSchedule.RouteSchedule;
  * Contains methods that generate example objects with random, but valid data for UI testing.
  */
 public class ExampleGenerator {
-    private static HashMap<Long, Route> exRoutesById;
-    private static HashMap<Long, Stop> exStopsById = new HashMap<>();
+    // Temporary data (for smaller-scale testing)
+    private HashMap<Long, Route> routesById = new HashMap<>();
 
-    // Initialize the HashMaps that allow us to add Predefined Sessions below...
-    static {
-        exRoutesById = generateRandomRoutes(3, 15);
+    private ArrayList<Long> routeIds = new ArrayList<>();
+    private HashMap<Long, Stop> stopsById = new HashMap<>();
+    private ArrayList<Long> stopIds = new ArrayList<>();
+
+    public ExampleGenerator() {
+        generateRandomRoutes(3, 15);
     }
 
     // BASE GENERATORS
@@ -34,8 +36,7 @@ public class ExampleGenerator {
      * to their route IDs, with the number of entries between (@code minNum} and {@code maxNum}
      * (inclusive)
      */
-    private static HashMap<Long, Route> generateRandomRoutes(int minNum, int maxNum) {
-        HashMap<Long, Route> routes = new HashMap<>();
+    private void generateRandomRoutes(int minNum, int maxNum) {
         Route newRoute;
         long routeId;
         String[] namePair;
@@ -49,6 +50,7 @@ public class ExampleGenerator {
         for (int i = 1; i <= numOfRoutesToGenerate; i++) {
             // Generate random (but logical) fields for the new Route
             routeId = randomRouteId();
+            this.routeIds.add(routeId);
             namePair = randomRouteNamePair();
             name = namePair[0];
             abbName = namePair[1];
@@ -57,22 +59,19 @@ public class ExampleGenerator {
             stopIds = generateRandomStopsOnRoute(routeId,  0.75,5, 20);
             activeBuses = generateRandomBusesOnRoute(routeId, stopIds, 0.25, 0, 3);
 
-            // Instantiate the Route and add it to the HashMap
             newRoute = new Route(routeId, name, abbName, displayColor, schedule, stopIds, activeBuses);
-            routes.put(newRoute.getRouteId(), newRoute);
+            this.routesById.put(newRoute.getRouteId(), newRoute);
         }
-
-        return routes;
     }
 
     /**
      * Generates a random number of unique {@code Stop}s between {@code minNum} and {@code maxNum}
      * (inclusive) with logical, valid data. The resultant mapping is an aggregation of brand new
-     * {@code Stop} instances and existing {@code Stop}s in {@code exStopsById} associated with
+     * {@code Stop} instances and existing {@code Stop}s in {@code stopsById} associated with
      * the provided {@code routeId}.
      *
      * @param routeId the routeId to associate new {@code Stop}s with
-     * @param percentExistingStops the bias towards using existing {@code Stop}s in {@code exStopsById}
+     * @param percentExistingStops the bias towards using existing {@code Stop}s in {@code stopsById}
      *      as opposed to creating new ones
      * @param minNumOfStops the minimum number of {@code Route}s to generate
      * @param maxNumOfStops the maximum number of {@code Route}sto generate
@@ -81,7 +80,7 @@ public class ExampleGenerator {
      * to their stop IDs, with the number of entries between {@code minNum} and {@code maxNum}
      * (inclusive)
      */
-    private static long[] generateRandomStopsOnRoute(
+    private long[] generateRandomStopsOnRoute(
             long routeId,
             double percentExistingStops,
             int minNumOfStops,
@@ -104,14 +103,14 @@ public class ExampleGenerator {
         double latitude;
         double longitude;
         long[] servesRouteIds;
-        for (int i = 1; i <= numOfStopsToGenerate; i++) {
+        for (int i = 0; i < numOfStopsToGenerate; i++) {
             selection = Math.random();
 
             // If an existing Stop is chosen to be collected, associate it with this Route
-            if (selection <= percentExistingStops) {
-                existingStopIndex = (int) (Math.random() * (exStopsById.size() - 1));
-                existingStopId = (long) exStopsById.keySet().toArray()[existingStopIndex];
-                existingStop = exStopsById.get(existingStopId);
+            if (selection <= percentExistingStops && !this.stopsById.isEmpty()) {
+                existingStopIndex = (int) (Math.random() * (stopsById.size() - 1));
+                existingStopId = (long) this.stopsById.keySet().toArray()[existingStopIndex];
+                existingStop = this.stopsById.get(existingStopId);
 
                 stopId = existingStopId;
                 name = existingStop.getName();
@@ -125,7 +124,7 @@ public class ExampleGenerator {
                     servesRouteIds[j] = (j < (servesRouteIds.length - 1)) ? oldServesRouteIds[j] : routeId;
                 }
 
-                exStopsById.remove(stopId);
+                this.stopsById.remove(stopId);
             } else { // Else, create a brand new Stop
                 stopId = randomStopId();
                 name = randomStopName();
@@ -136,9 +135,10 @@ public class ExampleGenerator {
                 servesRouteIds = new long[]{routeId};
             }
 
+            this.stopIds.add(stopId);
             newStop = new Stop(stopId, name, type, latitude, longitude, servesRouteIds);
 
-            exStopsById.put(newStop.getStopId(), newStop);
+            this.stopsById.put(newStop.getStopId(), newStop);
             stopIds[i] = newStop.getStopId();
         }
 
@@ -161,7 +161,7 @@ public class ExampleGenerator {
      * to their stop IDs, with the number of entries between {@code minNum} and {@code maxNum}
      * (inclusive)
      */
-    private static HashMap<Long, Bus[]> generateRandomBusesOnRoute(
+    private HashMap<Long, Bus[]> generateRandomBusesOnRoute(
             long routeId,
             long[] stopIds,
             double percentWithApproachingBuses,
@@ -199,6 +199,8 @@ public class ExampleGenerator {
                             stopId,
                             newSTAs
                     );
+
+                    newBusArray[i] = newBus;
                 }
 
                 newOverview.put(stopId, newBusArray);
@@ -211,26 +213,90 @@ public class ExampleGenerator {
     }
 
     // GETTERS
+    public Route getRoute() {
+        int randomIndex = (int)(Math.random() * (routeIds.size() - 1));
+        return routesById.get(routeIds.get(0));
+    }
+
+    public Stop getStop() {
+        int randomIndex = (int)(Math.random() * (stopIds.size() - 1));
+        return stopsById.get(stopIds.get(0));
+    }
+
     /**
-     * Instantiates a {@code Route} object with random, logical data for testing purposes.
+     * Gets the {@code Route} object with routeId {@code routeId}.
      *
      * @return a {@code Route} object with random, logical data
      *
      * @see Route
      */
-    public static Route getRoute(long routeId) {
-        return exRoutesById.get(routeId);
+    public Route getRoute(long routeId) {
+        return routesById.get(routeId);
     }
 
     /**
-     * Instantiates a {@code Stop} object with random, logical data for testing purposes.
+     * Gets the {@code Stop} object with stopId {@code stopId}.
      *
      * @return a {@code Stop} object with random, logical data
      *
      * @see Stop
      */
-    public static Stop getStop(long stopId) {
-        return exStopsById.get(stopId);
+    public Stop getStop(long stopId) {
+        return stopsById.get(stopId);
+    }
+
+    /**
+     * Gets all {@code Route} objects.
+     *
+     * @return an array of all {@code Route} objects
+     */
+    public Route[] getRoutes() {
+        return (Route[])routesById.values().toArray();
+    }
+
+    /**
+     * Gets all {@code Route} ids.
+     *
+     * @return an {@code ArrayList} of all {@code Route} ids
+     */
+    public ArrayList<Long> getRouteIds() {
+        return this.routeIds;
+    }
+
+    /**
+     * Gets the mapping of {@code Route} objects to their ids.
+     *
+     * @return a {@code HashMap} of Route ids ({@code Long}) to their respective {@code Route}s
+     */
+    public HashMap<Long, Route> getRoutesById() {
+        return this.routesById;
+    }
+
+    /**
+     * Gets all {@code Stop} objects.
+     *
+     * @return an array of all {@code Stop} objects
+     */
+    public Stop[] getStops() {
+        return (Stop[])stopsById.values().toArray();
+    }
+
+    /**
+     * Gets all {@code Stop} ids.
+     *
+     * @return an {@code ArrayList} of all {@code Stop} ids
+     */
+    public ArrayList<Long> getStopIds() {
+        return this.stopIds;
+    }
+
+    /**
+     * Gets the mapping of {@code Stop} objects to their ids.
+     *
+     * @return a {@code HashMap} of Stop ids ({@code Long}) to their respective {@code Stop}s
+     */
+    public HashMap<Long, Stop> getStopsById() {
+        return this.stopsById;
     }
 
     // HELPERS
@@ -266,7 +332,7 @@ public class ExampleGenerator {
      * @return a random 4-digit number between 1,000 and 9,999 not used by any other buses previously
      * generated by this class
      */
-    private static long randomBusId() {
+    private long randomBusId() {
         long newId;
 
         // While EXTREMELY unlikely, ensure no duplicate IDs are generated
@@ -279,16 +345,20 @@ public class ExampleGenerator {
 
     /**
      * Determines if the provided {@code busId} already exists in the example batch
-     * {@code exRoutesById}.
+     * {@code routesById}.
      *
      * @param busId the ID to check
      *
-     * @return {@code true} if {@code busId} already exists in {@code exRoutesById},
+     * @return {@code true} if {@code busId} already exists in {@code routesById},
      * else {@code false}
      */
-    private static boolean busIdAlreadyExists(long busId) {
+    private boolean busIdAlreadyExists(long busId) {
+        if (routesById.isEmpty()) {
+            return false;
+        }
+
         HashMap<Long, Bus[]> activeBuses;
-        for (Route route : exRoutesById.values()) {
+        for (Route route : routesById.values()) {
             activeBuses = route.getActiveBuses();
             for (Bus[] busList : activeBuses.values()) {
                 for (Bus bus : busList) {
@@ -333,13 +403,13 @@ public class ExampleGenerator {
      *
      * @return a random stop name
      */
-    private static String randomStopName() {
+    private String randomStopName() {
         String[] prefixes = new String[]{
                 "Big", "Lecture Hall", "Dr. Professor", "Student", "UGA", "Bulldog", "The", "Tiny",
-        "Westside", "Eastside", "Northside", "Southside", "Central", "Harry Dawg", "UGA", "Old", "New"};
+                "Westside", "Eastside", "Northside", "Southside", "Central", "Harry Dawg", "UGA", "Old", "New"};
         String[] suffixes = new String[]{
                 "Center", "Park", "Parking Lot", "Dining Hall", "Stadium", "Dormitory", "Building",
-        "Clinic", "Mall", "Apartments", "Commons", "Expansion", "Campus", "House", "Fields", "Woods"};
+                "Clinic", "Mall", "Apartments", "Commons", "Expansion", "Campus", "House", "Fields", "Woods"};
 
         String fullName;
         int prefixIndex, suffixIndex;
@@ -355,15 +425,19 @@ public class ExampleGenerator {
 
     /**
      * Determines if the provided {@code stopName} already exists in the example batch
-     * {@code exStopsById}.
+     * {@code stopsById}.
      *
      * @param stopName the name to check
      *
-     * @return {@code true} if {@code stopName} already exists in {@code exStopsById},
+     * @return {@code true} if {@code stopName} already exists in {@code stopsById},
      * else {@code false}
      */
-    private static boolean stopNameAlreadyExists(String stopName) {
-        for (Stop stop : exStopsById.values()) {
+    private boolean stopNameAlreadyExists(String stopName) {
+        if (stopsById.isEmpty()) {
+            return false;
+        }
+
+        for (Stop stop : stopsById.values()) {
             if (stop.getName().equals(stopName)) {
                 return true;
             }
@@ -376,9 +450,9 @@ public class ExampleGenerator {
      * Generates a random, unique 6-digit {@code long} number between 100,000 and 999,999.
      *
      * @return a random, 6-digit {@code long} number not already used by a {@code Route} in
-     * {@code exRoutesById} or other {@code Stop}s in {@code exStopsById}
+     * {@code routesById} or other {@code Stop}s in {@code stopsById}
      */
-    private static long randomStopId() {
+    private long randomStopId() {
         long newId;
 
         // While EXTREMELY unlikely, ensure no duplicate IDs are generated
@@ -391,15 +465,19 @@ public class ExampleGenerator {
 
     /**
      * Determines if the provided {@code stopId} already exists in the example batch
-     * {@code exStopsById}.
+     * {@code stopsById}.
      *
      * @param stopId the ID to check
      *
-     * @return {@code true} if {@code stopId} already exists in {@code exStopsById},
+     * @return {@code true} if {@code stopId} already exists in {@code stopsById},
      * else {@code false}
      */
-    private static boolean stopIdAlreadyExists(long stopId) {
-        for (Stop stop : exStopsById.values()) {
+    private boolean stopIdAlreadyExists(long stopId) {
+        if (stopsById.isEmpty()) {
+            return false;
+        }
+
+        for (Stop stop : stopsById.values()) {
             if (stop.getStopId() == stopId) {
                 return true;
             }
@@ -412,9 +490,9 @@ public class ExampleGenerator {
      * Generates a random, unique 6-digit {@code long} number between 100,000 and 999,999.
      *
      * @return a random, 6-digit {@code long} number not already used by another {@code Route} in
-     * {@code exRoutesById}
+     * {@code routesById}
      */
-    private static long randomRouteId() {
+    private long randomRouteId() {
         long newId;
 
         // While EXTREMELY unlikely, ensure no duplicate IDs are generated
@@ -427,15 +505,19 @@ public class ExampleGenerator {
 
     /**
      * Determines if the provided {@code routeId} already exists in the example batch
-     * {@code exRoutesById}.
+     * {@code routesById}.
      *
      * @param routeId the ID to check
      *
-     * @return {@code true} if {@code routeId} already exists in {@code exRoutesById},
+     * @return {@code true} if {@code routeId} already exists in {@code routesById},
      * else {@code false}
      */
-    private static boolean routeIdAlreadyExists(long routeId) {
-        for (Route route : exRoutesById.values()) {
+    private boolean routeIdAlreadyExists(long routeId) {
+        if (routesById.isEmpty()) {
+            return false;
+        }
+
+        for (Route route : routesById.values()) {
             if (route.getRouteId() == routeId) {
                 return true;
             }
@@ -449,7 +531,7 @@ public class ExampleGenerator {
      *
      * @return a random route name (index 0) and abbreviated name (index 1)
      */
-    private static String[] randomRouteNamePair() {
+    private String[] randomRouteNamePair() {
         String[] prefixes = new String[]{
                 "Cross-Campus", "Northern", "Eastern", "Western", "Southern", "Bulldog", "Parking",
                 "Lecture Hall", "Dormitory", "Downtown", "Weekend", "Weekday",
@@ -464,8 +546,8 @@ public class ExampleGenerator {
         do {
             prefixIndex = (int) (Math.random() * (prefixes.length - 1));
             suffixIndex = (int) (Math.random() * (suffixes.length - 1));
-            fullName = prefixes[prefixIndex] + suffixes[suffixIndex];
-            abbName = prefixes[prefixIndex].substring(0, 1) + " " + suffixes[suffixIndex].substring(0, 1);
+            fullName = prefixes[prefixIndex] + " " + suffixes[suffixIndex];
+            abbName = prefixes[prefixIndex].substring(0, 1) + suffixes[suffixIndex].substring(0, 1);
         } while (routeNameAlreadyExists(fullName));
 
         return new String[] {fullName, abbName};
@@ -473,15 +555,19 @@ public class ExampleGenerator {
 
     /**
      * Determines if the provided {@code routeName} already exists in the example batch
-     * {@code exRoutesById}.
+     * {@code routesById}.
      *
      * @param routeName the name to check
      *
-     * @return {@code true} if {@code routeName} already exists in {@code exRoutesById},
+     * @return {@code true} if {@code routeName} already exists in {@code routesById},
      * else {@code false}
      */
-    private static boolean routeNameAlreadyExists(String routeName) {
-        for (Route route : exRoutesById.values()) {
+    private boolean routeNameAlreadyExists(String routeName) {
+        if (routesById.isEmpty()) {
+            return false;
+        }
+
+        for (Route route : routesById.values()) {
             if (route.getName().equals(routeName)) {
                 return true;
             }
@@ -493,9 +579,9 @@ public class ExampleGenerator {
     /**
      * Generates a random, unique color.
      *
-     * @return a random, unique color not already used in {@code exRoutesById}
+     * @return a random, unique color not already used in {@code routesById}
      */
-    private static String randomRouteColor() {
+    private String randomRouteColor() {
         String color;
         do {
             int[] characterValues = new int[6];
@@ -525,15 +611,19 @@ public class ExampleGenerator {
 
     /**
      * Determines if the provided {@code color} already exists in the example batch
-     * {@code exRoutesById}.
+     * {@code routesById}.
      *
      * @param color the color (hex string) to check
      *
-     * @return {@code true} if {@code color} already exists in {@code exRoutesById},
+     * @return {@code true} if {@code color} already exists in {@code routesById},
      * else {@code false}
      */
-    private static boolean colorAlreadyExists(String color) {
-        for (Route route : exRoutesById.values()) {
+    private boolean colorAlreadyExists(String color) {
+        if (routesById.isEmpty()) {
+            return false;
+        }
+
+        for (Route route : routesById.values()) {
             if (route.getDisplayColor().equals(color)) {
                 return true;
             }
@@ -545,16 +635,16 @@ public class ExampleGenerator {
     /**
      * Picks a random, valid schedule from a predefined list.
      *
-     * @return a random, unique {@code RouteSchedule} not already used in {@code exRoutesById}
+     * @return a random, unique {@code RouteSchedule} not already used in {@code routesById}
      */
     private static RouteSchedule randomSchedule() {
         String[] presetSchedules = new String[] {
-                "-121223{U:-2030;M-F:0830-2230;S:0830-;}",
+                "-121225{U:-2030;M-F:0830-2230;S:0830-;}",
                 "012524-{U:1725-;M:-0230,0830-1230,1330-1400,1740-;TW:-;R:-0830;}",
-                "-012324,012524-022724,030124,030324-{U:1725-;M:-0230,0830-1230,1330-1400,1740-;TW:-;R:-0830;}",
+                "-012325,012524-022724,030124,030324-{U:1725-;M:-0230,0830-1230,1330-1400,1740-;TW:-;R:-0830;}",
                 "121223{0830-2230}",
                 "{M:0830-1230;}",
-                "121223;s{M:0830-1230;}"
+                "121224;s{M:0830-1230;}"
         };
 
         int randomIndex = (int) (Math.random() * (presetSchedules.length - 1));

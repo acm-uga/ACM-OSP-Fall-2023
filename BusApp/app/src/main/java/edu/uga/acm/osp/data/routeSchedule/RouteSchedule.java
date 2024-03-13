@@ -63,7 +63,6 @@ public class RouteSchedule {
 		OperatingWindow[] operatingWindows = new OperatingWindow[operatingWindowStrings.length];
 		int i = 0;
 		for (String encodedOperatingWindow : operatingWindowStrings) {
-			System.out.println(encodedOperatingWindow);
 			operatingWindows[i] = OperatingWindow.decode(encodedOperatingWindow);
 			i++;
 		}

@@ -665,9 +665,6 @@ public class DailySchedule {
 	 * @see #toDayIndicator(DayOfWeek)
 	 */
 	private static String[] sortByDay(String[] unsortedArray) {
-		// Create a custom, adjusted DayOfWeek enum locally to store our standard week order
-		enum AdjDayOfWeek {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY};
-		
 		// Get the first AdjDayOfWeek of every element and add them to an array
 		AdjDayOfWeek[] adjDays = new AdjDayOfWeek[unsortedArray.length];
 		HashMap<DayOfWeek,String> referenceMap = new HashMap<>();

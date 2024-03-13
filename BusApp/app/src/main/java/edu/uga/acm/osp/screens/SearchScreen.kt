@@ -7,6 +7,6 @@ import edu.uga.acm.osp.components.displayNavBar
 
 @Composable
 fun SearchScreen(navController: NavController) {
-    Header(text = "Search Screen")
+    Header(screenName = "Search Screen")
     displayNavBar(navController = navController)
 }

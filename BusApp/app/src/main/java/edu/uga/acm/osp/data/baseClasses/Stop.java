@@ -60,11 +60,11 @@ public class Stop implements DisplayableObject, ListItemData {
         this.name = name;
     }
 
-    public Stop.StopType getType() {
+    public StopType getType() {
         return type;
     }
 
-    public void setType(Stop.StopType type) {
+    public void setType(StopType type) {
         this.type = type;
     }
 
