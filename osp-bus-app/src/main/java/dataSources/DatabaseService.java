@@ -1,4 +1,4 @@
-package busAppCore;
+package dataSources;
 
 import baseClasses.Bus;
 import baseClasses.Route;
@@ -288,7 +288,7 @@ public class DatabaseService {
             RouteSchedule schedule = RouteSchedule.decode(rs.getString("schedule")); // TODO edit to reflect actual field name when determined
             long[] stopIds = Route.parseStopIdsString(rs.getString("stopidsordered"));
 
-            HashMap<Long, Bus[]> activeBuses = ApiService.getBusDataFromId(routeId);
+            HashMap<Long, Bus[]> activeBuses = BusData.getBusDataFromId(routeId);
 
             return new Route(routeId, name, abbName, displayColor, schedule, stopIds, activeBuses);
         } catch (SQLException ex) {

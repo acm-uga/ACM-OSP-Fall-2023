@@ -1,6 +1,6 @@
 package baseClasses;
 
-import busAppCore.DatabaseService;
+import dataSources.DatabaseService;
 import routeSchedule.RouteSchedule;
 
 import java.time.temporal.ChronoUnit;
