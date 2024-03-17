@@ -1,4 +1,4 @@
-package busAppCore;
+package dataSources;
 
 import baseClasses.Bus;
 import baseClasses.Stop;
@@ -17,50 +17,14 @@ import java.util.*;
 /**
  * Handles data retrieval from the API mirror
  */
-public class ApiService {
+public class ApiService extends BusDataSource {
     /**
-     * Maps Route IDs to a mapping of Stop IDs to the Buses approaching them, updated with each batch of data from the
-     * API mirror. For example:
-     * <br><br>
-     * <b>First Key is any RouteID. Second Key is a StopID along that Route.</b>
-     * <ul>
-     *     <li> Route ID 123456: <ul>
-     *         <li> Stop ID 000001: <ul>
-     *             <li>Next approaching Bus,</li>
-     *             <li>Second-next approaching Bus,</li>
-     *             <li><i>Any other Buses approaching this stop on this Route that we receive from the API, ordered.</i></li>
-     *         </ul></li>
-     *         <li> Stop ID 000002: <ul>
-     *             <li>Next approaching Bus,</li>
-     *             <li>Second-next approaching Bus,</li>
-     *             <li><i>Any other Buses approaching this stop on this Route that we receive from the API, ordered.</i></li>
-     *         </ul></li>
-     *         <li><i>Every other Stop on this Route, unordered.</i></li>
-     *     </ul></li>
-     *     <li> Route ID 789101 <ul>
-     *         <li> Stop ID 000010 <ul>
-     *             <li>Next approaching Bus</li>
-     *             <li>Second-next approaching Bus</li>
-     *             <li><i>Any other Buses approaching this stop on this Route that we receive from the API, ordered.</i></li>
-     *         </ul></li>
-     *         <li> Stop ID 000020 <ul>
-     *             <li>Next approaching Bus</li>
-     *             <li>Second-next approaching Bus</li>
-     *             <li><i>Any other Buses approaching this stop on this Route that we receive from the API, ordered.</i></li>
-     *         </ul></li>
-     *         <li><i>Every other Stop on this Route, unordered.</i></li>
-     *     </ul></li>
-     *     <li><i>Every other Route, unordered.</i></li>
-     * </ul>
-     */
-    private static HashMap<Long,HashMap<Long, Bus[]>> busDataByRouteId;
-    
-    /* This method is responsible for getting all the Bus data from the API mirror, organizing it, and changing
-     * the busDataByRouteId field that provides bus data for the rest of this program.
+     * Gets new data from the (now-defunct) UGA Bus System API mirror, parses it, and organizes
+     * it for storage.
      *
-     * TODO: change the method below to create a a mapping of Route ID keys to values of Stop ID-Bus array HashMaps.
-     * Then, set busDataByRouteId to this new data (SEE ABOVE). Add JavaDoc to this method when complete :) */
-    public static void updateBusData() {
+     * @deprecated as of 3/13/24, with the privatization of UGA's Bus Data. To be replaced by {@link LiveBusModel}.
+     */
+    @Deprecated public void getNewData() {
         // Make an API call for every known stop ID. First, determine those IDs
         Stop[] allStops = DatabaseService.getAllStops();
         long[] stopIds = new long[allStops.length];
@@ -80,15 +44,15 @@ public class ApiService {
         //Get a parser object to parse each response's body
         JSONParser parser = new JSONParser();
 
-        Map<Long, Integer> routes = new HashMap<>();
+        HashMap<Long, Integer> routes = new HashMap<>();
 
         //List where each index is a route
         //Map of each bus ID to its object in this route
-        List<Map<Long, Bus>> busesOnRoute = new ArrayList<>();
+        ArrayList<Map<Long, Bus>> busesOnRoute = new ArrayList<>();
 
         // Route ID (key) to value of map where stopid is key along this route and value is array of bus objs on this route
         // Instance field reference will be updated to this local variable at end of method
-        Map<Long,HashMap<Long, Bus[]>> busDataByRouteId = new HashMap<>();
+        HashMap<Long,HashMap<Long, Bus[]>> busDataByRouteId = new HashMap<>();
 
         //Parse data for each stop, iterating through stops
         for (long stopId : stopIds) {
@@ -105,6 +69,7 @@ public class ApiService {
                     .uri(URI.create(baseUrl + endpoint))
                     .build();
 
+            long currRouteId = 0;
             try {
                 //Send request and store response body in String
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -117,13 +82,13 @@ public class ApiService {
                 //Get arrivals array from inside route object
                 JSONArray arrivals = (JSONArray) route.get("Arrivals");
                 Set<Long> vehicleIds = new HashSet<>();
-                for (int i = 0; i < arrivals.size(); i++) {
+                for (int j = 0; j < arrivals.size(); j++) {
                     //Get each arrival object from within arrivals array
                     JSONObject arrival = (JSONObject) arrivals.get(i);
 
                     int posRouteId;
 
-                    long currRouteId = (long) arrival.get("RouteID");
+                    currRouteId = (long) arrival.get("RouteID");
 
                     if (routes.containsKey(currRouteId)) {
                         posRouteId = routes.get(currRouteId);
@@ -140,7 +105,7 @@ public class ApiService {
                     double secondsToArrival = (double) arrival.get("SecondsToArrival");
                     // stopID, routeID already in for loop
                     Bus bus;
-                    
+
                     // // adding to an existing bus object
                     // if (busesOnRoute.get(posRouteId).containsKey(vehicleId)) {
                     //     bus = busesOnRoute.get(posRouteId).get(vehicleId);
@@ -165,11 +130,11 @@ public class ApiService {
                     // }
                     // creating a new bus object
                     // else {
-                    
+
                     // For now, just creating new bus object -- maybe fix later to update existing ones
                     List<Double> listSecondsToArrival = new ArrayList<>();
                     listSecondsToArrival.add(secondsToArrival);
-                    bus = new Bus(vehicleId, currRouteId, stopId, listSecondsToArrival); 
+                    bus = new Bus(vehicleId, currRouteId, stopId, listSecondsToArrival);
                     // Add bus to list for this stop    
                     stopBuses.add(bus);
                     // }
@@ -186,41 +151,15 @@ public class ApiService {
 
             // Get existing stop ids map for this route, then put this stop id with its buses as an entry in the map
             // Verify entry already exists in map for this route id or create new map
-            Map<Long, Bus[]> stopIdsToBuses = busDataByRouteId.getOrDefault(currRouteId, new HashMap<>());
-            stopIdsToBuses.put(stopId, stopBuses);
+            HashMap<Long, Bus[]> stopIdsToBuses = busDataByRouteId.getOrDefault(currRouteId, new HashMap<>());
+            stopIdsToBuses.put(stopId, (Bus[])stopBuses.toArray());
 
             // Update entry in map
             busDataByRouteId.put(currRouteId, stopIdsToBuses);
-               
+
         }
 
         // Update reference
         this.busDataByRouteId = busDataByRouteId;
-    }
-
-    /**
-     * Gets the entire mapping of Route IDs to their Stop ID-Approaching Bus Array mappings, which is constantly
-     * updated with new data from the API mirror
-     *
-     * @return a {@code HashMap} mapping the ID of every {@code Route} to its own {@code HashMap} mapping the ID of every
-     * {@code Stop} along that {@code Route} to its own array of {@code Bus}es approaching it, in order of seconds to
-     * arrival
-     */
-    public static HashMap<Long,HashMap<Long, Bus[]>> getAllBusData() {
-        return busDataByRouteId;
-    }
-
-    /**
-     * Gets a mapping of Stop IDs to an array of {@code Bus}es approaching each, which is constantly updated with new
-     * data from the API mirror
-     *
-     * @param routeId the ID of the {@code Route} whose {@code Bus} data is desired
-     *
-     * @return a mapping of the ID of every {@code Stop} along the {@code Route} with ID {@code routeId} to its own array
-     * of {@code Bus}es approaching it, in ascending order of seconds to arrival
-     *
-     */
-    public static HashMap<Long, Bus[]> getBusDataFromId(long routeId) {
-        return busDataByRouteId.get(routeId);
     }
 }
