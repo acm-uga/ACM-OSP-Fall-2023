@@ -5,23 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2473489-9b9f-48ee-9b7a-f4bc8cb65ea2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/osp-bus-app/src/main/java/ospbusapp/TestDriver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/osp-bus-app/src/main/java/ospbusapp/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/src/main/java/ospbusapp/ApiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/osp-bus-app/src/main/java/ospbusapp/DatabaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/src/main/java/ospbusapp/DatabaseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/osp-bus-app/src/main/java/ospbusapp/TestRoute.java" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/src/main/java/ospbusapp/TestRoute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/ospbusapp/ApiService.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/ospbusapp/ApiService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/ospbusapp/Bus.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/ospbusapp/Bus.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/ospbusapp/Driver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/ospbusapp/Route.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/ospbusapp/Route.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/ospbusapp/Stop.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/ospbusapp/Stop.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/ospbusapp/TestRoute.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/ospbusapp/TestRoute.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -42,31 +34,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;19&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/jdouglas/Desktop/Portfolio Coding Projects/Spring Boot Projects/ACM-OSP-Fall-2023/osp-bus-app/src/main/java/ospbusapp&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.43908045&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "JQB-Front-End-Development",
+    "jdk.selected.JAVA_MODULE": "19",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/justi/Documents/GitHub/ACM-OSP-Fall-2023/osp-bus-app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.43908045",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;kotlin&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "kotlin"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/osp-bus-app/src/main/java/ospbusapp" />
@@ -94,6 +89,7 @@
       <workItem from="1702757933412" duration="325000" />
       <workItem from="1702758700749" duration="27000" />
       <workItem from="1702758736689" duration="58000" />
+      <workItem from="1709522451231" duration="24000" />
     </task>
     <servers />
   </component>
