@@ -1,6 +1,7 @@
 package edu.uga.acm.osp.nav
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -10,6 +11,7 @@ import edu.uga.acm.osp.screens.PlannerScreen
 import edu.uga.acm.osp.screens.SearchScreen
 import edu.uga.acm.osp.screens.SettingScreen
 
+@Preview
 @Composable
 fun Navigation() {
     val navController = rememberNavController()

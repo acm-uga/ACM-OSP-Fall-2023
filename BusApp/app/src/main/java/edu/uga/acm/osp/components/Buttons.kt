@@ -42,6 +42,7 @@ fun TextButton(
             backgroundColor = BusAppTheme.colors.primaryAction
             textColor = BusAppTheme.colors.onPrimaryAction
         }
+
         ButtonType.SECONDARY -> {
             backgroundColor = BusAppTheme.colors.secondaryAction
             textColor = BusAppTheme.colors.onSecondaryAction
@@ -55,5 +56,23 @@ fun TextButton(
         modifier = modifier.height(40.dp)
     ) {
         Text(text = buttonText, color = textColor)
+    }
+}
+
+/**
+ * A clickable icon with circular background.
+ *
+ * @param icon the icon resource to render
+ * @param backgroundColor the color of the circular shape behind the icon
+ * @param description a brief description of the icon or the button's functionality, for accesibility
+ * @param onClick the method to invoke on click
+ */
+@Composable
+fun IconButton(icon: ImageVector, backgroundColor: Color, description: String, onClick: () -> Unit) {
+    Button(onClick = onClick, shape = CircleShape, colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor)) {
+        Icon(
+            iconName,
+            contentDescription = description
+        )
     }
 }
