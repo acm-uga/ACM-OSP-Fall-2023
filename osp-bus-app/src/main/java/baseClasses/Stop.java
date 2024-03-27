@@ -166,4 +166,22 @@ public class Stop {
         }
         return nextBus;
     }
+
+
+    /**
+     * Determines if one of the routes RouteIds served by the Stop matches the  {@code RouteID}.
+     * 
+     * @param RouteId the {@code RouteId} representing an {@code Route} 
+     * 
+     * @return true if {@code servesRouteIds} contains the @param RouteId.
+     */
+
+     public boolean containsRoute(long routeId) {
+        for (int i = 0; i < this.servesRouteIds.length; i++) {
+            if(this.servesRouteIds[i] == routeId) {
+                return true;
+            }
+        }
+        return false;
+     }
 }
