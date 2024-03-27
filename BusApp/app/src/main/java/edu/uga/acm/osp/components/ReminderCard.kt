@@ -1,4 +1,4 @@
-package edu.uga.acm.osp.composables
+package edu.uga.acm.osp.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.uga.acm.osp.components.ButtonType
 import edu.uga.acm.osp.components.IconListItem
 import edu.uga.acm.osp.components.LabelListItem
 import edu.uga.acm.osp.components.TextButton
@@ -88,9 +89,17 @@ fun ReminderCard(cardName: String, stop: List<String>, desc: List<String>, badge
                     item {
                         Row {
                             Spacer(modifier = Modifier.padding(20.dp))
-                            TextButton({}, textButton = "Import Trip", colorBackground = TripleGray, colorText = ChapelBellWhite)
+                            TextButton(
+                                buttonText = "Import Trip",
+                                buttonType = ButtonType.SECONDARY,
+                                onClick = {}
+                            )
+                            TextButton(
+                                buttonText = "Add Reminder",
+                                buttonType = ButtonType.PRIMARY,
+                                onClick = {}
+                            )
                             Spacer(modifier = Modifier.padding(20.dp))
-                            TextButton({}, textButton = "Add Reminder", colorBackground = GloryGloryRed, colorText = ChapelBellWhite)
                         }
                     }
                 }

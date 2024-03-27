@@ -1,5 +1,7 @@
 package edu.uga.acm.osp.data.baseClasses;
 
+import androidx.compose.ui.graphics.Color;
+
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,6 +98,13 @@ public class Route implements DisplayableObject, ListItemData {
 
     public long[] getStopIds() {
         return stopIds;
+    }
+
+    /**
+     * Gets the {@code Color} object matching {@code this} {@code Route}'s {@code displayColor}.
+     */
+    public int getDisplayColorObject() {
+        return colorFromString(this.displayColor);
     }
 
     public void setStopIds(long[] stopIds) {
@@ -232,6 +241,18 @@ public class Route implements DisplayableObject, ListItemData {
         }
 
         return idsSeen.size();
+    }
+
+    /**
+     * Retrieves the {@code Color} object from the provided Hexadecimal color {@code String} with
+     * Alpha channel.
+     *
+     * @param colorString the hexadecimal, alpha-channel {@code String} to turn into a color object
+     * @return the {@code Color} object matching the provided {@code colorString}
+     */
+    private static int colorFromString(String colorString) {
+        int colorAsInt = Integer.parseInt(colorString);
+        return colorAsInt;
     }
 
     // ListItemData Implementations:

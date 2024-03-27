@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import edu.uga.acm.osp.ui.theme.BusAppTheme
@@ -55,7 +57,7 @@ fun TextButton(
         colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
         modifier = modifier.height(40.dp)
     ) {
-        Text(text = buttonText, color = textColor)
+        Text(text = buttonText, color = textColor, style = BusAppTheme.typography.button)
     }
 }
 
@@ -71,7 +73,7 @@ fun TextButton(
 fun IconButton(icon: ImageVector, backgroundColor: Color, description: String, onClick: () -> Unit) {
     Button(onClick = onClick, shape = CircleShape, colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor)) {
         Icon(
-            iconName,
+            icon,
             contentDescription = description
         )
     }

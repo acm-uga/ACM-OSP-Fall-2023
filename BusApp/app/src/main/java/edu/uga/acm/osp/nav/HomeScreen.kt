@@ -2,6 +2,7 @@ package edu.uga.acm.osp.nav
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,7 +26,7 @@ fun HomeScreen(navController: NavController) {
         bottomBar = {
             displayNavBar(navController = navController)
         }
-    ) { innerPadding ->
+    ) { it: PaddingValues ->
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
