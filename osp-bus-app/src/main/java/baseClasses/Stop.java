@@ -17,7 +17,22 @@ public class Stop {
     /**
      * The primary "type" of location a {@code Stop} may serve, such as housing or parking
      */
-    public enum StopType {UNKNOWN}
+    public enum StopType {
+        PARKING,
+        HOUSING,
+        LECTURE_HALL,
+        LIBRARY,
+        LANDMARK,
+        DINING,
+        MEDICAL,
+        SPORTS_COMPLEX,
+        RECREATION,
+        NATURE,
+        OTHER,
+        SATELLITE,
+        EXTERNAL,
+        GREEK_LIFE
+    }
 
     // Fields derived from the database at instantiation:
     private long stopId;
@@ -104,10 +119,7 @@ public class Stop {
      * @see #type
      */
     public static Stop.StopType typeFromString(String typeString) {
-        switch (typeString) {
-            default:
-                return Stop.StopType.UNKNOWN;
-        }
+        return StopType.valueOf(typeString);
     }
 
     /**
@@ -122,10 +134,7 @@ public class Stop {
      * @see StopType
      */
     public static String stringFromType(StopType stopType) {
-        switch(stopType) {
-            default:
-                return "Unknown";
-        }
+        return stopType.name();
     }
 
     /**

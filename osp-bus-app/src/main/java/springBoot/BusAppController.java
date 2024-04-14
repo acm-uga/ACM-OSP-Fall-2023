@@ -20,7 +20,6 @@ import dataSources.DatabaseService;
 @RestController
 @RequestMapping("/api")
 public class BusAppController {
-
     @GetMapping
     @RequestMapping(value = "/get/nearestStops")
     public Stop[] getNearestStops( 
@@ -74,7 +73,6 @@ public class BusAppController {
     @RequestMapping(value = "/get/all/routes")
     public Route[] getAllRoutes() {
         return DatabaseService.getAllRoutes();
-        
     }
 
     @GetMapping
@@ -87,10 +85,8 @@ public class BusAppController {
                 activeRoutes.add(allRoutes[i]);
             }
         }
-        Route[] array = activeRoutes.toArray(new Route[0]);
-        return array;
-        
+        Route[] activeRoutesArray = activeRoutes.<Route>toArray(new Route[activeRoutes.size()]);
+        return activeRoutesArray;
     }
-
 }
 //accept user commands and return JSON
