@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import edu.uga.acm.osp.components.BasicContainer
+import edu.uga.acm.osp.components.BusOverviewPreview
 import edu.uga.acm.osp.components.ContextAction
 import edu.uga.acm.osp.components.ContextInfo
 import edu.uga.acm.osp.components.IconListItem
@@ -38,7 +39,7 @@ class MainActivity : ComponentActivity() {
                     .background(BusAppTheme.colors.background)
                     .fillMaxSize()
             ) {
-                testContainer()
+                BusOverviewPreview()
             }
         }
     }

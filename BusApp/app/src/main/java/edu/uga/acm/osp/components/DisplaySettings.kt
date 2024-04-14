@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-<<<<<<< HEAD:BusApp/app/src/main/java/edu/uga/acm/osp/composables/DisplaySettings.kt
 import androidx.compose.foundation.layout.offset
-=======
->>>>>>> JQB-Front-End-Development:BusApp/app/src/main/java/edu/uga/acm/osp/components/DisplaySettings.kt
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -33,7 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.uga.acm.osp.ui.theme.BusAppTheme
-import edu.uga.acm.osp.composables.DefaultIcon
 
 
 @Preview(showBackground = true)

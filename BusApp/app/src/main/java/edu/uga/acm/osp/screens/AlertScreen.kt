@@ -16,7 +16,7 @@ import edu.uga.acm.osp.components.displayNavBar
 fun AlertScreen(navController: NavController) {
     Scaffold(
         topBar = {
-            Header(text = "Your Alerts")
+            Header(screenName = "Your Alerts")
         },
         bottomBar = {
             displayNavBar(navController = navController)
