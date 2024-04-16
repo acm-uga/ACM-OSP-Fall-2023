@@ -8,6 +8,8 @@ sealed class Screen(val route: String) {
     object SettingsScreen: Screen("settings_screen");
     object StopInfoScreen: Screen("stop_info_screen")
     object RouteInfoScreen: Screen("route_info_screen");
+    object StopsScreen: Screen("stops_screen");
+    object RoutesScreen: Screen("routes_screen");
     //more screens later
 
 

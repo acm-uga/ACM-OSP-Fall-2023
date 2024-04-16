@@ -25,6 +25,8 @@ import edu.uga.acm.osp.components.ContextAction
 import edu.uga.acm.osp.components.ContextInfo
 import edu.uga.acm.osp.components.IconListItem
 import edu.uga.acm.osp.components.LabelListItem
+import edu.uga.acm.osp.nav.Navigation
+import edu.uga.acm.osp.nav.Screen
 import edu.uga.acm.osp.ui.theme.BusAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -34,13 +36,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             // For the time being, sets the app background to the correct
             // color as determine by System theme
-            Box(
-                modifier = Modifier
-                    .background(BusAppTheme.colors.background)
-                    .fillMaxSize()
-            ) {
-                BusOverviewPreview()
-            }
+            Navigation();
         }
     }
 }
