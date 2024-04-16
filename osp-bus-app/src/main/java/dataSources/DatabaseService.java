@@ -15,9 +15,9 @@ import java.util.HashMap;
  */
 public class DatabaseService {
     //Add to properties file for security
-    private static final String URL = "jdbc:mysql://localhost:3306/OSPDB";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "Password123";
+    private static final String URL = "jdbc:mysql://localhost:3306/ospdb"; // DB ADDRESS
+    private static final String USERNAME = "root"; // UNCHANGING UNLESS A PROFILE EXISTS
+    private static final String PASSWORD = ""; // TODO PASSWORD YOU SET TO ACCESS THE MYSQL DB. DO NOT PUBLISH TO GH!
 
     // STOP DATA
     /**
@@ -85,6 +85,7 @@ public class DatabaseService {
             int i = 0;
             while (rs.next()) {
                 allStops[i] = stopFromResultSet(rs);
+                i++;
             }
 
             return allStops;
@@ -142,6 +143,7 @@ public class DatabaseService {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
 
+            rs.next();
             return rs.getInt(1);
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
@@ -172,6 +174,7 @@ public class DatabaseService {
             int i = 0;
             while (rs.next()) {
                 nearbyStops[i] = stopFromResultSet(rs);
+                i++;
             }
 
             return nearbyStops;
@@ -235,11 +238,11 @@ public class DatabaseService {
     public static int routeCount() {
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
             //Need to parameterize query to prevent possible SQL injection?
-            String query = "SELECT COUNT(*) FROM routeinfo" +
-                    "\n";
+            String query = "SELECT COUNT(*) FROM routeinfo" + "\n";
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
 
+            rs.next();
             return rs.getInt(1);
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
@@ -263,6 +266,7 @@ public class DatabaseService {
             int i = 0;
             while (rs.next()) {
                 allRoutes[i] = routeFromResultSet(rs);
+                i++;
             }
 
             return allRoutes;
@@ -285,7 +289,7 @@ public class DatabaseService {
             String name = rs.getString("routename");
             String abbName = rs.getString("routenameabrv");
             String displayColor = rs.getString("hexcolor");
-            RouteSchedule schedule = RouteSchedule.decode(rs.getString("schedule")); // TODO edit to reflect actual field name when determined
+            RouteSchedule schedule = RouteSchedule.decode(rs.getString("encodedschedule"));
             long[] stopIds = Route.parseStopIdsString(rs.getString("stopidsordered"));
 
             HashMap<Long, Bus[]> activeBuses = BusData.getBusDataFromId(routeId);

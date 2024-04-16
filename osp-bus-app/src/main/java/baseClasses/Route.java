@@ -124,7 +124,7 @@ public class Route {
                 ", schedule=\n" + schedule.toString() +
                 "\n, stopIds=" + Arrays.toString(stopIds) +
                 " active=" + active +
-                ", activeBuses=" + activeBuses.toString() +
+                ", activeBuses=" + ((activeBuses != null) ? activeBuses.toString() : "null") +
                 '}'
         );
     }
@@ -138,13 +138,18 @@ public class Route {
      * @return an array of {@code long}s, with each element derived from the '-'-delimited {@code stopIdsString}
      */
     public static long[] parseStopIdsString(String stopIdsString) {
+        //System.out.println(stopIdsString);
         String[] stopIdStrings = stopIdsString.split("-");
+        //System.out.println(Arrays.toString(stopIdStrings));
         long[] stopIds = new long[stopIdStrings.length];
         int i = 0;
         for (String stopIdString : stopIdStrings) {
-            stopIds[i] = Long.getLong(stopIdString);
+            stopIds[i] = Long.parseLong(stopIdString);
+            //System.out.println(Long.parseLong(stopIdString));
             i++;
         }
+
+        //System.out.println(Arrays.toString(stopIds));
         return stopIds;
     }
 
@@ -155,21 +160,27 @@ public class Route {
      * @param timeUnit the chronological time unit to measure in (such as {@code ChronoUnit.SECONDS})
      *
      * @return the number of {@code timeUnit}s between the last update of a {@code Bus}'s data on {@code this}
-     * {@code Route}'s data and the time at invocation, exclusive
+     * {@code Route}'s data and the time at invocation, exclusive. If no active buses exist, then {@code -1} is returned
+     * as a sentinel.
      *
      * @see ChronoUnit
      */
     private long timeSinceMostRecentBusUpdate(ChronoUnit timeUnit) {
-        long leastUnits = 0;
-        long currentUnits;
+        long leastUnits;
+        if (this.activeBuses != null && this.activeBuses.size() != 0) {
+            leastUnits = 0;
+            long currentUnits;
 
-        /* Iterate through all of this Route's Bus objects and determine the number of time units since the most recent
-        * update of a Bus object's data */
-        for (Bus[] listOfApproachingBuses : activeBuses.values()) {
-            for (Bus bus : listOfApproachingBuses) {
-                currentUnits = bus.timeSinceLastUpdate(timeUnit);
-                leastUnits = Math.min(currentUnits, leastUnits);
+            /* Iterate through all of this Route's Bus objects and determine the number of time units since the most recent
+             * update of a Bus object's data */
+            for (Bus[] listOfApproachingBuses : activeBuses.values()) {
+                for (Bus bus : listOfApproachingBuses) {
+                    currentUnits = bus.timeSinceLastUpdate(timeUnit);
+                    leastUnits = Math.min(currentUnits, leastUnits);
+                }
             }
+        } else {
+            leastUnits = -1;
         }
 
         return leastUnits;
@@ -183,7 +194,8 @@ public class Route {
      * to it's {@code schedule} and it has been less than five minutes since the last
      */
     public boolean determineActivity() {
-        return (this.timeSinceMostRecentBusUpdate(ChronoUnit.MINUTES) <= 5) && (this.schedule.isOperatingNow());
+        long timeSinceMostRecentBusUpdate = this.timeSinceMostRecentBusUpdate(ChronoUnit.MINUTES);
+        return ((timeSinceMostRecentBusUpdate != -1) && (timeSinceMostRecentBusUpdate <= 5)) && (this.schedule.isOperatingNow());
     }
 
     /**
