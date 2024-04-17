@@ -24,10 +24,14 @@ public class BusAppController {
     @GetMapping
     @RequestMapping(value = "/get/nearestStops")
     public Stop[] getNearestStops( 
+        
         @RequestParam(value = "routeId", required = false) Long routeId, 
         @RequestParam(value = "n", defaultValue = "3") int n,
         @RequestParam(value = "longitude", defaultValue = "0") double longitude,
         @RequestParam(value = "latitude", defaultValue = "0") double latitude) {
+            if (longitude == 0 || latitude == 0) {
+                  throw new IllegalArgumentException("Url did not include latitude or longitude.");
+            }
             if (routeId != null) { 
                 Stop[] nearestStops = DatabaseService.getNearbyStops(latitude, longitude, DatabaseService.getAllRoutes().length);
                 int i = 0;
@@ -47,12 +51,15 @@ public class BusAppController {
                 Stop[] nearestStops = DatabaseService.getNearbyStops(latitude, longitude, n);
                 return nearestStops;
             }
-        }
+        } 
 
     @GetMapping
     @RequestMapping(value = "/get/stop")
     public Stop getStop(
         @RequestParam(value = "stopId", defaultValue = "0") long stopId) {
+            if (stopId == 0) {
+                throw new IllegalArgumentException("URL did not include a stopID.");
+            }
             return DatabaseService.getStop(stopId);
     }
 
@@ -61,6 +68,9 @@ public class BusAppController {
     @RequestMapping(value = "/get/route")
     public Route getRoute(
         @RequestParam(value = "routeID", defaultValue = "0") long routeId){
+            if (routeId == 0) {
+                throw new IllegalArgumentException("URL did not include RouteID.");
+            }
             return DatabaseService.getRoute(routeId);
     }
 
@@ -74,7 +84,6 @@ public class BusAppController {
     @RequestMapping(value = "/get/all/routes")
     public Route[] getAllRoutes() {
         return DatabaseService.getAllRoutes();
-        
     }
 
     @GetMapping
@@ -89,7 +98,6 @@ public class BusAppController {
         }
         Route[] array = activeRoutes.toArray(new Route[0]);
         return array;
-        
     }
 
 }
