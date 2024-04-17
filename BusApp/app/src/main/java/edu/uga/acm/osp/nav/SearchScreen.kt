@@ -20,31 +20,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import edu.uga.acm.osp.components.IconButton
-import edu.uga.acm.osp.components.TextButton
 import edu.uga.acm.osp.composables.DisplayBox
 import edu.uga.acm.osp.composables.Header
 import edu.uga.acm.osp.composables.NotificationComposable
 import edu.uga.acm.osp.composables.TestComposable
 import edu.uga.acm.osp.composables.displayNavBar
-import edu.uga.acm.osp.ui.theme.BusAppTheme
 
 @Composable
 fun SearchScreen(navController: NavController) {
-    Header(text = "Search All")
-    displayNavBar(navController = navController, enableSearch = true)
-
-    LazyColumn {
-
-    }
-
-    Column {
-
-
-
-
-        // Buttons
-        Row(verticalAlignment = Alignment.Bottom,
+    Scaffold(
+        topBar = {
+            Header(text = "Search All")
+        },
+        bottomBar = {
+            displayNavBar(navController = navController)
+        }
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
                 .height(590.dp)
                 .fillMaxWidth(),
