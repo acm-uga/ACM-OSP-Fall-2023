@@ -1,6 +1,7 @@
 package busAppCore;
 
 import baseClasses.Route;
+import dataSources.DatabaseService;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -8,7 +9,7 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Rough idea of how we may power the backend, primarily in terms of startup procedures and data management during runtime
+ * The backend's driver class. Responsible for startup procedures and maintaining data.
  */
 public class BackendEngine {
     // Specifies the number of milliseconds between data updates

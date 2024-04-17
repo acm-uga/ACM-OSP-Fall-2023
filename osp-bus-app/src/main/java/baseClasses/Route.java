@@ -1,10 +1,6 @@
 package baseClasses;
 
-import busAppCore.DatabaseService;
-import dataDisplay.DisplayableObject;
-import dataDisplay.ListItemData;
-import dataDisplay.MeasurementSystem;
-import dataDisplay.UiContext;
+import dataSources.DatabaseService;
 import routeSchedule.RouteSchedule;
 
 import java.time.temporal.ChronoUnit;
@@ -20,7 +16,7 @@ import java.util.HashMap;
  * @see Stop
  * @see Bus
  */
-public class Route implements DisplayableObject, ListItemData {
+public class Route {
     // Fields derived from the database at instantiation:
     private long routeId; // Route ID as given by the Bus API. Derived from db
     private String name; // Full, official route name
@@ -232,75 +228,5 @@ public class Route implements DisplayableObject, ListItemData {
         }
 
         return idsSeen.size();
-    }
-
-    // ListItemData Implementations:
-    /**
-     * Provides the name of the invoking {@code Route}
-     *
-     * @param ctx the context in which this data is being displayed in the UI
-     *
-     * @return the name of {@code this} {@code Route}
-     */
-    public String listItemHeader(UiContext ctx) {
-        return this.name;
-    }
-
-    /**
-     * Provides an abbreviated view of the schedule currently in effect at the time of invocation
-     *
-     * @param ctx the context in which this data is being displayed in the UI
-     *
-     * @return a {@code String} containing the containing condensed information about the schedule in effect at the time
-     * of invocation
-     *
-     * @see routeSchedule.RouteSchedule#mainSchedule
-     */
-    public String listItemSubHeader(UiContext ctx) {
-        return this.schedule.mainSchedule();
-    }
-
-    /**
-     * Provides the distance to the closest {@code Stop} along this {@code Route} to the user's
-     * location
-     *
-     * @param ctx the context in which this data is being displayed in the UI
-     *
-     * @return a {@code String} containing the distance (in the desired unit) to the closest {@code Stop} along this
-     * {@code Route} to the user's location
-     */
-    public String listItemContext1(UiContext ctx) {
-        // Get all the stops on this route in order of proximity to the user
-        double userLat = ctx.getUserLat(), userLong = ctx.getUserLong();
-
-        // Determine the first stop on nearestStops that serves this Route
-        Stop nearestStopOnRoute = getNearestStop(userLat, userLong);
-
-        // Determine the distance to this stop
-        double distanceToStop = nearestStopOnRoute.distanceToStop(userLat, userLong, ctx.getMeasurementSystem());
-
-        // Create the final string
-        String finalString = "";
-        String unit = (ctx.getMeasurementSystem() == MeasurementSystem.IMPERIAL) ? "mi" : "km";
-        if (Math.abs(distanceToStop - 0.1) <= 0.01) {
-            finalString = "<0.1" + unit;
-        } else {
-            finalString = String.format("%.1f%b", distanceToStop, unit);
-        }
-
-        finalString += " walk";
-
-        return finalString;
-    }
-
-    /**
-     * Provides the number of buses currently active on this {@code Route}
-     *
-     * @param ctx the context in which this data is being displayed in the UI
-     *
-     * @return a {@code String} containing the number of buses currently running on this {@code Route}
-     */
-    public String listItemContext2(UiContext ctx) {
-        return this.totalUniqueBuses() + " active";
     }
 }
