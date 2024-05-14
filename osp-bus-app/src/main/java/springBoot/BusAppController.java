@@ -18,7 +18,7 @@ import baseClasses.Route;
 import dataSources.DatabaseService;
 
 @RestController
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class BusAppController {
 
     @GetMapping("/hello")

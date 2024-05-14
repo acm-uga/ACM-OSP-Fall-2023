@@ -29,6 +29,7 @@ public class InstantBusModel extends BusDataSource {
                     )
             );
         }
+        this.busDataByRouteId = newOverview;
     }
 
     /**
@@ -49,7 +50,7 @@ public class InstantBusModel extends BusDataSource {
      */
     private HashMap<Long, Bus[]> generateBusData(
             long routeId,
-            long[] stopIds,
+            int[] stopIds,
             double percentWithApproachingBuses,
             int minNumOfBusesPerStop,
             int maxNumOfBusesPerStop
