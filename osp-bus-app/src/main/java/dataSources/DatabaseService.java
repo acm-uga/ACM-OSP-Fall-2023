@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -49,8 +50,11 @@ public class DatabaseService {
             String query = "SELECT * FROM stopinfo WHERE stopid = " + stopId;
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
-
-            return stopFromResultSet(rs);
+            
+            if (rs.next())
+                return stopFromResultSet(rs);
+            else 
+                return null;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
@@ -74,7 +78,10 @@ public class DatabaseService {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            return stopFromResultSet(rs);
+            if (rs.next())
+                return stopFromResultSet(rs);
+            else 
+                return null;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
@@ -97,6 +104,7 @@ public class DatabaseService {
             int i = 0;
             while (rs.next()) {
                 allStops[i] = stopFromResultSet(rs);
+                i++;
             }
 
             return allStops;
@@ -120,12 +128,16 @@ public class DatabaseService {
                 Stop.StopType type = Stop.typeFromString(rs.getString("type_info"));
                 double stopLatitude = rs.getDouble("latitude");
                 double stopLongitude = rs.getDouble("longitude");
+                // System.out.println("name: " + name);
 
                 // Determine the Routes served by this Stop
                 ArrayList<Long> servesRouteIdsList = new ArrayList<Long>();
                 for (Route route : DatabaseService.getAllRoutes()) {
-                    if (Arrays.stream(route.getStopIds()).anyMatch(id -> id == stopId)) {
-                        servesRouteIdsList.add(route.getRouteId());
+                    if (route != null) {
+                        // System.out.println("route id: " + route.getRouteId());
+                        if (Arrays.stream(route.getStopIds()).anyMatch(id -> id == stopId)) {
+                            servesRouteIdsList.add(route.getRouteId());
+                        }
                     }
                 }
 
@@ -188,8 +200,10 @@ public class DatabaseService {
             int i = 0;
             while (rs.next()) {
                 nearbyStops[i] = stopFromResultSet(rs);
+                i++;
             }
-
+            Stream<Stop> stopStream = Arrays.stream(nearbyStops);
+            stopStream.forEach(stop -> System.out.println(stop.getName()));
             return nearbyStops;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
@@ -214,7 +228,10 @@ public class DatabaseService {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            return routeFromResultSet(rs);
+            if (rs.next())
+                return routeFromResultSet(rs);
+            else
+                return null;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
@@ -237,7 +254,10 @@ public class DatabaseService {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            return routeFromResultSet(rs);
+            if (rs.next())
+                return routeFromResultSet(rs);
+            else
+                return null;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
@@ -273,7 +293,7 @@ public class DatabaseService {
         //Use try-with-resources to make code more concise
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
 
-            String query = "SELECT * FROM routeinfo";
+            String query = "SELECT * FROM OSPDB.routeinfo";
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
             // Questions I should ask myself: Is it giving 
@@ -282,8 +302,11 @@ public class DatabaseService {
             int i = 0;
             while (rs.next()) {
                 allRoutes[i] = routeFromResultSet(rs);
+                i++;
             }
-
+            for (Route route: allRoutes) {
+                System.out.println("routename: " + route.getName());
+            }
             return allRoutes;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
@@ -299,23 +322,18 @@ public class DatabaseService {
      */
     private static Route routeFromResultSet(ResultSet rs) {
         try {
-            if (rs.next()) {
             // Holds the fields of the current Route being instantiated from db fields below
             long routeId = rs.getLong("routeid");
             String name = rs.getString("routename");
             String abbName = rs.getString("routenameabrv");
             String displayColor = rs.getString("hexcolor");
-            System.out.println("routeid: " + routeId + " name: " + name);
+            // System.out.println("routeid: " + routeId + " name: " + name);
             RouteSchedule schedule = RouteSchedule.decode(rs.getString("encodedschedule")); // TODO edit to reflect actual field name when determined
             int[] stopIds = Route.parseStopIdsString(rs.getString("stopidsordered"));
 
             HashMap<Long, Bus[]> activeBuses = BusData.getBusDataFromId(routeId);
 
             return new Route(routeId, name, abbName, displayColor, schedule, stopIds, activeBuses);
-            }
-            else {
-                return null;
-            }
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
