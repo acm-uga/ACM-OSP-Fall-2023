@@ -9,15 +9,28 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.stream.Stream;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * Handles data retrieval from the database
  */
+@Component
 public class DatabaseService {
     //Add to properties file for security
-    private static final String URL = "jdbc:mysql://localhost:3306/ospdb"; // DB ADDRESS
-    private static final String USERNAME = "root"; // UNCHANGING UNLESS A PROFILE EXISTS
-    private static final String PASSWORD = ""; // TODO PASSWORD YOU SET TO ACCESS THE MYSQL DB. DO NOT PUBLISH TO GH!
+    // private static final String url = "jdbc:mysql://ospdb-instance.c3cfroxqfhpq.us-east-1.rds.amazonaws.com:3306/OSPDB";
+    // private static final String username = "yushus_komarlu";
+    // private static final String password = "Incntat3m";
+
+    // retrieves information with this name from app.props
+    @Value("${spring.datasource.url}")
+    private static String url = "jdbc:mysql://acm-osp-db.cwj19omwwmxs.us-east-2.rds.amazonaws.com/OSPDB";
+    @Value("${spring.datasource.username}")
+    private static String username = "yushus_komarlu";
+    @Value("${spring.datasource.password}")
+    private static String password = "Inc@ntat3m";
 
     // STOP DATA
     /**
@@ -32,13 +45,16 @@ public class DatabaseService {
      */
     public static Stop getStop(long stopId) {
         //Use try-with-resources to make code more concise
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
 
             String query = "SELECT * FROM stopinfo WHERE stopid = " + stopId;
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
-
-            return stopFromResultSet(rs);
+            
+            if (rs.next())
+                return stopFromResultSet(rs);
+            else 
+                return null;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
@@ -56,13 +72,16 @@ public class DatabaseService {
      */
     public static Stop getStop(String stopName) {
         //Use try-with-resources to make code more concise
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
 
             String query = "SELECT * FROM stopinfo WHERE stopname = " + stopName;
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            return stopFromResultSet(rs);
+            if (rs.next())
+                return stopFromResultSet(rs);
+            else 
+                return null;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
@@ -75,7 +94,7 @@ public class DatabaseService {
      */
     public static Stop[] getAllStops() {
         //Use try-with-resources to make code more concise
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
 
             String query = "SELECT * FROM stopinfo";
             Statement st = connection.createStatement();
@@ -103,28 +122,36 @@ public class DatabaseService {
      */
     private static Stop stopFromResultSet(ResultSet rs) {
         try {
-            String name = rs.getString("stopname");
-            long stopId = rs.getLong("stopid");
-            Stop.StopType type = Stop.typeFromString(rs.getString("type_info"));
-            double stopLatitude = rs.getDouble("latitude");
-            double stopLongitude = rs.getDouble("longitude");
+            if (rs != null) {
+                String name = rs.getString("stopname");
+                long stopId = rs.getLong("stopid");
+                Stop.StopType type = Stop.typeFromString(rs.getString("type_info"));
+                double stopLatitude = rs.getDouble("latitude");
+                double stopLongitude = rs.getDouble("longitude");
+                // System.out.println("name: " + name);
 
-            // Determine the Routes served by this Stop
-            ArrayList<Long> servesRouteIdsList = new ArrayList<Long>();
-            for (Route route : DatabaseService.getAllRoutes()) {
-                if (Arrays.stream(route.getStopIds()).anyMatch(id -> id == stopId)) {
-                    servesRouteIdsList.add(route.getRouteId());
+                // Determine the Routes served by this Stop
+                ArrayList<Long> servesRouteIdsList = new ArrayList<Long>();
+                for (Route route : DatabaseService.getAllRoutes()) {
+                    if (route != null) {
+                        // System.out.println("route id: " + route.getRouteId());
+                        if (Arrays.stream(route.getStopIds()).anyMatch(id -> id == stopId)) {
+                            servesRouteIdsList.add(route.getRouteId());
+                        }
+                    }
                 }
-            }
 
-            int i = 0;
-            long[] servesRouteIds = new long[servesRouteIdsList.size()];
-            for (long routeId : servesRouteIdsList) {
-                servesRouteIds[i] = routeId;
-                i++;
-            }
+                int i = 0;
+                long[] servesRouteIds = new long[servesRouteIdsList.size()];
+                for (long routeId : servesRouteIdsList) {
+                    servesRouteIds[i] = routeId;
+                    i++;
+                }
 
-            return new Stop(stopId, name, type, stopLatitude, stopLongitude, servesRouteIds);
+                return new Stop(stopId, name, type, stopLatitude, stopLongitude, servesRouteIds);
+            } else {
+                return null;
+            }
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
@@ -136,15 +163,14 @@ public class DatabaseService {
      * @return the number of {@code Stop} records in the {@code stopinfo} database table
      */
     public static int stopCount() {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
             //Need to parameterize query to prevent possible SQL injection?
-            String query = "SELECT COUNT(*) FROM stopinfo" +
+            String query = "SELECT COUNT(*) as stopCount FROM stopinfo" +
                     "\n";
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
-
             rs.next();
-            return rs.getInt(1);
+            return rs.getInt("stopCount");
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
@@ -163,7 +189,7 @@ public class DatabaseService {
      * <b>Else:</b> "Every stop on campus, sorted in order of proximity to the provided coordinates (closest i=0)"
      */
     public static Stop[] getNearbyStops(double latitude, double longitude, int numOfStops) {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
             //Need to parameterize query to prevent possible SQL injection?
             String query = "CALL FinalCalculate(" + latitude + ", " + longitude + ", " + numOfStops + ")";
             Statement st = connection.createStatement();
@@ -176,7 +202,8 @@ public class DatabaseService {
                 nearbyStops[i] = stopFromResultSet(rs);
                 i++;
             }
-
+            Stream<Stop> stopStream = Arrays.stream(nearbyStops);
+            stopStream.forEach(stop -> System.out.println(stop.getName()));
             return nearbyStops;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
@@ -195,13 +222,16 @@ public class DatabaseService {
      * @return the {@code Route} object of ID {@code routeId}, constructed from database data
      */
     public static Route getRoute(long routeId) {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
             //Need to parameterize query to prevent possible SQL injection?
             String query = "SELECT * FROM routeinfo WHERE routeid = " + routeId;
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            return routeFromResultSet(rs);
+            if (rs.next())
+                return routeFromResultSet(rs);
+            else
+                return null;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
@@ -218,13 +248,16 @@ public class DatabaseService {
      * @return the {@code Route} object of ID {@code routeId}, constructed from database data
      */
     public static Route getRoute(String routeName) {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
             //Need to parameterize query to prevent possible SQL injection?
             String query = "SELECT * FROM routeinfo WHERE routename = " + routeName;
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            return routeFromResultSet(rs);
+            if (rs.next())
+                return routeFromResultSet(rs);
+            else
+                return null;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
@@ -236,15 +269,17 @@ public class DatabaseService {
      * @return the number of {@code Route} records in the {@code routeinfo} database table
      */
     public static int routeCount() {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
             //Need to parameterize query to prevent possible SQL injection?
-            String query = "SELECT COUNT(*) FROM routeinfo" + "\n";
+            String query = "SELECT COUNT(*) FROM routeinfo";
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
-
-            rs.next();
-            return rs.getInt(1);
-        } catch (SQLException ex) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }else {
+                    return 0;
+                }
+            } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
         }
     }
@@ -256,11 +291,12 @@ public class DatabaseService {
      */
     public static Route[] getAllRoutes() {
         //Use try-with-resources to make code more concise
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
 
-            String query = "SELECT * FROM routeinfo";
+            String query = "SELECT * FROM OSPDB.routeinfo";
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
+            // Questions I should ask myself: Is it giving 
 
             Route[] allRoutes = new Route[routeCount()];
             int i = 0;
@@ -268,7 +304,9 @@ public class DatabaseService {
                 allRoutes[i] = routeFromResultSet(rs);
                 i++;
             }
-
+            for (Route route: allRoutes) {
+                System.out.println("routename: " + route.getName());
+            }
             return allRoutes;
         } catch (SQLException ex) {
             throw new RuntimeException("Error: ", ex);
@@ -289,8 +327,9 @@ public class DatabaseService {
             String name = rs.getString("routename");
             String abbName = rs.getString("routenameabrv");
             String displayColor = rs.getString("hexcolor");
-            RouteSchedule schedule = RouteSchedule.decode(rs.getString("encodedschedule"));
-            long[] stopIds = Route.parseStopIdsString(rs.getString("stopidsordered"));
+            // System.out.println("routeid: " + routeId + " name: " + name);
+            RouteSchedule schedule = RouteSchedule.decode(rs.getString("encodedschedule")); // TODO edit to reflect actual field name when determined
+            int[] stopIds = Route.parseStopIdsString(rs.getString("stopidsordered"));
 
             HashMap<Long, Bus[]> activeBuses = BusData.getBusDataFromId(routeId);
 
