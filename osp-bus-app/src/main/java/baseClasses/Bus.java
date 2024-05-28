@@ -137,7 +137,7 @@ public class Bus {
         Want STA to F, currently approaching C: 5 - 2 = *3*
         */
 
-        long[] stopIdsAlongRoute = DatabaseService.getRoute(routeId).getStopIds();
+        int[] stopIdsAlongRoute = DatabaseService.getRoute(routeId).getStopIds();
 
         // Determine the real index of the desired stop
         // Employ a linear search since StopIds are sorted by the order they're served, not numerically

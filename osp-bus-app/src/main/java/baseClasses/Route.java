@@ -1,12 +1,12 @@
 package baseClasses;
 
 import dataSources.DatabaseService;
-import routeSchedule.RouteSchedule;
 
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import routeSchedule.*;
 
 /**
  * Represents a bus route: a series of stops and the buses actively driving through them in order
@@ -23,7 +23,7 @@ public class Route {
     private String abbName; // Abbreviated route name, as displayed in current bus tracking tool
     private String displayColor; // Hex code of the color used when displaying this route in UI components
     private RouteSchedule schedule; // Contains all info pertaining to when the route is supposed to be operating
-    private long[] stopIds; // Contains the IDs of the stops on this route in the order they are served
+    private int[] stopIds; // Contains the IDs of the stops on this route in the order they are served
 
     // Fields that update with each batch of API data
     private boolean active; // True when the route is operating AND buses are appearing in the API. Otherwise false
@@ -36,7 +36,7 @@ public class Route {
             String abbName,
             String displayColor,
             RouteSchedule schedule,
-            long[] stopIds,
+            int[] stopIds,
             HashMap<Long, Bus[]> activeBuses
     ) {
         this.routeId = routeId;
@@ -45,7 +45,7 @@ public class Route {
         this.displayColor = displayColor;
         this.schedule = schedule;
         this.stopIds = stopIds;
-        this.activeBuses =activeBuses;
+        this.activeBuses = activeBuses;
         this.active = this.determineActivity();
     }
 
@@ -90,11 +90,11 @@ public class Route {
         this.schedule = routeSchedule;
     }
 
-    public long[] getStopIds() {
+    public int[] getStopIds() {
         return stopIds;
     }
 
-    public void setStopIds(long[] stopIds) {
+    public void setStopIds(int[] stopIds) {
         this.stopIds = stopIds;
     }
 
@@ -137,14 +137,14 @@ public class Route {
      *
      * @return an array of {@code long}s, with each element derived from the '-'-delimited {@code stopIdsString}
      */
-    public static long[] parseStopIdsString(String stopIdsString) {
+    public static int[] parseStopIdsString(String stopIdsString) {
         //System.out.println(stopIdsString);
         String[] stopIdStrings = stopIdsString.split("-");
         //System.out.println(Arrays.toString(stopIdStrings));
-        long[] stopIds = new long[stopIdStrings.length];
+        int[] stopIds = new int[stopIdStrings.length];
         int i = 0;
         for (String stopIdString : stopIdStrings) {
-            stopIds[i] = Long.parseLong(stopIdString);
+            stopIds[i] = Integer.parseInt(stopIdString);
             //System.out.println(Long.parseLong(stopIdString));
             i++;
         }
