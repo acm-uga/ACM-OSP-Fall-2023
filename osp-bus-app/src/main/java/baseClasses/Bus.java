@@ -1,9 +1,6 @@
 package baseClasses;
 
-import busAppCore.DatabaseService;
-import dataDisplay.DisplayableObject;
-import dataDisplay.ListItemData;
-import dataDisplay.UiContext;
+import dataSources.DatabaseService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,7 +15,7 @@ import java.util.stream.Collectors;
  *
  * @see Route
  */
-public class Bus implements DisplayableObject, ListItemData {
+public class Bus {
     // Fields that update with each batch of API data:
     // Derived directly from API data:
     private long busId; // VehicleID in API
@@ -140,7 +137,7 @@ public class Bus implements DisplayableObject, ListItemData {
         Want STA to F, currently approaching C: 5 - 2 = *3*
         */
 
-        long[] stopIdsAlongRoute = DatabaseService.getRoute(routeId).getStopIds();
+        int[] stopIdsAlongRoute = DatabaseService.getRoute(routeId).getStopIds();
 
         // Determine the real index of the desired stop
         // Employ a linear search since StopIds are sorted by the order they're served, not numerically
@@ -181,68 +178,5 @@ public class Bus implements DisplayableObject, ListItemData {
         /* Accounting for the amount of time that's passed since STA was updated, STA at the moment of invocation
          * should equal (approximately) the originalSTA minus the time that's elapsed since that data was updated */
         return ogSecondsToArrival - (double)(timeSinceLastUpdate(ChronoUnit.SECONDS));
-    }
-
-    // ListItemData Implementations
-    /**
-     * Provides the identification number of the invoking {@code Bus}
-     *
-     * @param ctx the context in which this data is being displayed in the UI
-     *
-     * @return a {@code String} containing the invoking {@code Bus}'s identification number, such as "Bus #1234"
-     */
-     public String listItemHeader(UiContext ctx) {
-        return "Bus #" + this.busId;
-    }
-
-    /**
-     * Provides the name of the {@code Route} that the invoking {@code Bus} is running along
-     *
-     * @param ctx the context in which this data is being displayed in the UI
-     *
-     * @return the name of the {@code Route} this {@code Bus} is operating on
-     */
-     public String listItemSubHeader(UiContext ctx) {
-        return DatabaseService.getRoute(this.routeId).getName();
-    }
-
-    /**
-     * Provides an approximate time until arrival at the stop this data is displayed under in the appropriate time units
-     *
-     * @param ctx the context in which this data is being displayed in the UI
-     *
-     * @return <b>If the the seconds till arrival at the stop is known:</b>
-     * <p>a {@code String} containing the seconds until {@code this} {@code Bus} arrives at there</p>
-     * <b>Else:</b> "Unknown"
-     */
-    public String listItemContext1(UiContext ctx) {
-        String finalString = "Unknown";
-        if (ctx.getDisplayedUnder() instanceof Stop) {
-            // Determine the correct seconds to arrival element to display given the context
-            long stopId = ((Stop)ctx.getDisplayedUnder()).getStopId();
-            double timeQuantity = secondsTillArrivalAt(stopId);
-
-            // Ensure the secondsTillArrival is actually known and doesn't indicate the bus has already arrived (STA <= 0)
-            if (timeQuantity != Double.NaN && timeQuantity > 0) {
-                finalString = Stop.condenseSecsToString(timeQuantity) + " away";
-            } else if (timeQuantity != Double.NaN && timeQuantity <= 0) {
-                finalString = "Arrived";
-            }
-        }
-        return finalString;
-    }
-
-    /**
-     * Provides the approximate time since {@code this} {@code Bus}'s data was updated from the API in the appropriate
-     * time units
-     *
-     * @param ctx the context in which this data is being displayed in the UI
-     *
-     * @return a {@code String} containing the approximate time that has elapsed since {@code this} {@code Bus}'s data
-     * was updated from the API, in the appropriate time units
-     */
-    public String listItemContext2(UiContext ctx) {
-        double timeQuantity = timeSinceLastUpdate(ChronoUnit.SECONDS);
-        return "Last updated " + Stop.condenseSecsToString(timeQuantity) + " ago";
     }
 }

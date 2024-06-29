@@ -5,7 +5,65 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2473489-9b9f-48ee-9b7a-f4bc8cb65ea2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/src/main/java/baseClasses/Route.java" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/src/main/java/baseClasses/Route.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/src/main/java/baseClasses/Stop.java" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/src/main/java/baseClasses/Stop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/src/main/java/busAppCore/DataUpdater.java" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/src/main/java/busAppCore/DataUpdater.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/src/main/java/dataSources/DatabaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/src/main/java/dataSources/DatabaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/src/main/java/routeSchedule/OperatingWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/src/main/java/routeSchedule/OperatingWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/src/main/java/routeSchedule/RouteSchedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/src/main/java/routeSchedule/RouteSchedule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/src/main/java/springBoot/BusAppController.java" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/src/main/java/springBoot/BusAppController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/src/main/java/springBoot/BusAppSpringWeb.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/baseClasses/Bus.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/baseClasses/Bus.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/baseClasses/Route.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/baseClasses/Route.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/baseClasses/Stop$StopType.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/baseClasses/Stop$StopType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/baseClasses/Stop.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/baseClasses/Stop.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/baseClasses/package-info.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/ApiService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/BackendEngine.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/BackendEngine.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/BusController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/BusSpringWeb.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/DataUpdater.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/DataUpdater.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/DatabaseService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/TestDriver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/TestRoute.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/baseClass/Bus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/baseClass/Route.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/baseClass/Stop$StopType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/baseClass/Stop.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/busAppCore/package-info.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataDisplay/DisplayableObject.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataDisplay/ListItemData.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataDisplay/MeasurementSystem.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataDisplay/ParentContainer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataDisplay/UiContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataDisplay/package-info.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/ApiService.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/ApiService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/BusData.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/BusData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/BusDataSource.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/BusDataSource.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/DatabaseService.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/DatabaseService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/InstantBusModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/InstantBusModel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/LiveBusModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/LiveBusModel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/dataSources/package-info.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/CustomSession.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/CustomSession.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/DailySchedule$1AdjDayOfWeek.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/DailySchedule$1AdjDayOfWeek.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/DailySchedule$Type.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/DailySchedule$Type.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/DailySchedule.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/DailySchedule.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/OperatingDate$Type.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/OperatingDate$Type.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/OperatingDate.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/OperatingDate.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/OperatingTime$Type.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/OperatingTime$Type.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/OperatingTime.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/OperatingTime.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/OperatingWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/OperatingWindow.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/PredefinedSession.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/PredefinedSession.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/PredefinedSessionTemplate.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/PredefinedSessionTemplate.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/RouteSchedule$Errors.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/RouteSchedule$Errors.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/RouteSchedule.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/RouteSchedule.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/Session.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/Session.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/routeSchedule/package-info.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/springBoot/BusAppController.class" beforeDir="false" afterPath="$PROJECT_DIR$/osp-bus-app/target/classes/springBoot/BusAppController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/springBoot/BusAppSpringWeb.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/osp-bus-app/target/classes/springBoot/package-info.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,34 +92,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "JQB-Front-End-Development",
-    "jdk.selected.JAVA_MODULE": "19",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/justi/Documents/GitHub/ACM-OSP-Fall-2023/osp-bus-app",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.43908045",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;JQB-Back-End-Development&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;19&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/justi/Documents/GitHub/ACM-OSP-Fall-2023/osp-bus-app&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.43908045&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
-      "kotlin"
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;kotlin&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/osp-bus-app/src/main/java/ospbusapp" />
@@ -90,6 +148,8 @@
       <workItem from="1702758700749" duration="27000" />
       <workItem from="1702758736689" duration="58000" />
       <workItem from="1709522451231" duration="24000" />
+      <workItem from="1713112996339" duration="85000" />
+      <workItem from="1713116868174" duration="7000" />
     </task>
     <servers />
   </component>

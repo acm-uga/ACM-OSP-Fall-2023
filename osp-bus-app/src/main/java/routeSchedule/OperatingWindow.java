@@ -91,6 +91,7 @@ public class OperatingWindow {
 	 */
 	protected static OperatingWindow decode(String encodedWindow) {		
 		// Locate '{' and '}' and separate the Session's from the DailySchedule
+		//System.out.println(encodedWindow);
 		int endOfDates = encodedWindow.indexOf('{');
 		int endOfDailySchedule = encodedWindow.indexOf('}');
 		String sessionsString = encodedWindow.substring(0, endOfDates);
