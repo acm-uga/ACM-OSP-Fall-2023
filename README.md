@@ -17,11 +17,11 @@ An open source project conducted by the UGA Open Source Club that designed and p
 - and more!
 
 ### Techstack
-Database: MySQL
-Backend: Java
-Framework: Springboot MVC
-Frontend: Kotlin, CSS
-API: The UGA Bus API
+- Database: MySQL
+- Backend: Java
+- Framework: Springboot MVC
+- Frontend: Kotlin, CSS
+- API: The UGA Bus API
 
 ### Frontend
 - Single Page Application Design
