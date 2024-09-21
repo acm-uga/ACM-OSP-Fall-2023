@@ -4,7 +4,6 @@
 - [Description](#description)
 - [Installation](#installation)
 - [Main Pages](#main-pages)
-- [Contributing](#contributing)
 - [Contributors](#contributors)
 
 ## Description
