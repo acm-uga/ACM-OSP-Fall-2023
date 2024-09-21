@@ -51,50 +51,32 @@ mvn start
 
 ## Contributors:
 
-Helium Yang
+Justin Brand
 
-Yushus Komarlu
+Nivedha Natarajan
 
 Cason Pittman
 
+Yushus Komarlu
+
+Helium Yang
+
+Kelsey Sterner
+
+Jacob Douglas
+
+Kade Styron
+
 Matt Basil
 
-Arjun Kavungal
+Adis Tucakovic
 
-Adithya Devi
-
-Justin Brand
-
-Jason Dinh
-
-Heet Shah
+Jeffrey Li
 
 Turjoy Paul
 
 Swapnil Roy
 
-Nivedha Natarajan
 
-Codey Borrelli
 
-Hiep Pham
 
-Rohan Singh
-
-Jeffrey Li
-
-Jacob Douglas
-
-Ishaan Chitre
-
-Kelsey Sterner
-
-Saachi Varshney
-
-Max Stewart
-
-Adis Tucakovic
-
-Ivan Zheng
-
-Kade Styron
