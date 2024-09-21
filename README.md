@@ -42,13 +42,13 @@ mvn start
 
 ## Main Pages
 ### Home Page
-<img width="130" alt="image" src="https://github.com/user-attachments/assets/f844a2b2-fd24-4bdd-bcaa-4219649df5e7">
+<img width="160" alt="image" src="https://github.com/user-attachments/assets/f844a2b2-fd24-4bdd-bcaa-4219649df5e7">
 
 ### Stop Page
-<img width="130" alt="image" src="https://github.com/user-attachments/assets/b21d3e74-8c7f-4103-9987-14c0bb8c966f">
+<img width="160" alt="image" src="https://github.com/user-attachments/assets/b21d3e74-8c7f-4103-9987-14c0bb8c966f">
 
 ### Route Page
-<img width="130" alt="image" src="https://github.com/user-attachments/assets/e841e67d-f8d8-47c6-893a-f9993bc7d509">
+<img width="160" alt="image" src="https://github.com/user-attachments/assets/e841e67d-f8d8-47c6-893a-f9993bc7d509">
 
 ## Contributors:
 
