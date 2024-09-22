@@ -34,10 +34,19 @@ An open source project conducted by the UGA Open Source Club that designed and p
 ## Installation
 ### Backend
 mvn clean
+
 mvn start
 
 ### Frontend
-[CASON CONTRIBUTION]
+#### Don't own an Android phone?
+1. Download the frontend directory
+2. Open Android Studio
+3. Run the program and view in the emulator
+
+#### Own an Android phone?
+1. Repeat steps 1-2 above
+2. With your phone plugged into your computer, run the program
+3. The end-user application will now be downloaded on your phone for later use
 
 ## Main Pages
 ### Home Page
@@ -76,7 +85,3 @@ Jeffrey Li
 Turjoy Paul
 
 Swapnil Roy
-
-
-
-
