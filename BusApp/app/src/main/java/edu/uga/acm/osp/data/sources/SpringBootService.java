@@ -11,6 +11,9 @@ import edu.uga.acm.osp.data.baseClasses.Stop;
  * TODO
  */
 public class SpringBootService {
+    // Static Gson instance for handling JSON operations
+    private static final Gson gson = new Gson();
+
     /**
      * Retrieves a specific {@code Route} object from the backend.
      *
@@ -30,6 +33,62 @@ public class SpringBootService {
      */
     public static Stop getStop(long stopId) {
         return StaticExampleData.getStop(stopId);
+    }
+
+    // Gson JSON handling methods
+
+    /**
+     * Deserializes a JSON string to a Bus object.
+     * @param json the JSON string representing a Bus
+     * @return the deserialized Bus object
+     */
+    public static Bus getBusFromJson(String json) {
+        return gson.fromJson(json, Bus.class);
+    }
+
+    /**
+     * Serializes a Bus object to a JSON string.
+     * @param bus the Bus object to serialize
+     * @return the JSON string representing the serialized Bus
+     */
+    public static String createBusJson(Bus bus) {
+        return gson.toJson(bus);
+    }
+
+    /**
+     * Deserializes a JSON string to a Route object.
+     * @param json the JSON string representing a Route
+     * @return the deserialized Route object
+     */
+    public static Route getRouteFromJson(String json) {
+        return gson.fromJson(json, Route.class);
+    }
+
+    /**
+     * Serializes a Route object to a JSON string.
+     * @param route the Route object to serialize
+     * @return the JSON string representing the serialized Route
+     */
+    public static String createRouteJson(Route route) {
+        return gson.toJson(route);
+    }
+
+    /**
+     * Deserializes a JSON string to a Stop object.
+     * @param json the JSON string representing a Stop
+     * @return the deserialized Stop object
+     */
+    public static Stop getStopFromJson(String json) {
+        return gson.fromJson(json, Stop.class);
+    }
+
+    /**
+     * Serializes a Stop object to a JSON string.
+     * @param stop the Stop object to serialize
+     * @return the JSON string representing the serialized Stop
+     */
+    public static String createStopJson(Stop stop) {
+        return gson.toJson(stop);
     }
 
     /**
